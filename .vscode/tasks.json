@@ -1,0 +1,128 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build package (Debug)",
+            "detail": "Build a package in debug mode",
+            "icon": {
+                "id": "package",
+                "color": "terminal.ansiYellow"
+            },
+            "type": "process",
+            "command": "cargo",
+            "args": [
+                "build",
+                "--package",
+                "${input:packageName}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": "$rustc"
+        },
+        {
+            "label": "Build package (Release)",
+            "detail": "Build a package in release mode",
+            "icon": {
+                "id": "package",
+                "color": "terminal.ansiGreen"
+            },
+            "type": "process",
+            "command": "cargo",
+            "args": [
+                "build",
+                "--release",
+                "--package",
+                "${input:packageName}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": "$rustc"
+        },
+        {
+            "label": "Run vscodeconfigurator",
+            "detail": "Run vscodeconfigurator (with optional arguments)",
+            "icon": {
+                "id": "play",
+                "color": "terminal.ansiBlue"
+            },
+            "type": "shell",
+            "command": "cargo run --bin vscodeconfigurator -- ${input:runExtraArgs}",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "linux": {
+                "options": {
+                    "shell": {
+                        "executable": "/bin/bash",
+                        "args": [
+                            "-c"
+                        ]
+                    }
+                }
+            },
+            "osx": {
+                "options": {
+                    "shell": {
+                        "executable": "/bin/zsh",
+                        "args": [
+                            "-c"
+                        ]
+                    }
+                }
+            },
+            "windows": {
+                "options": {
+                    "shell": {
+                        "executable": "pwsh.exe"
+                    }
+                }
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": "$rustc"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "packageName",
+            "type": "pickString",
+            "description": "Select a package to build",
+            "default": "vscodeconfigurator",
+            "options": [
+                {
+                    "label": "vscodeconfigurator (Binary)",
+                    "value": "vscodeconfigurator"
+                }
+            ]
+        },
+        {
+            "id": "runExtraArgs",
+            "description": "Extra arguments to pass to the binary",
+            "type": "promptString"
+        }
+    ]
+}
