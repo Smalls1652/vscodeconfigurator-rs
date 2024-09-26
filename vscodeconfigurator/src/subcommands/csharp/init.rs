@@ -49,8 +49,7 @@ pub struct InitArgs {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
-enum CsharpLspOption {
-    #[value(name = "CsharpLsp")]
+pub enum CsharpLspOption {
     /// The C# language server provided by the C# extension for Visual Studio Code.
     CsharpLsp,
 
