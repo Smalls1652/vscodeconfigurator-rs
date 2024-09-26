@@ -1,0 +1,21 @@
+version: 2
+updates:
+  # Cargo config for 'vscodeconfigurator'
+  - package-ecosystem: "cargo"
+    directory: "/"
+    target-branch: "main"
+    labels:
+      - "Configurator"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "Smalls1652"
+
+  # GitHub Actions config for the repo
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "main"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "Smalls1652"
