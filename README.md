@@ -1,4 +1,4 @@
-# VSCode Configurator-rs
+# VSCode Configurator-rs [![Build status](https://github.com/Smalls1652/vscodeconfigurator-rs/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Smalls1652/vscodeconfigurator-rs/actions/workflows/build.yml) [![MIT license](https://badgen.net/static/License/MIT/blue)](./LICENSE)
 
 This is a CLI tool to quickly bootstrap a new project for VSCode. More specifically, it's to reduce the amount of common tasks I perform.
 
