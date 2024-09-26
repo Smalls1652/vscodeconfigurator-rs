@@ -1,8 +1,14 @@
 mod subcommands;
+mod external_procs;
+mod console_utils;
+mod template_ops;
+mod vscode_ops;
+mod utils;
 
 use clap::{crate_version, Parser};
-use subcommands::{csharp, RootSubcommands};
+use subcommands::RootSubcommands;
 
+/// The main CLI struct.
 #[derive(Parser)]
 #[command(
     name = "VSCode Configurator",
@@ -17,11 +23,16 @@ struct Cli {
     command: Option<RootSubcommands>
 }
 
+/// The entry point for the CLI.
 fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        Some(RootSubcommands::Csharp { command }) => csharp::match_subcommand(command),
+        Some(RootSubcommands::Csharp { command }) =>
+            command
+                .as_ref()
+                .unwrap()
+                .match_subcommand(),
 
         None => println!("No subcommand provided")
     }
