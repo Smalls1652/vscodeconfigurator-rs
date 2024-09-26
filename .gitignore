@@ -2,3 +2,6 @@ target/
 artifacts/
 bin/
 obj/
+.DS_Store
+
+testing/
