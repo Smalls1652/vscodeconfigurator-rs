@@ -57,6 +57,61 @@
             "problemMatcher": "$rustc"
         },
         {
+            "label": "Clean package (Debug)",
+            "detail": "Clean a package in debug mode",
+            "icon": {
+                "id": "trash",
+                "color": "terminal.ansiYellow"
+            },
+            "type": "process",
+            "command": "cargo",
+            "args": [
+                "clean",
+                "--package",
+                "${input:packageName}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": "$rustc"
+        },
+        {
+            "label": "Clean package (Release)",
+            "detail": "Clean a package in release mode",
+            "icon": {
+                "id": "trash",
+                "color": "terminal.ansiYellow"
+            },
+            "type": "process",
+            "command": "cargo",
+            "args": [
+                "clean",
+                "--release",
+                "--package",
+                "${input:packageName}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": "$rustc"
+        },
+        {
             "label": "Run vscodeconfigurator",
             "detail": "Run vscodeconfigurator (with optional arguments)",
             "icon": {
@@ -64,7 +119,7 @@
                 "color": "terminal.ansiBlue"
             },
             "type": "shell",
-            "command": "cargo run --bin vscodeconfigurator -- ${input:runExtraArgs}",
+            "command": "cargo run --quiet --bin vscodeconfigurator -- ${input:runExtraArgs}",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -98,7 +153,7 @@
             "presentation": {
                 "echo": true,
                 "reveal": "always",
-                "focus": false,
+                "focus": true,
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": true
