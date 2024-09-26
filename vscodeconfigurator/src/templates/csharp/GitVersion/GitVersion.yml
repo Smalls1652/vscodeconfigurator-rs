@@ -1,0 +1,7 @@
+assembly-versioning-scheme: MajorMinorPatchTag
+mode: ContinuousDeployment
+increment: Inherit
+branches: {}
+ignore:
+  sha: []
+merge-message-formats: {}
