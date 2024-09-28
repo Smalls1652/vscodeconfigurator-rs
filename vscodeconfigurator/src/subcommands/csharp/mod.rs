@@ -1,7 +1,9 @@
 pub mod init;
+pub mod add;
 
 use clap::Subcommand;
 use init::InitCommandArgs;
+use add::AddCommandArgs;
 
 /// Subcommands for C# projects.
 #[derive(Subcommand)]
@@ -15,7 +17,14 @@ pub enum CsharpSubcommands {
         about = "Initialize a new C# project.",
         long_about = None
     )]
-    Init(InitCommandArgs)
+    Init(InitCommandArgs),
+
+    /// Add a new project to a C# solution.
+    #[command(
+        about = "Add a new project to a C# solution.",
+        long_about = None
+    )]
+    Add(AddCommandArgs)
 }
 
 impl CsharpSubcommands {
@@ -24,7 +33,11 @@ impl CsharpSubcommands {
         match self {
             CsharpSubcommands::Init(init_args) =>
                 InitCommandArgs::run_command(init_args)
-                    .expect("Failed to run 'csharp init' command.")
+                    .expect("Failed to run 'csharp init' command."),
+
+            CsharpSubcommands::Add(add_args) =>
+                AddCommandArgs::run_command(add_args)
+                    .expect("Failed to run 'csharp add' command.")
         }
     }
 }
