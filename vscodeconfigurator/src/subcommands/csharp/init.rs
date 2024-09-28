@@ -50,6 +50,7 @@ pub struct InitCommandArgs {
     )]
     add_nuget_config: bool,
 
+    /// Whether to enable centrally managed packages.
     #[arg(
         long = "enable-centrally-managed-packages",
         required = false,
