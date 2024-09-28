@@ -22,7 +22,7 @@ push-hook = true
 # When disabled, many Git Town commands execute faster
 # and Git Town will create the missing tracking branch
 # on the first run of "git town sync".
-push-new-branches = true
+push-new-branches = false
 
 # The "create-prototype-branches" setting determines whether Git Town
 # always creates prototype branches.
