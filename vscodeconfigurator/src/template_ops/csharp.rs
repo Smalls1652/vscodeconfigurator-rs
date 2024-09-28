@@ -47,7 +47,7 @@ pub fn csharp_copy_gitversion(output_directory: &PathBuf, console_utils: &mut Co
 /// 
 /// * `output_directory` - The output directory of the project.
 /// * `console_utils` - The console utilities.
-pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &String, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
 
     let core_templates_path = utils::get_core_templates_path();
@@ -73,7 +73,11 @@ pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, console_utils: &m
         console_utils.restore_cursor_position_and_clear_below()?;
     }
 
-    fs::copy(template_file_path, &output_file_path)?;
+    let solution_name_full = format!("{:}.sln", solution_name);
+    let vscode_settings_json = fs::read_to_string(&template_file_path)?
+        .replace("{{solutionName}}", &solution_name_full);
+
+    fs::write(&output_file_path, vscode_settings_json)?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -86,7 +90,7 @@ pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, console_utils: &m
 /// 
 /// * `output_directory` - The output directory of the project.
 /// * `console_utils` - The console utilities.
-pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, solution_name: &String, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
 
     let core_templates_path = utils::get_core_templates_path();
@@ -112,7 +116,11 @@ pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, console_utils: &mut 
         console_utils.restore_cursor_position_and_clear_below()?;
     }
 
-    fs::copy(template_file_path, &output_file_path)?;
+    let solution_name_full = format!("{:}.sln", solution_name);
+    let vscode_tasks_json = fs::read_to_string(&template_file_path)?
+        .replace("{{solutionName}}", &solution_name_full);
+
+    fs::write(&output_file_path, vscode_tasks_json)?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
