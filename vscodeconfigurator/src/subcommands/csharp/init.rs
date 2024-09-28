@@ -31,10 +31,9 @@ pub struct InitCommandArgs {
         short = 'n',
         long = "solution-name",
         required = false,
-        default_value = "",
-        value_hint = ValueHint::Unknown
+        value_hint = ValueHint::Other
     )]
-    solution_name: String,
+    solution_name: Option<String>,
 
     /// Add GitVersion to the project.
     #[arg(
@@ -146,7 +145,7 @@ impl InitCommandArgs {
     /// Gets the default value for the `solution_name` (`--solution-name`) argument if
     /// it is not provided by the user.
     fn get_solution_name_value(&self) -> String {
-        match &self.solution_name.is_empty() {
+        match &self.solution_name.is_none() {
             true =>
                 self.output_directory
                 .file_name()
@@ -154,7 +153,10 @@ impl InitCommandArgs {
                 .to_string_lossy()
                 .to_string(),
             
-            false => self.solution_name.clone()
+            false => self.solution_name
+                .as_ref()
+                .unwrap()
+                .clone()
         }
     }
 }
