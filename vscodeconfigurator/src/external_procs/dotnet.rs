@@ -330,3 +330,33 @@ fn initialize_dotnet_tool_manifest(
 
     Ok(())
 }
+
+/// Add a project to a solution.
+/// 
+/// ## Arguments
+/// 
+/// * `solution_file_path` - The path to the solution file.
+/// * `project_file_path` - The path to the project file.
+/// * `console_utils` - The console utilities.
+pub fn add_project_to_solution(
+    solution_file_path: &PathBuf,
+    project_file_path: &PathBuf,
+    console_utils: &mut ConsoleUtils
+) -> Result<(), Box<dyn std::error::Error>> {
+    let project_file_path = project_file_path.canonicalize().unwrap();
+    let project_path_relative = project_file_path.strip_prefix(solution_file_path.parent().unwrap())?;
+
+    console_utils.write_info(format!("- 📄 Adding '{:}' to solution... ", project_path_relative.to_str().unwrap()))?;
+    console_utils.save_cursor_position()?;
+
+    let dotnet_proc_args = vec!["sln", solution_file_path.to_str().unwrap(), "add", project_file_path.to_str().unwrap()];
+
+    process::Command::new("dotnet")
+        .args(dotnet_proc_args)
+        .output()
+        .expect("Failed to run 'dotnet sln add' command.");
+
+    console_utils.write_success(format!("Done! ✅\n"))?;
+
+    Ok(())
+}
