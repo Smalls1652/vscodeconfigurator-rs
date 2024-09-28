@@ -1,4 +1,4 @@
-use clap::Args;
+use clap::{Args, ValueHint};
 use std::{
     env, io::ErrorKind, path::PathBuf, process
 };
@@ -8,19 +8,21 @@ use crate::{
     vscode_ops
 };
 
-#[derive(Args, Debug)]
+#[derive(Args, Debug, PartialEq)]
 pub struct AddCommandArgs {
     /// The solution file to add the project to.
     #[arg(
         long = "solution-file-path",
-        required = false
+        required = false,
+        value_hint = ValueHint::FilePath
     )]
     solution_file_path: Option<PathBuf>,
 
     /// The path to the project.
     #[arg(
         long = "project-path",
-        required = true
+        required = true,
+        value_hint = ValueHint::AnyPath
     )]
     project_path: PathBuf,
 
@@ -28,6 +30,7 @@ pub struct AddCommandArgs {
     #[arg(
         long = "project-friendly-name",
         required = false,
+        value_hint = ValueHint::Other
     )]
     project_friendly_name: Option<String>,
 

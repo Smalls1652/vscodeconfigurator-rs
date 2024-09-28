@@ -6,7 +6,7 @@ use init::InitCommandArgs;
 use add::AddCommandArgs;
 
 /// Subcommands for C# projects.
-#[derive(Subcommand)]
+#[derive(Subcommand, Debug, PartialEq)]
 #[command(
     about = "Commands for creating and managing C# projects.",
     arg_required_else_help = true,
