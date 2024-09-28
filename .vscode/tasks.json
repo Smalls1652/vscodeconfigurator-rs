@@ -159,7 +159,38 @@
                 "clear": true
             },
             "problemMatcher": "$rustc"
-        }
+        },
+        {
+			"label": "Install vscodeconfigurator locally",
+			"detail": "Copy the vscodeconfigurator binary to the \"~/.vscodeconfigurator/bin\" directory.",
+			"icon": {
+				"id": "move",
+				"color": "terminal.ansiBlue"
+			},
+			"type": "process",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-File",
+				"Install-VSCodeConfigurator.ps1",
+				"-Configuration",
+				"${input:buildConfig}",
+				"-Verbose"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true,
+			},
+			"problemMatcher": []
+		}
     ],
     "inputs": [
         {
@@ -178,6 +209,22 @@
             "id": "runExtraArgs",
             "description": "Extra arguments to pass to the binary",
             "type": "promptString"
+        },
+        {
+            "id": "buildConfig",
+            "description": "Select the build configuration",
+            "type": "pickString",
+            "default": "Release",
+            "options": [
+                {
+                    "label": "Debug",
+                    "value": "Debug"
+                },
+                {
+                    "label": "Release",
+                    "value": "Release"
+                }
+            ]
         }
     ]
 }
