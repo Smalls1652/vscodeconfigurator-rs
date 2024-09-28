@@ -1,9 +1,14 @@
 use clap::{builder::TypedValueParser, Args, ValueEnum};
 use std::{
-    env, ffi::OsString, path::{absolute, Path, PathBuf}
+    env, path::{absolute, Path, PathBuf}
 };
 
-use crate::{external_procs::{dotnet, git}, template_ops, vscode_ops};
+use crate::{
+    external_procs::{dotnet, git}, 
+    template_ops,
+    utils, 
+    vscode_ops
+};
 
 /// Defines the arguments for the `csharp init` command and the logic to run the command.
 #[derive(Args, Debug)]
@@ -14,7 +19,7 @@ pub struct InitCommandArgs {
         long = "output-directory",
         required = false,
         value_parser = clap::builder::OsStringValueParser::new().map(|s| PathBuf::from(s)),
-        default_value = get_output_directory_default_value()
+        default_value = utils::get_output_directory_default_value()
     )]
     output_directory: PathBuf,
 
@@ -125,9 +130,9 @@ impl InitCommandArgs {
         }
 
         console_utils.write_info(format!("\n🚀 VSCode\n"))?;
-        template_ops::csharp::csharp_copy_vscode_settings(&output_directory_absolute, &mut console_utils)?;
+        template_ops::csharp::csharp_copy_vscode_settings(&output_directory_absolute, &solution_name, &mut console_utils)?;
         vscode_ops::csharp::update_csharp_lsp(&output_directory_absolute, self.csharp_lsp, &mut console_utils)?;
-        template_ops::csharp::csharp_copy_vscode_tasks(&output_directory_absolute, &mut console_utils)?;
+        template_ops::csharp::csharp_copy_vscode_tasks(&output_directory_absolute, &solution_name, &mut console_utils)?;
 
         console_utils.write_info(format!("\n🥳 VSCode project initialized!\n"))?;
         console_utils.release();
@@ -161,10 +166,4 @@ pub enum CsharpLspOption {
     /// The original C# language server provided by OmniSharp.
     #[value(name = "OmniSharp")]
     OmniSharp,
-}
-
-/// Gets the default value for the `output_directory` (`--output-directory`) argument if 
-/// it is not provided by the user.
-fn get_output_directory_default_value() -> OsString {
-    env::current_dir().unwrap().into_os_string()
 }
