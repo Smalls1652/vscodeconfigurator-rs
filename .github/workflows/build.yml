@@ -3,17 +3,7 @@ name: Build
 on:
   push:
     tags-ignore: [ 'v*.*.*', 'v*.*.*-*' ]
-    paths-ignore: 
-        - "README.md"
-        - "LICENSE"
-        - ".vscode/**"
-        - ".github/dependabot.yml"
   pull_request:
-    paths-ignore: 
-        - "README.md"
-        - "LICENSE"
-        - ".vscode/**"
-        - ".github/dependabot.yml"
   workflow_dispatch:
 
 permissions:
