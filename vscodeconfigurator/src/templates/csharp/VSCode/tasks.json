@@ -175,8 +175,6 @@
 			},
 			"problemMatcher": "$msCompile"
 		}
-		// Remaining tasks are only for the VSCode launch configs
-		// or are supporting tasks.
     ],
     "inputs": [
 		{
