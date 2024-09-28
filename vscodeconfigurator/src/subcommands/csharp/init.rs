@@ -1,4 +1,4 @@
-use clap::{builder::TypedValueParser, Args, ValueEnum};
+use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
 use std::{
     env, path::{absolute, Path, PathBuf}
 };
@@ -11,7 +11,7 @@ use crate::{
 };
 
 /// Defines the arguments for the `csharp init` command and the logic to run the command.
-#[derive(Args, Debug)]
+#[derive(Args, Debug, PartialEq)]
 pub struct InitCommandArgs {
     /// The output directory for the new project.
     #[arg(
@@ -19,7 +19,8 @@ pub struct InitCommandArgs {
         long = "output-directory",
         required = false,
         value_parser = clap::builder::OsStringValueParser::new().map(|s| PathBuf::from(s)),
-        default_value = utils::get_output_directory_default_value()
+        default_value = utils::get_output_directory_default_value(),
+        value_hint = ValueHint::DirPath
     )]
     output_directory: PathBuf,
 
@@ -30,7 +31,8 @@ pub struct InitCommandArgs {
         short = 'n',
         long = "solution-name",
         required = false,
-        default_value = ""
+        default_value = "",
+        value_hint = ValueHint::Unknown
     )]
     solution_name: String,
 
