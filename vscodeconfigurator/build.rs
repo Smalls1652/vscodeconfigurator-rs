@@ -3,6 +3,31 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use git_version::git_version;
+
+fn set_version() {
+    let build_profile_env_var = env::var("PROFILE")
+        .clone()
+        .unwrap();
+
+    let build_profile = build_profile_env_var
+        .as_str();
+
+    let current_git_version: &str = match build_profile {
+        "release" => git_version!(
+            args = ["--tags", "--abbrev=0"],
+            fallback = "v0.0.0"
+        ),
+
+        _ => git_version!(
+                args = ["--tags"],
+                fallback = "v0.0.0"
+            )
+    };
+
+    println!("cargo::rustc-env=CARGO_PKG_VERSION={}", current_git_version);
+}
+
 fn copy_source_dir<I, O>(source_dir: I, output_dir: O)
 where I: AsRef<Path>, O: AsRef<Path> {
     let source_dir_path = source_dir
@@ -87,4 +112,6 @@ fn main() {
 
         copy_source_dir(&src_copy_path, &output_copy_path);
     }
+
+    set_version();
 }
