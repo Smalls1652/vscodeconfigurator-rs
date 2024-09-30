@@ -4,6 +4,7 @@ use std::{
 };
 
 use git_version::git_version;
+use toml_edit::{DocumentMut, value};
 
 /// Sets the version of the package to the latest git tag.
 fn set_version() {
@@ -27,6 +28,35 @@ fn set_version() {
     };
 
     println!("cargo::rustc-env=CARGO_PKG_VERSION={}", current_git_version);
+
+    // Check if the package version should be updated in the manifest file.
+    // The 'VSCODECONFIGURATOR_UPDATE_MANIFEST_VERSION' environment variable should be set to 'true' for this to happen.
+    let should_update_cargo_manifest = env::var("VSCODECONFIGURATOR_UPDATE_MANIFEST_VERSION")
+        .unwrap_or("false".to_string())
+        .parse::<bool>()
+        .unwrap();
+
+    if should_update_cargo_manifest {
+        println!("cargo::warning=Package version will be set to '{}' in the manifest file.", current_git_version);
+
+        let manifest_dir_path = PathBuf::from(
+            env::var("CARGO_MANIFEST_DIR")
+                .unwrap()
+        );
+
+        let cargo_toml_path = manifest_dir_path
+            .join("Cargo.toml");
+
+        let mut cargo_toml = fs::read_to_string(&cargo_toml_path)
+            .expect("Failed to read Cargo.toml.")
+            .parse::<DocumentMut>()
+            .expect("Failed to parse Cargo.toml.");
+
+        cargo_toml["package"]["version"] = value(&current_git_version.trim_start_matches("v").to_string());
+
+        fs::write(&cargo_toml_path, cargo_toml.to_string())
+            .expect("Failed to write Cargo.toml.");
+    }
 }
 
 fn copy_source_dir<I, O>(source_dir: I, output_dir: O)
