@@ -44,7 +44,10 @@
                 "${input:packageName}"
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "VSCODECONFIGURATOR_UPDATE_MANIFEST_VERSION": "${input:updateManifestVersion}"
+                }
             },
             "presentation": {
                 "echo": true,
@@ -223,6 +226,22 @@
                 {
                     "label": "Release",
                     "value": "Release"
+                }
+            ]
+        },
+        {
+            "id": "updateManifestVersion",
+            "description": "Should the manifest version be updated?",
+            "type": "pickString",
+            "default": "No",
+            "options": [
+                {
+                    "label": "Yes",
+                    "value": "true"
+                },
+                {
+                    "label": "No",
+                    "value": "false"
                 }
             ]
         }
