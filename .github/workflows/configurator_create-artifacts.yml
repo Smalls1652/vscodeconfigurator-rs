@@ -51,28 +51,20 @@ jobs:
             if: ${{ runner.os == 'Windows' }}
             shell: pwsh
             run: |
-              cargo build --release --package vscodeconfigurator --target x86_64-pc-windows-gnu;
-              Copy-Item -Path "./target/x86_64-pc-windows-gnu/release/templates" -Destination "./artifacts/x86_64-pc-windows-gnu/" -Recurse -Force;
-              Copy-Item -Path "./target/x86_64-pc-windows-gnu/release/vscodeconfigurator.exe" -Destination "./artifacts/x86_64-pc-windows-gnu/" -Force;
+              ./tools/Compile-VSCodeConfigurator.ps1 -Platform "Windows" -Architecture "x64";
 
           - name: Compile package (macOS)
             if: ${{ runner.os == 'macOS' }}
             shell: pwsh
             run: |
-              cargo build --release --package vscodeconfigurator --target x86_64-apple-darwin;
-              Copy-Item -Path "./target/x86_64-apple-darwin/release/templates" -Destination "./artifacts/x86_64-apple-darwin/" -Recurse -Force;
-              Copy-Item -Path "./target/x86_64-apple-darwin/release/vscodeconfigurator" -Destination "./artifacts/x86_64-apple-darwin/" -Force;
-              cargo build --release --package vscodeconfigurator --target aarch64-apple-darwin;
-              Copy-Item -Path "./target/aarch64-apple-darwin/release/templates" -Destination "./artifacts/aarch64-apple-darwin/" -Recurse -Force;
-              Copy-Item -Path "./target/aarch64-apple-darwin/release/vscodeconfigurator" -Destination "./artifacts/aarch64-apple-darwin/" -Force;
+              ./tools/Compile-VSCodeConfigurator.ps1 -Platform "macOS" -Architecture "x64";
+              ./tools/Compile-VSCodeConfigurator.ps1 -Platform "macOS" -Architecture "arm64"
 
           - name: Compile package (Linux)
             if: ${{ runner.os == 'Linux' }}
             shell: pwsh
             run: |
-              cargo build --release --package vscodeconfigurator --target x86_64-unknown-linux-gnu;
-              Copy-Item -Path "./target/x86_64-unknown-linux-gnu/release/templates" -Destination "./artifacts/x86_64-unknown-linux-gnu/" -Recurse -Force;
-              Copy-Item -Path "./target/x86_64-unknown-linux-gnu/release/vscodeconfigurator" -Destination "./artifacts/x86_64-unknown-linux-gnu/" -Force;
+              ./tools/Compile-VSCodeConfigurator.ps1 -Platform "Linux" -Architecture "x64";
 
           # Upload artifacts
           - name: Create artifact (Windows)
@@ -80,7 +72,7 @@ jobs:
             if: ${{ runner.os == 'Windows' }}
             with:
               name: "Configurator_win-x64_${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
-              path: ${{ github.workspace }}/artifacts/x86_64-pc-windows-gnu/**/*
+              path: ${{ github.workspace }}/artifacts/windows-x64/**/*
               if-no-files-found: error
 
           - name: Create artifact (Linux - x64)
@@ -88,7 +80,7 @@ jobs:
             if: ${{ runner.os == 'Linux' }}
             with:
               name: "Configurator_linux-x64_${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
-              path: ${{ github.workspace }}/artifacts/x86_64-unknown-linux-gnu/**/*
+              path: ${{ github.workspace }}/artifacts/linux-x64/**/*
               if-no-files-found: error
 
           - name: Create artifact (macOS - x64)
@@ -96,7 +88,7 @@ jobs:
             if: ${{ runner.os == 'macOS' }}
             with:
               name: "Configurator_osx-x64_${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
-              path: ${{ github.workspace }}/artifacts/x86_64-apple-darwin/**/*
+              path: ${{ github.workspace }}/artifacts/macos-x64/**/*
               if-no-files-found: error
 
           - name: Create artifact (macOS - arm64)
@@ -104,5 +96,5 @@ jobs:
             if: ${{ runner.os == 'macOS' }}
             with:
               name: "Configurator_osx-arm64_${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
-              path: ${{ github.workspace }}/artifacts/aarch64-apple-darwin/**/*
+              path: ${{ github.workspace }}/artifacts/macos-arm64/**/*
               if-no-files-found: error
