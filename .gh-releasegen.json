@@ -1,0 +1,21 @@
+{
+  "labels": {
+    "bug": [
+      "bug",
+      "bug fix",
+      "bugfix"
+    ],
+    "maintenance": [
+      "maintenance"
+    ]
+  },
+  "separateProjectLabel": {
+    "enable": true,
+    "projectLabels": [
+      {
+        "name": "CLI Tool",
+        "label": "Configurator"
+      }
+    ]
+  }
+}
