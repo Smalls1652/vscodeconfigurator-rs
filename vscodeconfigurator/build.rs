@@ -5,6 +5,7 @@ use std::{
 
 use git_version::git_version;
 
+/// Sets the version of the package to the latest git tag.
 fn set_version() {
     let build_profile_env_var = env::var("PROFILE")
         .clone()
