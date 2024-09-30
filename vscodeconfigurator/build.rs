@@ -59,6 +59,48 @@ fn set_version() {
     }
 }
 
+/// Copies the templates directory to the build directory.
+fn copy_templates_to_build_dir() {
+    let manifest_dir_path = PathBuf::from(
+        env::var("CARGO_MANIFEST_DIR")
+            .unwrap()
+    );
+
+    let output_dir_path = PathBuf::from(
+        env::var("OUT_DIR")
+            .unwrap()
+    )
+        .join("../../../")
+        .canonicalize()
+        .unwrap();
+
+    let src_dir_path = manifest_dir_path
+        .clone()
+        .join("src");
+
+    let directories_to_copy = vec![
+        "templates"
+    ];
+
+    for directory_item in directories_to_copy {
+        let src_copy_path = src_dir_path
+            .join(directory_item);
+
+        let output_copy_path = output_dir_path
+            .clone()
+            .join(directory_item);
+
+        println!("Copying directory '{:?}' to '{:?}'...", src_copy_path, output_copy_path);
+
+        copy_source_dir(&src_copy_path, &output_copy_path);
+    }
+}
+
+/// Copies the source directory to the output directory.
+/// 
+/// ## Arguments
+/// * `source_dir` - The source directory to copy.
+/// * `output_dir` - The output directory to copy to.
 fn copy_source_dir<I, O>(source_dir: I, output_dir: O)
 where I: AsRef<Path>, O: AsRef<Path> {
     let source_dir_path = source_dir
@@ -108,41 +150,7 @@ where I: AsRef<Path>, O: AsRef<Path> {
 }
 
 fn main() {
-    let manifest_dir_path = PathBuf::from(
-        env::var("CARGO_MANIFEST_DIR")
-            .unwrap()
-    );
-
-    let output_dir_path = manifest_dir_path
-        .clone()
-        .parent()
-        .unwrap()
-        .join("target")
-        .join(
-            env::var("PROFILE")
-                .unwrap()
-        );
-
-    let src_dir_path = manifest_dir_path
-        .clone()
-        .join("src");
-
-    let directories_to_copy = vec![
-        "templates"
-    ];
-
-    for directory_item in directories_to_copy {
-        let src_copy_path = src_dir_path
-            .join(directory_item);
-
-        let output_copy_path = output_dir_path
-            .clone()
-            .join(directory_item);
-
-        println!("Copying directory '{:?}' to '{:?}'...", src_copy_path, output_copy_path);
-
-        copy_source_dir(&src_copy_path, &output_copy_path);
-    }
+    copy_templates_to_build_dir();
 
     set_version();
 }
