@@ -66,15 +66,13 @@ fn copy_templates_to_build_dir() {
             .unwrap()
     );
 
-    let output_dir_path = manifest_dir_path
-        .clone()
-        .parent()
-        .unwrap()
-        .join("target")
-        .join(
-            env::var("PROFILE")
-                .unwrap()
-        );
+    let output_dir_path = PathBuf::from(
+        env::var("OUT_DIR")
+            .unwrap()
+    )
+        .join("../../../")
+        .canonicalize()
+        .unwrap();
 
     let src_dir_path = manifest_dir_path
         .clone()
