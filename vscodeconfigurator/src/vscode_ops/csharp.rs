@@ -31,7 +31,7 @@ pub fn update_csharp_lsp(
 
     vscode_settings["dotnet.server.path"] = match csharp_lsp {
         CsharpLspOption::CsharpLsp => Value::String("".to_string()),
-        CsharpLspOption::OmniSharp => Value::String("omnisharp".to_string())
+        CsharpLspOption::OmniSharp => Value::String("latest".to_string())
     };
 
     let updated_vscode_settings_json = serde_json::to_string(&vscode_settings)?;
