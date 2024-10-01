@@ -34,7 +34,7 @@ pub fn update_csharp_lsp(
         CsharpLspOption::OmniSharp => Value::String("latest".to_string())
     };
 
-    let updated_vscode_settings_json = serde_json::to_string(&vscode_settings)?;
+    let updated_vscode_settings_json = serde_json::to_string_pretty(&vscode_settings)?;
     fs::write(&vscode_settings_path, updated_vscode_settings_json)?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
