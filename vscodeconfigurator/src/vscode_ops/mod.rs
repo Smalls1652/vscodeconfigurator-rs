@@ -46,3 +46,44 @@ impl VSCodeSettings {
         Ok(())
     }
 }
+
+/// Represents the tasks file for a Visual Studio Code workspace.
+pub struct VSCodeTasks {
+    /// The path to the tasks file.
+    pub file_path: PathBuf,
+
+    /// The values in the tasks file.
+    pub values: Value
+}
+
+impl VSCodeTasks {
+    /// Creates a new `VSCodeTasks` instance.
+    /// 
+    /// ## Arguments
+    /// 
+    /// * `file_path` - The path to the tasks file.
+    pub fn new(
+        file_path: PathBuf
+    ) -> Self {
+        if !file_path.exists() {
+            panic!("The tasks file does not exist.");
+        }
+
+        let tasks_json = fs::read_to_string(&file_path).unwrap();
+        let tasks = serde_json::from_str(&tasks_json.as_str()).unwrap();
+
+        Self {
+            file_path: file_path,
+            values: tasks
+        }
+    }
+
+    /// Writes the tasks to the tasks file.
+    pub fn write_tasks(&self) -> Result<(), Box<dyn std::error::Error>> {
+        let updated_tasks_json = serde_json::to_string_pretty(&self.values)?;
+
+        fs::write(&self.file_path, updated_tasks_json)?;
+
+        Ok(())
+    }
+}
