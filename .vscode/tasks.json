@@ -2,114 +2,70 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build package (Debug)",
-            "detail": "Build a package in debug mode",
-            "icon": {
-                "id": "package",
-                "color": "terminal.ansiYellow"
-            },
-            "type": "process",
-            "command": "cargo",
-            "args": [
-                "build",
-                "--package",
-                "${input:packageName}"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            },
-            "problemMatcher": "$rustc"
-        },
+			"label": "Build package",
+			"detail": "Build a package in the workspace",
+			"icon": {
+				"id": "tools",
+				"color": "terminal.ansiGreen"
+			},
+			"type": "process",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+                "-NoProfile",
+				"-File",
+				"${workspaceFolder}/tools/Build-Package.ps1",
+				"-PackageName",
+				"${input:packageName}",
+                "-BuildProfile",
+                "${input:buildProfile}",
+				"-Verbose"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true,
+			},
+			"problemMatcher": "$rustc"
+		},
         {
-            "label": "Build package (Release)",
-            "detail": "Build a package in release mode",
-            "icon": {
-                "id": "package",
-                "color": "terminal.ansiGreen"
-            },
-            "type": "process",
-            "command": "cargo",
-            "args": [
-                "build",
-                "--release",
-                "--package",
-                "${input:packageName}"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            },
-            "problemMatcher": "$rustc"
-        },
-        {
-            "label": "Clean package (Debug)",
-            "detail": "Clean a package in debug mode",
+            "label": "Clean package",
+            "detail": "Clean a package in the workspace",
             "icon": {
                 "id": "trash",
                 "color": "terminal.ansiYellow"
             },
             "type": "process",
-            "command": "cargo",
-            "args": [
-                "clean",
-                "--package",
-                "${input:packageName}"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            },
-            "problemMatcher": "$rustc"
-        },
-        {
-            "label": "Clean package (Release)",
-            "detail": "Clean a package in release mode",
-            "icon": {
-                "id": "trash",
-                "color": "terminal.ansiYellow"
-            },
-            "type": "process",
-            "command": "cargo",
-            "args": [
-                "clean",
-                "--release",
-                "--package",
-                "${input:packageName}"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            },
-            "problemMatcher": "$rustc"
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+                "-NoProfile",
+				"-File",
+				"${workspaceFolder}/tools/Clean-Package.ps1",
+				"-PackageName",
+				"${input:packageName}",
+                "-BuildProfile",
+                "${input:buildProfile}",
+				"-Verbose"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true,
+			},
+			"problemMatcher": "$rustc"
         },
         {
             "label": "Run vscodeconfigurator",
@@ -175,7 +131,7 @@
 				"-File",
 				"Install-VSCodeConfigurator.ps1",
 				"-Configuration",
-				"${input:buildConfig}",
+				"${input:buildProfile}",
 				"-Verbose"
 			],
 			"options": {
@@ -244,10 +200,10 @@
             "type": "promptString"
         },
         {
-            "id": "buildConfig",
-            "description": "Select the build configuration",
+            "id": "buildProfile",
+            "description": "Select the build profile",
             "type": "pickString",
-            "default": "Release",
+            "default": "Debug",
             "options": [
                 {
                     "label": "Debug",
