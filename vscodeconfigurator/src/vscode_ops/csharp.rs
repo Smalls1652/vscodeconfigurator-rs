@@ -1,8 +1,12 @@
-use std::{fs, path::PathBuf};
+use std::path::PathBuf;
 
 use serde_json::{json, Value};
 
-use crate::{console_utils::ConsoleUtils, subcommands::csharp::init::CsharpLspOption};
+use crate::{
+    console_utils::ConsoleUtils,
+    subcommands::csharp::init::CsharpLspOption,
+    vscode_ops::{VSCodeSettings, VSCodeTasks}
+};
 
 /// Updates the C# LSP option in the `.vscode/settings.json` file.
 /// 
@@ -16,26 +20,21 @@ pub fn update_csharp_lsp(
     csharp_lsp: CsharpLspOption,
     console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let vscode_settings_path = output_directory.join(".vscode/settings.json");
-
     console_utils.write_info(format!("- 📄 Updating C# LSP option in tasks.json... "))?;
 
-    let vscode_settings_json = fs::read_to_string(&vscode_settings_path)?;
+    let mut vscode_settings = VSCodeSettings::new(output_directory.join(".vscode/settings.json"));
 
-    let mut vscode_settings: Value = serde_json::from_str(&vscode_settings_json.as_str())?;
-
-    vscode_settings["dotnet.server.useOmnisharp"] = match csharp_lsp {
+    vscode_settings.values["dotnet.server.useOmnisharp"] = match csharp_lsp {
         CsharpLspOption::CsharpLsp => Value::Bool(false),
         CsharpLspOption::OmniSharp => Value::Bool(true)
     };
 
-    vscode_settings["dotnet.server.path"] = match csharp_lsp {
+    vscode_settings.values["dotnet.server.path"] = match csharp_lsp {
         CsharpLspOption::CsharpLsp => Value::String("".to_string()),
         CsharpLspOption::OmniSharp => Value::String("latest".to_string())
     };
 
-    let updated_vscode_settings_json = serde_json::to_string_pretty(&vscode_settings)?;
-    fs::write(&vscode_settings_path, updated_vscode_settings_json)?;
+    vscode_settings.write_settings()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -60,15 +59,11 @@ pub fn add_csharp_project_to_tasks(
     is_watchable: bool,
     console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let vscode_tasks_path = output_directory.join(".vscode/tasks.json");
-
     console_utils.write_info(format!("- 📄 Adding C# project to tasks.json... "))?;
 
-    let vscode_tasks_json = fs::read_to_string(&vscode_tasks_path)?;
+    let mut vscode_tasks = VSCodeTasks::new(output_directory.join(".vscode/tasks.json"));
 
-    let mut vscode_tasks: Value = serde_json::from_str(&vscode_tasks_json.as_str())?;
-
-    let inputs_node = vscode_tasks["inputs"].as_array_mut().unwrap();
+    let inputs_node = vscode_tasks.values["inputs"].as_array_mut().unwrap();
 
     let csharp_project_input = json!({
         "label": project_friendly_name,
@@ -95,8 +90,7 @@ pub fn add_csharp_project_to_tasks(
         }
     }
 
-    let updated_vscode_tasks_json = serde_json::to_string_pretty(&vscode_tasks)?;
-    fs::write(&vscode_tasks_path, updated_vscode_tasks_json)?;
+    vscode_tasks.write_tasks()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
