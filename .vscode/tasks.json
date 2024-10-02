@@ -44,10 +44,7 @@
                 "${input:packageName}"
             ],
             "options": {
-                "cwd": "${workspaceFolder}",
-                "env": {
-                    "VSCODECONFIGURATOR_UPDATE_MANIFEST_VERSION": "${input:updateManifestVersion}"
-                }
+                "cwd": "${workspaceFolder}"
             },
             "presentation": {
                 "echo": true,
@@ -193,6 +190,39 @@
 				"clear": true,
 			},
 			"problemMatcher": []
+		},
+        {
+			"label": "Update package version",
+			"detail": "Update the version for a package in the workspace.",
+			"icon": {
+				"id": "versions",
+				"color": "terminal.ansiBlack"
+			},
+			"type": "process",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-File",
+				"${workspaceFolder}/tools/Update-PackageVersion.ps1",
+				"-PackageName",
+				"${input:packageName}",
+                "-CustomVersion",
+                "${input:newPackageVersion}",
+				"-Verbose"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true,
+			},
+			"problemMatcher": []
 		}
     ],
     "inputs": [
@@ -230,20 +260,10 @@
             ]
         },
         {
-            "id": "updateManifestVersion",
-            "description": "Should the manifest version be updated?",
-            "type": "pickString",
-            "default": "No",
-            "options": [
-                {
-                    "label": "Yes",
-                    "value": "true"
-                },
-                {
-                    "label": "No",
-                    "value": "false"
-                }
-            ]
+            "id": "newPackageVersion",
+            "description": "Enter the new version for the package",
+            "type": "promptString",
+            "default": ""
         }
     ]
 }
