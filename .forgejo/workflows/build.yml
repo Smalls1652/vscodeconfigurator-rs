@@ -22,7 +22,6 @@ jobs:
         ]
     env:
       CARGO_TERM_COLOR: always
-      PATH: "$HOME/.cargo/bin:$PATH"
     
     steps:
       - name: Checkout repository
@@ -31,10 +30,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Rust
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y;
-          source $HOME/.cargo/env;
-          rustup toolchain install stable
+        uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Build project
         run: cargo build --package ${{ matrix.package_name }} --verbose
