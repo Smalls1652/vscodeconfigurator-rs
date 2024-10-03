@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+name: Build
+on:
+  push:
+    tags-ignore: [ 'v*.*.*', 'v*.*.*-*' ]
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  packages: read
+
+jobs:
+  build:
+    name: Build project
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        package_name: [
+          "vscodeconfigurator"
+        ]
+    env:
+      CARGO_TERM_COLOR: always
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Rust
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y;
+          rustup toolchain install stable
+
+      - name: Build project
+        run: cargo build --package ${{ matrix.package_name }} --verbose
