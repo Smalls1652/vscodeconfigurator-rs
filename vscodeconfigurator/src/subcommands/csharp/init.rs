@@ -103,7 +103,18 @@ impl InitCommandArgs {
         }
 
         let output_directory_absolute = absolute(output_directory).unwrap();
-        let solution_name = self.get_solution_name_value();
+
+        let parsed_solution_name = self.get_solution_name_value();
+
+        if parsed_solution_name.is_none() {
+            return Err(
+                CliError::new(
+                    "The solution name could not be determined.", 
+                    CliErrorKind::UnableToParseSolutionName).into()
+            );
+        }
+
+        let solution_name = parsed_solution_name.unwrap();
 
         console_utils.write_info(format!("🚀 Basic\n"))?;
         dotnet::add_dotnet_globaljson(&output_directory_absolute, &mut console_utils)?;
@@ -143,19 +154,22 @@ impl InitCommandArgs {
 
     /// Gets the default value for the `solution_name` (`--solution-name`) argument if
     /// it is not provided by the user.
-    fn get_solution_name_value(&self) -> String {
+    fn get_solution_name_value(&self) -> Option<String> {
         match &self.solution_name.is_none() {
-            true =>
-                self.output_directory
-                .file_name()
-                .unwrap()
-                .to_string_lossy()
-                .to_string(),
+            true => {
+                let output_directory_name = self.output_directory
+                    .file_name();
+
+                match output_directory_name {
+                    Some(name) => Some(name.to_string_lossy().to_string()),
+                    None => None
+                }
+            }
             
-            false => self.solution_name
+            false => Some(self.solution_name
                 .as_ref()
                 .unwrap()
-                .clone()
+                .clone())
         }
     }
 }
