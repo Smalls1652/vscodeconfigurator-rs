@@ -68,8 +68,6 @@ impl InitCommandArgs {
     pub fn run_command(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
         let mut output_directory = self.output_directory.clone();
 
-        console_utils.write_info(format!("{:?}\n", output_directory))?;
-
         output_directory = output_directory
             .resolve_home_dir()?
             .trim_trailing_slashes()?;
@@ -77,8 +75,6 @@ impl InitCommandArgs {
         output_directory.create_if_not_exists()?;
 
         let output_directory_absolute = output_directory.to_absolute();
-
-        console_utils.write_info(format!("{:?}\n", output_directory_absolute))?;
 
         let parsed_solution_name = self.get_solution_name_value();
 
