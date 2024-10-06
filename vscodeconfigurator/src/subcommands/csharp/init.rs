@@ -85,7 +85,7 @@ impl InitCommandArgs {
             let home_dir_env_var_key = match env::consts::OS {
                 "windows" => "USERPROFILE",
                 "unix" | "macos" => "HOME",
-                _ => panic!("Unsupported OS"),
+                _ => return Err(CliError::new("The operating system is not supported.", CliErrorKind::UnsupportedOperatingSystem).into()),
             };
             let home_dir_env_var = env::var(home_dir_env_var_key).unwrap();
             let home_dir = Path::new(&home_dir_env_var);
@@ -99,8 +99,7 @@ impl InitCommandArgs {
         }
 
         if !output_directory.exists() {
-            std::fs::create_dir(&output_directory)
-                .expect("Failed to create output directory.");
+            std::fs::create_dir(&output_directory)?;
         }
 
         let output_directory_absolute = absolute(output_directory).unwrap();
