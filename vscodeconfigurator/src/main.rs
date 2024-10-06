@@ -5,6 +5,7 @@ mod template_ops;
 mod vscode_ops;
 mod utils;
 mod error;
+mod io;
 
 use std::{error::Error, process};
 
