@@ -145,7 +145,10 @@
 				"showReuseMessage": true,
 				"clear": true,
 			},
-			"problemMatcher": []
+			"problemMatcher": [],
+            "dependsOn": [
+                "Build package"
+            ]
 		},
         {
 			"label": "Update package version",
