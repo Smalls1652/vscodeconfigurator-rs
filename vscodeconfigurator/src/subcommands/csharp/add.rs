@@ -4,8 +4,7 @@ use std::{
 };
 
 use crate::{
-    external_procs::dotnet,
-    vscode_ops
+    console_utils::ConsoleUtils, external_procs::dotnet, vscode_ops
 };
 
 #[derive(Args, Debug, PartialEq)]
@@ -53,9 +52,7 @@ pub struct AddCommandArgs {
 
 impl AddCommandArgs {
     /// Runs the `csharp add` command.
-    pub fn run_command(&self) -> Result<(), Box<dyn std::error::Error>> {
-        let mut console_utils = crate::console_utils::ConsoleUtils::new(None);
-
+    pub fn run_command(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
         let solution_file_path: PathBuf;
 
         if self.solution_file_path.is_none() {
@@ -106,8 +103,8 @@ impl AddCommandArgs {
         }
 
         console_utils.write_info(format!("🚀 Add project\n"))?;
-        dotnet::add_project_to_solution(&solution_file_path, &self.project_path, &mut console_utils)?;
-        vscode_ops::csharp::add_csharp_project_to_tasks(&PathBuf::from(solution_file_path.parent().unwrap()), &self.project_path, &project_friendly_name, self.is_runnable, self.is_watchable, &mut console_utils)?;
+        dotnet::add_project_to_solution(&solution_file_path, &self.project_path, console_utils)?;
+        vscode_ops::csharp::add_csharp_project_to_tasks(&PathBuf::from(solution_file_path.parent().unwrap()), &self.project_path, &project_friendly_name, self.is_runnable, self.is_watchable, console_utils)?;
 
         Ok(())
     }

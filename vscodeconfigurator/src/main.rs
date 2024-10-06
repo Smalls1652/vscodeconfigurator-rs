@@ -4,9 +4,14 @@ mod console_utils;
 mod template_ops;
 mod vscode_ops;
 mod utils;
+mod error;
+
+use std::{error::Error, process};
 
 use clap::{crate_version, CommandFactory, Parser};
 use clap_complete::aot::generate;
+use console_utils::ConsoleUtils;
+use error::{CliError, CliErrorKind};
 use subcommands::RootSubcommands;
 
 /// The main CLI struct.
@@ -25,21 +30,32 @@ struct Cli {
 }
 
 /// The entry point for the CLI.
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
+    let mut console_utils = ConsoleUtils::new(None);
+
     let cli = Cli::parse();
 
-    match &cli.command {
+    let result = match &cli.command {
         Some(RootSubcommands::Completions(command)) => {
             generate(command.shell, &mut Cli::command(), "vscodeconfigurator", &mut std::io::stdout());
-            std::process::exit(0);
+            Ok(())
         }
 
         Some(RootSubcommands::Csharp { command }) =>
             command
                 .as_ref()
                 .unwrap()
-                .match_subcommand(),
+                .match_subcommand(&mut console_utils),
 
-        None => println!("No subcommand provided")
+        None => Err(CliError::new("No subcommand provided.", CliErrorKind::NoSubcommandProvided).into())
+    };
+
+    match result {
+        Err(e) => {
+            console_utils.write_error_extended(e)?;
+            process::exit(1);
+        }
+
+        Ok(_) => Ok(())
     }
 }

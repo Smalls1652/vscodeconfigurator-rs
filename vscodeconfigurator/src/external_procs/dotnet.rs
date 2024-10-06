@@ -42,8 +42,7 @@ pub fn initalize_dotnet_solution(
     process::Command::new("dotnet")
         .args(dotnet_proc_args)
         .current_dir(output_directory)
-        .output()
-        .expect("Failed to run 'dotnet new sln' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -85,8 +84,7 @@ pub fn add_dotnet_globaljson(
     process::Command::new("dotnet")
         .args(dotnet_proc_args)
         .current_dir(output_directory)
-        .output()
-        .expect("Failed to run 'dotnet new globaljson' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -128,8 +126,7 @@ pub fn add_dotnet_gitignore(
     process::Command::new("dotnet")
         .args(dotnet_proc_args)
         .current_dir(output_directory)
-        .output()
-        .expect("Failed to run 'dotnet new gitignore' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -171,8 +168,7 @@ pub fn add_dotnet_buildprops(
     process::Command::new("dotnet")
         .args(dotnet_proc_args)
         .current_dir(output_directory)
-        .output()
-        .expect("Failed to run 'dotnet new buildprops' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -214,8 +210,7 @@ pub fn add_dotnet_nugetconfig(
     process::Command::new("dotnet")
         .args(dotnet_proc_args)
         .current_dir(output_directory)
-        .output()
-        .expect("Failed to run 'dotnet new nugetconfig' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -257,8 +252,7 @@ pub fn add_dotnet_packagesprops(
     process::Command::new("dotnet")
         .args(dotnet_proc_args)
         .current_dir(output_directory)
-        .output()
-        .expect("Failed to run 'dotnet new packagesprops' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -286,8 +280,7 @@ pub fn add_dotnet_tool(
     process::Command::new("dotnet")
         .args(dotnet_proc_args)
         .current_dir(output_directory)
-        .output()
-        .expect("Failed to run 'dotnet tool install' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -307,8 +300,7 @@ fn initialize_dotnet_tool_manifest(
     let tool_manifest_file_path = PathBuf::from(&config_directory).join("dotnet-tools.json");
 
     if !config_directory.exists() {
-        fs::create_dir(&config_directory)
-            .expect("Failed to create '.config' directory.");
+        fs::create_dir(&config_directory)?;
     }
 
     if tool_manifest_file_path.exists() {
@@ -323,8 +315,7 @@ fn initialize_dotnet_tool_manifest(
     process::Command::new("dotnet")
         .args(dotnet_proc_args)
         .current_dir(output_directory)
-        .output()
-        .expect("Failed to run 'dotnet new tool-manifest' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 
@@ -353,8 +344,7 @@ pub fn add_project_to_solution(
 
     process::Command::new("dotnet")
         .args(dotnet_proc_args)
-        .output()
-        .expect("Failed to run 'dotnet sln add' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
 

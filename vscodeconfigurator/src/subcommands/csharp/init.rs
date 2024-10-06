@@ -1,12 +1,15 @@
 use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
 use std::{
-    env, path::{absolute, Path, PathBuf}
+    env,
+    path::{absolute, Path, PathBuf}
 };
 
 use crate::{
-    external_procs::{dotnet, git}, 
+    console_utils::ConsoleUtils,
+    error::{CliError, CliErrorKind},
+    external_procs::{dotnet, git},
     template_ops,
-    utils, 
+    utils,
     vscode_ops
 };
 
@@ -71,9 +74,7 @@ pub struct InitCommandArgs {
 
 impl InitCommandArgs {
     /// Runs the `csharp init` command.
-    pub fn run_command(&self) -> Result<(), Box<dyn std::error::Error>> {
-        let mut console_utils = crate::console_utils::ConsoleUtils::new(None);
-
+    pub fn run_command(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
         let mut output_directory = self.output_directory.clone();
 
         // Adding a check for the `~` character at the beginning of
@@ -85,7 +86,7 @@ impl InitCommandArgs {
             let home_dir_env_var_key = match env::consts::OS {
                 "windows" => "USERPROFILE",
                 "unix" | "macos" => "HOME",
-                _ => panic!("Unsupported OS"),
+                _ => return Err(CliError::new("The operating system is not supported.", CliErrorKind::UnsupportedOperatingSystem).into()),
             };
             let home_dir_env_var = env::var(home_dir_env_var_key).unwrap();
             let home_dir = Path::new(&home_dir_env_var);
@@ -99,64 +100,76 @@ impl InitCommandArgs {
         }
 
         if !output_directory.exists() {
-            std::fs::create_dir(&output_directory)
-                .expect("Failed to create output directory.");
+            std::fs::create_dir(&output_directory)?;
         }
 
         let output_directory_absolute = absolute(output_directory).unwrap();
-        let solution_name = self.get_solution_name_value();
+
+        let parsed_solution_name = self.get_solution_name_value();
+
+        if parsed_solution_name.is_none() {
+            return Err(
+                CliError::new(
+                    "The solution name could not be determined.", 
+                    CliErrorKind::UnableToParseSolutionName).into()
+            );
+        }
+
+        let solution_name = parsed_solution_name.unwrap();
 
         console_utils.write_info(format!("🚀 Basic\n"))?;
-        dotnet::add_dotnet_globaljson(&output_directory_absolute, &mut console_utils)?;
+        dotnet::add_dotnet_globaljson(&output_directory_absolute, console_utils)?;
 
         console_utils.write_info(format!("\n🚀 Git\n"))?;
-        git::initialize_git_repo(&output_directory_absolute, &mut console_utils)?;
-        dotnet::add_dotnet_gitignore(&output_directory_absolute, &mut console_utils)?;
+        git::initialize_git_repo(&output_directory_absolute, console_utils)?;
+        dotnet::add_dotnet_gitignore(&output_directory_absolute, console_utils)?;
 
         console_utils.write_info(format!("\n🚀 .NET\n"))?;
-        dotnet::initalize_dotnet_solution(&output_directory_absolute, &solution_name, &mut console_utils)?;
-        dotnet::add_dotnet_buildprops(&output_directory_absolute, &mut console_utils)?;
+        dotnet::initalize_dotnet_solution(&output_directory_absolute, &solution_name, console_utils)?;
+        dotnet::add_dotnet_buildprops(&output_directory_absolute, console_utils)?;
 
         if self.add_nuget_config {
-            dotnet::add_dotnet_nugetconfig(&output_directory_absolute, &mut console_utils)?;
+            dotnet::add_dotnet_nugetconfig(&output_directory_absolute, console_utils)?;
         }
 
         if self.enable_centrally_managed_packages {
-            dotnet::add_dotnet_packagesprops(&output_directory_absolute, &mut console_utils)?;
+            dotnet::add_dotnet_packagesprops(&output_directory_absolute, console_utils)?;
         }
 
         if self.add_gitversion {
             console_utils.write_info(format!("\n🚀 GitVersion\n"))?;
-            dotnet::add_dotnet_tool(&output_directory_absolute, "GitVersion.Tool", &mut console_utils)?;
-            template_ops::csharp::csharp_copy_gitversion(&output_directory_absolute, &mut console_utils)?;
+            dotnet::add_dotnet_tool(&output_directory_absolute, "GitVersion.Tool", console_utils)?;
+            template_ops::csharp::csharp_copy_gitversion(&output_directory_absolute, console_utils)?;
         }
 
         console_utils.write_info(format!("\n🚀 VSCode\n"))?;
-        template_ops::csharp::csharp_copy_vscode_settings(&output_directory_absolute, &solution_name, &mut console_utils)?;
-        vscode_ops::csharp::update_csharp_lsp(&output_directory_absolute, self.csharp_lsp, &mut console_utils)?;
-        template_ops::csharp::csharp_copy_vscode_tasks(&output_directory_absolute, &solution_name, &mut console_utils)?;
+        template_ops::csharp::csharp_copy_vscode_settings(&output_directory_absolute, &solution_name, console_utils)?;
+        vscode_ops::csharp::update_csharp_lsp(&output_directory_absolute, self.csharp_lsp, console_utils)?;
+        template_ops::csharp::csharp_copy_vscode_tasks(&output_directory_absolute, &solution_name, console_utils)?;
 
         console_utils.write_info(format!("\n🥳 VSCode project initialized!\n"))?;
-        console_utils.release();
 
         Ok(())
     }
 
     /// Gets the default value for the `solution_name` (`--solution-name`) argument if
     /// it is not provided by the user.
-    fn get_solution_name_value(&self) -> String {
+    fn get_solution_name_value(&self) -> Option<String> {
         match &self.solution_name.is_none() {
-            true =>
-                self.output_directory
-                .file_name()
-                .unwrap()
-                .to_string_lossy()
-                .to_string(),
+            true => {
+                let output_directory_name = self.output_directory
+                    .file_name();
+
+                match output_directory_name {
+                    Some(name) => Some(name.to_string_lossy().to_string()),
+                    None => None
+                }
+            }
             
-            false => self.solution_name
+            false => Some(self.solution_name
                 .as_ref()
                 .unwrap()
-                .clone()
+                .clone())
         }
     }
 }

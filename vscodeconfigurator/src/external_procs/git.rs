@@ -21,8 +21,7 @@ pub fn initialize_git_repo(
     std::process::Command::new("git")
         .args(git_proc_args)
         .current_dir(output_directory)
-        .output()
-        .expect("Failed to run 'git init' command.");
+        .output()?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
     Ok(())

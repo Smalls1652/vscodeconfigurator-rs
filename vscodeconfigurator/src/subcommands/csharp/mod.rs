@@ -1,9 +1,13 @@
 pub mod init;
 pub mod add;
 
+use std::error::Error;
+
 use clap::Subcommand;
 use init::InitCommandArgs;
 use add::AddCommandArgs;
+
+use crate::console_utils::ConsoleUtils;
 
 /// Subcommands for C# projects.
 #[derive(Subcommand, Debug, PartialEq)]
@@ -29,15 +33,15 @@ pub enum CsharpSubcommands {
 
 impl CsharpSubcommands {
     /// Matches the subcommand provided by the user and runs the corresponding command.
-    pub fn match_subcommand(&self) {
+    pub fn match_subcommand(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn Error>> {
         match self {
             CsharpSubcommands::Init(init_args) =>
-                InitCommandArgs::run_command(init_args)
-                    .expect("Failed to run 'csharp init' command."),
+                InitCommandArgs::run_command(init_args, console_utils)?,
 
             CsharpSubcommands::Add(add_args) =>
-                AddCommandArgs::run_command(add_args)
-                    .expect("Failed to run 'csharp add' command.")
-        }
+                AddCommandArgs::run_command(add_args, console_utils)?
+        };
+
+        Ok(())
     }
 }
