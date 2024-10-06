@@ -1,9 +1,34 @@
 use std::{io::{Result, Stdout, Write}, process};
 
 use crossterm::{
-    cursor::{RestorePosition, SavePosition}, event:: {
-        read, Event, KeyCode, KeyboardEnhancementFlags, PushKeyboardEnhancementFlags
-    }, execute, queue, style::{Color, Print, ResetColor, SetForegroundColor}, terminal::{disable_raw_mode, enable_raw_mode, Clear, ClearType}
+    cursor::{
+        RestorePosition,
+        SavePosition
+    },
+    event:: {
+        read,
+        Event,
+        KeyCode,
+        KeyboardEnhancementFlags,
+        PushKeyboardEnhancementFlags
+    },
+    execute,
+    queue,
+    style::{
+        Attribute,
+        Color,
+        Print,
+        ResetColor,
+        SetAttribute,
+        SetBackgroundColor,
+        SetForegroundColor
+    },
+    terminal::{
+        disable_raw_mode,
+        enable_raw_mode,
+        Clear,
+        ClearType
+    }
 };
 
 /// Utility for writing to the console.
@@ -67,6 +92,60 @@ impl ConsoleUtils {
             Print(message),
             ResetColor
         )
+    }
+
+    /// Write an error message to the console by utilizing an error source.
+    pub fn write_error_extended(&mut self, source_error: Box<dyn std::error::Error>) -> Result<()> {
+        let source_error_type: &str;
+        let mut source_error_kind: Option<crate::error::CliErrorKind> = None;
+
+        if source_error.is::<std::io::Error>() {
+            source_error_type = "I/O error";
+        }
+        else if source_error.is::<clap::error::Error>() {
+            source_error_type = "CLI Argument Parser error";
+        }
+        else if source_error.is::<crate::error::CliError>() {
+            source_error_type = "Internal error";
+            source_error_kind = Some(source_error.downcast_ref::<crate::error::CliError>().unwrap().kind.clone());
+        }
+        else {
+            source_error_type = "Unknown error";
+        }
+
+        execute!(
+            self.stdout,
+            SetAttribute(Attribute::Bold),
+            SetBackgroundColor(Color::Red),
+            SetForegroundColor(Color::White),
+            Print(format!("🚨 Error ")),
+            ResetColor,
+            SetAttribute(Attribute::Bold),
+            SetForegroundColor(Color::Red),
+            SetBackgroundColor(Color::Grey),
+            Print(format!(" {} ", source_error_type)),
+            ResetColor
+        )?;
+
+        if source_error_kind.is_some() {
+            execute!(
+                self.stdout,
+                SetAttribute(Attribute::Bold),
+                SetForegroundColor(Color::Red),
+                SetBackgroundColor(Color::Black),
+                Print(format!(" Kind: {} ", source_error_kind.unwrap())),
+                ResetColor
+            )?;
+        }
+
+        execute!(
+            self.stdout,
+            SetForegroundColor(Color::Red),
+            Print(format!("\n\n{}", source_error)),
+            ResetColor
+        )?;
+
+        Ok(())
     }
 
     /// Manually save the current cursor position.
