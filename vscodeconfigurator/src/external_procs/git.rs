@@ -12,7 +12,7 @@ pub fn initialize_git_repo(
     output_directory: &PathBuf,
     console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("\n- 📦 Initializing Git repository... "))?;
+    console_utils.write_info(format!("- 📦 Initializing Git repository... "))?;
     
     let git_proc_args = vec![
         "init"
