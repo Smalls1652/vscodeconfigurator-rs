@@ -1,16 +1,7 @@
 use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
-use std::{
-    env,
-    path::{absolute, Path, PathBuf}
-};
 
 use crate::{
-    console_utils::ConsoleUtils,
-    error::{CliError, CliErrorKind},
-    external_procs::{dotnet, git},
-    template_ops,
-    utils,
-    vscode_ops
+    console_utils::ConsoleUtils, error::{CliError, CliErrorKind}, external_procs::{dotnet, git}, io::OutputDirectory, template_ops, vscode_ops
 };
 
 /// Defines the arguments for the `csharp init` command and the logic to run the command.
@@ -21,11 +12,11 @@ pub struct InitCommandArgs {
         short = 'o',
         long = "output-directory",
         required = false,
-        value_parser = clap::builder::OsStringValueParser::new().map(|s| PathBuf::from(s)),
-        default_value = utils::get_output_directory_default_value(),
+        value_parser = clap::builder::OsStringValueParser::new().map(|s| OutputDirectory::from_os_string(s).unwrap()),
+        default_value = OutputDirectory::from_current_dir(),
         value_hint = ValueHint::DirPath
     )]
-    output_directory: PathBuf,
+    output_directory: OutputDirectory,
 
     /// The name of the solution file.
     /// 
@@ -77,33 +68,13 @@ impl InitCommandArgs {
     pub fn run_command(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
         let mut output_directory = self.output_directory.clone();
 
-        // Adding a check for the `~` character at the beginning of
-        // the output directory path. If it does, it will modify the
-        // path to use the user's home directory.
-        // 
-        // Might need to check if this is even necessary to do?
-        if self.output_directory.starts_with("~") {
-            let home_dir_env_var_key = match env::consts::OS {
-                "windows" => "USERPROFILE",
-                "unix" | "macos" => "HOME",
-                _ => return Err(CliError::new("The operating system is not supported.", CliErrorKind::UnsupportedOperatingSystem).into()),
-            };
-            let home_dir_env_var = env::var(home_dir_env_var_key).unwrap();
-            let home_dir = Path::new(&home_dir_env_var);
+        output_directory = output_directory
+            .resolve_home_dir()?
+            .trim_trailing_slashes()?;
 
-            output_directory =
-                PathBuf::from(&home_dir)
-                    .join(output_directory
-                        .strip_prefix("~")
-                        .unwrap()
-                    );
-        }
+        output_directory.create_if_not_exists()?;
 
-        if !output_directory.exists() {
-            std::fs::create_dir(&output_directory)?;
-        }
-
-        let output_directory_absolute = absolute(output_directory).unwrap();
+        let output_directory_absolute = output_directory.to_absolute();
 
         let parsed_solution_name = self.get_solution_name_value();
 
@@ -157,11 +128,18 @@ impl InitCommandArgs {
     fn get_solution_name_value(&self) -> Option<String> {
         match &self.solution_name.is_none() {
             true => {
-                let output_directory_name = self.output_directory
+                let output_directory_pathbuf = &self.output_directory
+                    .as_pathbuf();
+
+                let output_directory_name = output_directory_pathbuf
                     .file_name();
 
                 match output_directory_name {
-                    Some(name) => Some(name.to_string_lossy().to_string()),
+                    Some(name) => Some(
+                        name
+                            .to_string_lossy()
+                            .to_string()
+                    ),
                     None => None
                 }
             }
