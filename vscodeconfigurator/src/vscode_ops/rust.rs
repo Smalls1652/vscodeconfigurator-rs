@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use serde_json::{json, Value};
+use serde_json::json;
 
 use crate::{
     console_utils::ConsoleUtils,

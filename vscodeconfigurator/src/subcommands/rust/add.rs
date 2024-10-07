@@ -1,6 +1,6 @@
-use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
+use clap::{builder::TypedValueParser, Args, ValueHint};
 
-use crate::{console_utils::ConsoleUtils, error::{CliError, CliErrorKind}, external_procs::{cargo, git}, io::OutputDirectory, template_ops, vscode_ops};
+use crate::{console_utils::ConsoleUtils, error::{CliError, CliErrorKind}, io::OutputDirectory, vscode_ops};
 
 #[derive(Args, Debug, PartialEq)]
 pub struct RustAddCommandArgs {
