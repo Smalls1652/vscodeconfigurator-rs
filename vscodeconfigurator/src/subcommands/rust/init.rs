@@ -47,7 +47,7 @@ impl RustInitCommandArgs {
 
         let output_directory_absolute = output_directory.to_absolute();
 
-        console_utils.write_info(format!("\n🚀 Git\n"))?;
+        console_utils.write_info(format!("🚀 Git\n"))?;
         git::initialize_git_repo(&output_directory_absolute, console_utils)?;
         template_ops::rust::copy_gitignore(&output_directory_absolute, console_utils)?;
 
