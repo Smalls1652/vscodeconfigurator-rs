@@ -191,7 +191,7 @@ impl ConsoleUtils {
         execute!(
             self.stdout,
             SetForegroundColor(Color::Yellow),
-            Print("\nOverwrite existing file? ([y]es/[n]o/[q]uit) "),
+            Print("✋ Overwrite? ([y]es/[n]o/[q]uit) "),
             ResetColor
         )?;
 
@@ -228,9 +228,9 @@ impl ConsoleUtils {
                             execute!(
                                 self.stdout,
                                 SetForegroundColor(Color::Red),
-                                Print("\nInvalid input. "),
+                                Print("🛑 Invalid input. "),
                                 SetForegroundColor(Color::Yellow),
-                                Print("Overwrite existing file? ([y]es/[n]o/[q]uit) "),
+                                Print("✋ Overwrite? ([y]es/[n]o/[q]uit) "),
                                 ResetColor
                             )?;
                             enable_raw_mode()?;
