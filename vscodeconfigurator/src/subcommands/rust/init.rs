@@ -13,7 +13,24 @@ pub struct RustInitCommandArgs {
         default_value = OutputDirectory::from_current_dir(),
         value_hint = ValueHint::DirPath
     )]
-    output_directory: OutputDirectory
+    output_directory: OutputDirectory,
+
+    /// The name of the base package.
+    #[arg(
+        short = 'n',
+        long = "base-package-name",
+        required = true
+    )]
+    base_package_name: String,
+
+    /// The type of Cargo package to create.
+    #[arg(
+        long = "base-package-template",
+        required = false,
+        value_enum,
+        default_value = "Library"
+    )]
+    base_package_template: CargoPackageTemplateOption
 }
 
 impl RustInitCommandArgs {
