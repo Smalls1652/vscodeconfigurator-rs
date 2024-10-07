@@ -54,6 +54,8 @@ impl RustInitCommandArgs {
         console_utils.write_info(format!("\n🚀 VSCode\n"))?;
         template_ops::rust::copy_vscode_settings(&output_directory_absolute, console_utils)?;
         template_ops::rust::copy_vscode_tasks(&output_directory_absolute, console_utils)?;
+        template_ops::rust::copy_build_pwsh_script(&output_directory_absolute, console_utils)?;
+        template_ops::rust::copy_clean_pwsh_script(&output_directory_absolute, console_utils)?;
 
         console_utils.write_info(format!("\n🚀 Rust\n"))?;
         template_ops::rust::copy_cargo_workspace_file(&output_directory_absolute, console_utils)?;
