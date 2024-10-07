@@ -144,6 +144,7 @@ pub fn copy_vscode_settings(
 /// * `console_utils` - The console utilities.
 pub fn copy_vscode_tasks(
     output_directory: &PathBuf,
+    package_name: &str,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
@@ -174,7 +175,9 @@ pub fn copy_vscode_tasks(
         console_utils.restore_cursor_position_and_clear_below()?;
     }
 
-    let vscode_tasks_json = fs::read_to_string(&template_file_path)?;
+    let vscode_tasks_json = fs::read_to_string(&template_file_path)?
+        .replace("{{basePackageName}}", package_name);
+
     fs::write(&output_file_path, vscode_tasks_json)?;
 
     console_utils.write_success(format!("Done! ✅\n"))?;
