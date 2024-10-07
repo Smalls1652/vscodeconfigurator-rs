@@ -29,7 +29,7 @@ pub fn copy_gitignore(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -37,7 +37,7 @@ pub fn copy_gitignore(
         fs::remove_file(&output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     fs::copy(template_file_path, &output_file_path)?;
@@ -72,7 +72,7 @@ pub fn copy_cargo_workspace_file(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -80,7 +80,7 @@ pub fn copy_cargo_workspace_file(
         fs::remove_file(&output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     fs::copy(template_file_path, &output_file_path)?;
@@ -117,7 +117,7 @@ pub fn copy_vscode_settings(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -125,7 +125,7 @@ pub fn copy_vscode_settings(
         fs::remove_file(&output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let vscode_settings_json = fs::read_to_string(&template_file_path)?;
@@ -164,7 +164,7 @@ pub fn copy_vscode_tasks(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -172,7 +172,7 @@ pub fn copy_vscode_tasks(
         fs::remove_file(&output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let vscode_tasks_json = fs::read_to_string(&template_file_path)?
@@ -233,7 +233,7 @@ pub fn copy_build_pwsh_script(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -241,7 +241,7 @@ pub fn copy_build_pwsh_script(
         fs::remove_file(&output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     fs::copy(template_file_path, &output_file_path)?;
@@ -278,7 +278,7 @@ pub fn copy_clean_pwsh_script(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -286,7 +286,7 @@ pub fn copy_clean_pwsh_script(
         fs::remove_file(&output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     fs::copy(template_file_path, &output_file_path)?;

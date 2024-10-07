@@ -26,7 +26,7 @@ pub fn initalize_dotnet_solution(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -34,7 +34,7 @@ pub fn initalize_dotnet_solution(
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let dotnet_proc_args = vec!["new", "sln", "--name", solution_name];
@@ -68,7 +68,7 @@ pub fn add_dotnet_globaljson(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -76,7 +76,7 @@ pub fn add_dotnet_globaljson(
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let dotnet_proc_args = vec!["new", "globaljson", "--roll-forward", "latestMinor"];
@@ -110,7 +110,7 @@ pub fn add_dotnet_gitignore(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -118,7 +118,7 @@ pub fn add_dotnet_gitignore(
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let dotnet_proc_args = vec!["new", "gitignore"];
@@ -152,7 +152,7 @@ pub fn add_dotnet_buildprops(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -160,7 +160,7 @@ pub fn add_dotnet_buildprops(
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let dotnet_proc_args = vec!["new", "buildprops", "--use-artifacts"];
@@ -194,7 +194,7 @@ pub fn add_dotnet_nugetconfig(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -202,7 +202,7 @@ pub fn add_dotnet_nugetconfig(
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let dotnet_proc_args = vec!["new", "nugetconfig"];
@@ -236,7 +236,7 @@ pub fn add_dotnet_packagesprops(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -244,7 +244,7 @@ pub fn add_dotnet_packagesprops(
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let dotnet_proc_args = vec!["new", "packagesprops"];
