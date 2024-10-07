@@ -1,6 +1,6 @@
 use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
 
-use crate::{console_utils::ConsoleUtils, external_procs::git, io::OutputDirectory, template_ops};
+use crate::{console_utils::ConsoleUtils, external_procs::{cargo, git}, io::OutputDirectory, template_ops};
 
 /// Defines the arguments for the `rust init` command and the logic to run the command.
 #[derive(Args, Debug, PartialEq)]
@@ -54,6 +54,12 @@ impl RustInitCommandArgs {
         console_utils.write_info(format!("\n🚀 VSCode\n"))?;
         template_ops::rust::copy_vscode_settings(&output_directory_absolute, console_utils)?;
         template_ops::rust::copy_vscode_tasks(&output_directory_absolute, console_utils)?;
+
+        console_utils.write_info(format!("\n🚀 Rust\n"))?;
+        template_ops::rust::copy_cargo_workspace_file(&output_directory_absolute, console_utils)?;
+        cargo::initalize_package(&output_directory_absolute, &self.base_package_name, self.base_package_template, console_utils)?;
+
+        console_utils.write_info(format!("\n🥳 VSCode project initialized!\n"))?;
 
         Ok(())
     }
