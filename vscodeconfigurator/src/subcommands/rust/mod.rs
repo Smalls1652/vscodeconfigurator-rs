@@ -1,4 +1,4 @@
-mod init;
+pub mod init;
 
 use std::error::Error;
 
