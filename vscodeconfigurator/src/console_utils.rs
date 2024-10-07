@@ -186,11 +186,12 @@ impl ConsoleUtils {
             )?;
         }
 
+        self.save_cursor_position()?;
+
         execute!(
             self.stdout,
-            SavePosition,
             SetForegroundColor(Color::Yellow),
-            Print("\nOverwrite existing file? ([y]es/[n]o/[q]uit) "),
+            Print("✋ Overwrite? ([y]es/[n]o/[q]uit) "),
             ResetColor
         )?;
 
@@ -214,7 +215,6 @@ impl ConsoleUtils {
                             disable_raw_mode()?;
                             execute!(
                                 self.stdout,
-                                SavePosition,
                                 SetForegroundColor(Color::Red),
                                 Print("\n\n🛑 Quitting...\n"),
                                 ResetColor
@@ -224,13 +224,13 @@ impl ConsoleUtils {
                         _ => {
                             disable_raw_mode()?;
                             self.restore_cursor_position_and_clear_below()?;
+                            self.save_cursor_position()?;
                             execute!(
                                 self.stdout,
-                                SavePosition,
                                 SetForegroundColor(Color::Red),
-                                Print("\nInvalid input. "),
+                                Print("🛑 Invalid input. "),
                                 SetForegroundColor(Color::Yellow),
-                                Print("Overwrite existing file? ([y]es/[n]o/[q]uit) "),
+                                Print("✋ Overwrite? ([y]es/[n]o/[q]uit) "),
                                 ResetColor
                             )?;
                             enable_raw_mode()?;
@@ -243,6 +243,8 @@ impl ConsoleUtils {
         }
 
         disable_raw_mode()?;
+
+        self.restore_cursor_position_and_clear_below()?;
 
         Ok(result)
     }

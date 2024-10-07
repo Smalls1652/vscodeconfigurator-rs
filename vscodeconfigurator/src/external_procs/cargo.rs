@@ -25,14 +25,14 @@ pub fn initalize_package(
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
 
         fs::remove_dir_all(&package_output_directory)?;
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let package_template_arg_str = match package_template {

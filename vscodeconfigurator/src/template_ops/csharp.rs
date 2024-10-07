@@ -23,7 +23,7 @@ pub fn csharp_copy_gitversion(output_directory: &PathBuf, console_utils: &mut Co
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -31,7 +31,7 @@ pub fn csharp_copy_gitversion(output_directory: &PathBuf, console_utils: &mut Co
         fs::remove_file(&output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     fs::copy(template_file_path, &output_file_path)?;
@@ -62,7 +62,7 @@ pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &S
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -70,7 +70,7 @@ pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &S
         fs::remove_file(&output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let solution_name_full = format!("{:}.sln", solution_name);
@@ -105,7 +105,7 @@ pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, solution_name: &Stri
         let overwrite_response = console_utils.ask_for_overwrite()?;
 
         if !overwrite_response {
-            console_utils.restore_cursor_position_and_clear_below()?;
+            
             console_utils.write_warning(format!("Already exists 🟠\n"))?;
             return Ok(());
         }
@@ -113,7 +113,7 @@ pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, solution_name: &Stri
         fs::remove_file(&output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
 
-        console_utils.restore_cursor_position_and_clear_below()?;
+        
     }
 
     let solution_name_full = format!("{:}.sln", solution_name);
