@@ -5,6 +5,7 @@ use crate::{console_utils::ConsoleUtils, external_procs::git, io::OutputDirector
 /// Defines the arguments for the `rust init` command and the logic to run the command.
 #[derive(Args, Debug, PartialEq)]
 pub struct RustInitCommandArgs {
+    /// The output directory for the new project.
     #[arg(
         short = 'o',
         long = "output-directory",
