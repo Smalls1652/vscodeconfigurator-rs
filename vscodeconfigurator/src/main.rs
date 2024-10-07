@@ -48,6 +48,12 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .unwrap()
                 .match_subcommand(&mut console_utils),
 
+        Some(RootSubcommands::Rust { command }) =>
+            command
+                .as_ref()
+                .unwrap()
+                .match_subcommand(&mut console_utils),
+
         None => Err(CliError::new("No subcommand provided.", CliErrorKind::NoSubcommandProvided).into())
     };
 
