@@ -73,8 +73,12 @@
             "id": "packageName",
             "type": "pickString",
             "description": "Select a package to build",
-            "default": "",
+            "default": "{{basePackageName}}",
             "options": [
+				{
+					"label": "{{basePackageName}}",
+					"value": "{{basePackageName}}"
+				}
             ]
         },
 		{
