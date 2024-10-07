@@ -1,4 +1,4 @@
-use std::{env, ffi::OsString, path::PathBuf};
+use std::{env, path::PathBuf};
 
 /// Gets the path to the core templates directory.
 pub fn get_core_templates_path() -> PathBuf {
