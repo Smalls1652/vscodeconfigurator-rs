@@ -1,4 +1,5 @@
 pub mod init;
+pub mod add;
 
 use std::error::Error;
 
@@ -19,7 +20,14 @@ pub enum RustSubcommands {
         about = "Initialize a new Rust project.",
         long_about = None
     )]
-    Init(RustInitCommandArgs)
+    Init(RustInitCommandArgs),
+
+    /// Add a new package to a Rust project.
+    #[command(
+        about = "Add a new package to a Rust project.",
+        long_about = None
+    )]
+    Add(add::RustAddCommandArgs),
 }
 
 impl RustSubcommands {
@@ -27,7 +35,10 @@ impl RustSubcommands {
     pub fn match_subcommand(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn Error>> {
         match self {
             RustSubcommands::Init(init_args) =>
-                init_args.run_command(console_utils)?
+                init_args.run_command(console_utils)?,
+
+            RustSubcommands::Add(add_args) =>
+                add_args.run_command(console_utils)?            
         };
 
         Ok(())

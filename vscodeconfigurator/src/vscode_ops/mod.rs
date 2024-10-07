@@ -1,4 +1,5 @@
 pub mod csharp;
+pub mod rust;
 
 use std::{fs, path::PathBuf};
 

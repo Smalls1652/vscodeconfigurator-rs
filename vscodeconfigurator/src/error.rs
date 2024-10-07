@@ -44,6 +44,9 @@ pub enum CliErrorKind {
     /// The operating system is not supported.
     UnsupportedOperatingSystem,
 
+    /// The output directory does not exist.
+    OutputDirectoryDoesNotExist,
+
     #[allow(dead_code)]
     /// Unknown error.
     UnknownError
