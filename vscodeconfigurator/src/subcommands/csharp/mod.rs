@@ -1,11 +1,16 @@
-pub mod init;
-pub mod add;
+mod add;
+mod init;
+
+pub use init::CsharpLspOption;
+
+use self::{
+    add::AddCommandArgs,
+    init::InitCommandArgs
+};
 
 use std::error::Error;
 
 use clap::Subcommand;
-use init::InitCommandArgs;
-use add::AddCommandArgs;
 
 use crate::console_utils::ConsoleUtils;
 

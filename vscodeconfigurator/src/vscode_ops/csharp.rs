@@ -4,7 +4,7 @@ use serde_json::{json, Value};
 
 use crate::{
     console_utils::ConsoleUtils,
-    subcommands::csharp::init::CsharpLspOption,
+    subcommands::csharp::CsharpLspOption,
     vscode_ops::{VSCodeSettings, VSCodeTasks}
 };
 

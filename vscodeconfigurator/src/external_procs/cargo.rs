@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf, process};
 
-use crate::{console_utils::ConsoleUtils, subcommands::rust::init::CargoPackageTemplateOption};
+use crate::{console_utils::ConsoleUtils, subcommands::rust::CargoPackageTemplateOption};
 
 /// Initializes a new package with Cargo.
 ///
