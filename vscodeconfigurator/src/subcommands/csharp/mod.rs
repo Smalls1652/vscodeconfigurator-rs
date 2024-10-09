@@ -1,11 +1,12 @@
-pub mod init;
-pub mod add;
+mod init;
+mod add;
+
+pub use init::*;
+pub use add::*;
 
 use std::error::Error;
 
 use clap::Subcommand;
-use init::InitCommandArgs;
-use add::AddCommandArgs;
 
 use crate::console_utils::ConsoleUtils;
 
