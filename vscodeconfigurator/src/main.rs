@@ -1,11 +1,11 @@
-mod subcommands;
-mod external_procs;
 mod console_utils;
-mod template_ops;
-mod vscode_ops;
-mod utils;
 mod error;
+mod external_procs;
 mod io;
+mod subcommands;
+mod template_ops;
+mod utils;
+mod vscode_ops;
 
 use std::{error::Error, process};
 

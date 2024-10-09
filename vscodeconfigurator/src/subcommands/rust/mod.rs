@@ -1,5 +1,5 @@
-mod init;
 mod add;
+mod init;
 
 pub use init::*;
 pub use add::*;
