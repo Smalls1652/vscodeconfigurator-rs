@@ -11,9 +11,12 @@ use std::{error::Error, process};
 
 use clap::{crate_version, CommandFactory, Parser};
 use clap_complete::aot::generate;
-use console_utils::ConsoleUtils;
-use error::{CliError, CliErrorKind};
-use subcommands::RootSubcommands;
+
+use self::{
+    console_utils::ConsoleUtils,
+    error::{CliError, CliErrorKind},
+    subcommands::RootSubcommands
+};
 
 /// The main CLI struct.
 #[derive(Parser, Debug, PartialEq)]
