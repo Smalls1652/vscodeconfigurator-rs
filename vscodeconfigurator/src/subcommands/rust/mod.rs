@@ -1,10 +1,12 @@
-pub mod init;
-pub mod add;
+mod init;
+mod add;
+
+pub use init::*;
+pub use add::*;
 
 use std::error::Error;
 
 use clap::Subcommand;
-use init::RustInitCommandArgs;
 
 use crate::console_utils::ConsoleUtils;
 
@@ -27,7 +29,7 @@ pub enum RustSubcommands {
         about = "Add a new package to a Rust project.",
         long_about = None
     )]
-    Add(add::RustAddCommandArgs),
+    Add(RustAddCommandArgs),
 }
 
 impl RustSubcommands {
