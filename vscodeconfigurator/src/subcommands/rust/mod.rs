@@ -1,8 +1,12 @@
 mod add;
 mod init;
 
-pub use init::*;
-pub use add::*;
+pub use init::CargoPackageTemplateOption;
+
+use self::{
+    add::RustAddCommandArgs,
+    init::RustInitCommandArgs
+};
 
 use std::error::Error;
 

@@ -1,8 +1,12 @@
 mod add;
 mod init;
 
-pub use init::*;
-pub use add::*;
+pub use init::CsharpLspOption;
+
+use self::{
+    add::AddCommandArgs,
+    init::InitCommandArgs
+};
 
 use std::error::Error;
 
