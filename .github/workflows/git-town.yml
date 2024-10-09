@@ -2,8 +2,8 @@ name: Git Town
 
 on:
   pull_request:
-    branches:
-      - '**'
+    branches-ignore: 
+      - "dependabot/**"
 
 jobs:
   git-town:
