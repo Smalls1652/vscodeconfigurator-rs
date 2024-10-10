@@ -35,7 +35,7 @@ struct Cli {
 
 /// The entry point for the CLI.
 fn main() -> Result<(), Box<dyn Error>> {
-    let mut console_utils = ConsoleUtils::new(None);
+    let mut console_utils = ConsoleUtils::new(None, None);
 
     let cli = Cli::parse();
 

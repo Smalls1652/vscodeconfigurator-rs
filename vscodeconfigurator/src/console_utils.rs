@@ -1,4 +1,4 @@
-use std::{io::{Result, Stdout, Write}, process};
+use std::{io::{Result, Stderr, Stdout, Write}, process};
 
 use crossterm::{
     cursor::{
@@ -33,7 +33,9 @@ use crossterm::{
 
 /// Utility for writing to the console.
 pub struct ConsoleUtils {
-    pub stdout: Stdout
+    pub stdout: Stdout,
+
+    pub stderr: Stderr
 }
 
 #[allow(dead_code)]
@@ -43,14 +45,21 @@ impl ConsoleUtils {
     /// ## Arguments
     /// 
     /// * `stdout` - The standard output stream. If `None`, the default standard output stream is used.
-    pub fn new(stdout: Option<Stdout>) -> Self {
+    pub fn new(stdout: Option<Stdout>, stderr: Option<Stderr>) -> Self {
         let stdout_item = match stdout.is_some() {
             true => stdout.unwrap(),
             false => std::io::stdout()
         };
 
+        let stderr_item = match stderr.is_some() {
+            true => stderr.unwrap(),
+            false => std::io::stderr()
+        };
+
         Self {
-            stdout: stdout_item
+            stdout: stdout_item,
+            stderr: stderr_item,
+            unicode_remove_regex: Regex::new(r"\\u\{[0-9a-fA-F]{1,6}\}").unwrap()
         }
     }
 
