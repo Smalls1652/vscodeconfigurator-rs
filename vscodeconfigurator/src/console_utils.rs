@@ -248,6 +248,10 @@ impl ConsoleUtils {
 
     /// Ask the user if they want to overwrite a file.
     pub fn ask_for_overwrite(&mut self) -> Result<bool> {
+        if !self.stdout.is_tty() {
+            panic!("Cannot ask for overwrite. Terminating...");
+        }
+
         let supports_keyboard_enhancement = matches!(
             crossterm::terminal::supports_keyboard_enhancement(),
             Ok(true)
