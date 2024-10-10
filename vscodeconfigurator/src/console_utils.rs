@@ -119,17 +119,30 @@ impl ConsoleUtils {
     /// Write an error message to the console by utilizing an error source.
     pub fn write_error_extended(&mut self, source_error: Box<dyn std::error::Error>) -> Result<()> {
         let source_error_type: &str;
-        let mut source_error_kind: Option<crate::error::CliErrorKind> = None;
+        let mut source_error_kind: Option<String> = None;
 
         if source_error.is::<std::io::Error>() {
             source_error_type = "I/O error";
+            source_error_kind = Some(
+                source_error.downcast_ref::<std::io::Error>()
+                    .unwrap()
+                    .kind()
+                    .to_string()
+                    .clone()
+            );
         }
         else if source_error.is::<clap::error::Error>() {
             source_error_type = "CLI Argument Parser error";
         }
         else if source_error.is::<crate::error::CliError>() {
             source_error_type = "Internal error";
-            source_error_kind = Some(source_error.downcast_ref::<crate::error::CliError>().unwrap().kind.clone());
+            source_error_kind = Some(
+                source_error.downcast_ref::<crate::error::CliError>()
+                    .unwrap()
+                    .kind
+                    .to_string()
+                    .clone()
+            );
         }
         else {
             source_error_type = "Unknown error";
