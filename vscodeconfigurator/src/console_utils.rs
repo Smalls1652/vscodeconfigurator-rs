@@ -31,6 +31,7 @@ use crossterm::{
     },
     tty::IsTty
 };
+use regex::Regex;
 
 /// Utility for writing to the console.
 pub struct ConsoleUtils {
