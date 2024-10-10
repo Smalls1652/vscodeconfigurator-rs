@@ -28,14 +28,17 @@ use crossterm::{
         enable_raw_mode,
         Clear,
         ClearType
-    }
+    },
+    tty::IsTty
 };
 
 /// Utility for writing to the console.
 pub struct ConsoleUtils {
     pub stdout: Stdout,
 
-    pub stderr: Stderr
+    pub stderr: Stderr,
+    
+    unicode_remove_regex: Regex
 }
 
 #[allow(dead_code)]
@@ -95,6 +98,15 @@ impl ConsoleUtils {
 
     /// Write an error message to the console.
     pub fn write_error(&mut self, message: String) -> Result<()> {
+        if !self.stdout.is_tty() {
+            execute!(
+                self.stderr,
+                Print(format!("[Error] - {}", message))
+            )?;
+
+            return Ok(());
+        }
+
         execute!(
             self.stdout,
             SetForegroundColor(Color::Red),
@@ -120,6 +132,29 @@ impl ConsoleUtils {
         }
         else {
             source_error_type = "Unknown error";
+        }
+
+        if !self.stdout.is_tty() {
+            let error_message = match source_error_kind.is_some() {
+                true => format!(
+                    "[Error] - {} (Kind: {}): {}",
+                    source_error_type,
+                    source_error_kind.unwrap(),
+                    source_error
+                ),
+                false => format!(
+                    "[Error] - {}: {}",
+                    source_error_type,
+                    source_error
+                )
+            };
+
+            execute!(
+                self.stderr,
+                Print(error_message)
+            )?;
+
+            return Ok(());
         }
 
         execute!(
@@ -261,5 +296,7 @@ impl ConsoleUtils {
     /// Flush and release the standard output stream.
     pub fn release(&mut self) {
         self.stdout.flush().unwrap();
+
+        self.stderr.flush().unwrap();
     }
 }
