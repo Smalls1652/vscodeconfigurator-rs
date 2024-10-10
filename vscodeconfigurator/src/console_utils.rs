@@ -38,7 +38,7 @@ pub struct ConsoleUtils {
     pub stdout: Stdout,
 
     pub stderr: Stderr,
-    
+
     unicode_remove_regex: Regex
 }
 
@@ -69,6 +69,15 @@ impl ConsoleUtils {
 
     /// Write an informational message to the console.
     pub fn write_info(&mut self, message: String) -> Result<()> {
+        if !self.stdout.is_tty() {
+            execute!(
+                self.stdout,
+                Print(format!("[Info] - {}", message))
+            )?;
+
+            return Ok(());
+        }
+
         execute!(
             self.stdout,
             SetForegroundColor(Color::Cyan),
@@ -79,6 +88,14 @@ impl ConsoleUtils {
 
     /// Write a success message to the console.
     pub fn write_success(&mut self, message: String) -> Result<()> {
+        if !self.stdout.is_tty() {
+            execute!(
+                self.stdout,
+                Print(message)
+            )?;
+            return Ok(());
+        }
+
         execute!(
             self.stdout,
             SetForegroundColor(Color::Green),
@@ -89,6 +106,10 @@ impl ConsoleUtils {
 
     /// Write a warning message to the console.
     pub fn write_warning(&mut self, message: String) -> Result<()> {
+        if !self.stdout.is_tty() {
+            return Ok(());
+        }
+
         execute!(
             self.stdout,
             SetForegroundColor(Color::Yellow),
