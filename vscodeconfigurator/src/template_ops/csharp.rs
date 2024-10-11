@@ -10,7 +10,8 @@ use super::vscode;
 /// 
 /// * `output_directory` - The output directory of the project.
 /// * `console_utils` - The console utilities.
-pub fn csharp_copy_gitversion(output_directory: &PathBuf, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+/// * `force` - Whether to forcefully overwrite.
+pub fn csharp_copy_gitversion(output_directory: &PathBuf, force: bool, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
     let core_templates_path = utils::get_core_templates_path();
     let template_file_path = core_templates_path.join("csharp/GitVersion/GitVersion.yml");
 
@@ -20,12 +21,14 @@ pub fn csharp_copy_gitversion(output_directory: &PathBuf, console_utils: &mut Co
     console_utils.write_info(format!("- 📄 Copying 'GitVersion.yml' to project root... "))?;
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(&output_file_path)
@@ -46,8 +49,10 @@ pub fn csharp_copy_gitversion(output_directory: &PathBuf, console_utils: &mut Co
 /// ## Arguments
 /// 
 /// * `output_directory` - The output directory of the project.
+/// * `solution_name` - The name of the solution.
+/// * `force` - Whether to forcefully overwrite.
 /// * `console_utils` - The console utilities.
-pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &String, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &String, force: bool, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
 
     let core_templates_path = utils::get_core_templates_path();
@@ -59,12 +64,14 @@ pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &S
     console_utils.write_info(format!("- 📄 Copying 'settings.json' to '.vscode' directory... "))?;
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(&output_file_path)
@@ -89,8 +96,10 @@ pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &S
 /// ## Arguments
 /// 
 /// * `output_directory` - The output directory of the project.
+/// * `solution_name` - The name of the solution.
+/// * `force` - Whether to forcefully overwrite.
 /// * `console_utils` - The console utilities.
-pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, solution_name: &String, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, solution_name: &String, force: bool, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
 
     let core_templates_path = utils::get_core_templates_path();
@@ -102,12 +111,14 @@ pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, solution_name: &Stri
     console_utils.write_info(format!("- 📄 Copying 'tasks.json' to '.vscode' directory... "))?;
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(&output_file_path)

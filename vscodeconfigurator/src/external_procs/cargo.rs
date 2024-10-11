@@ -9,10 +9,12 @@ use crate::{console_utils::ConsoleUtils, subcommands::rust::CargoPackageTemplate
 /// * `output_directory` - The output directory for the new solution.
 /// * `package_name` - The name of the package.
 /// * `package_template` - The type of package to create.
+/// * `force` - Whether to forcefully overwrite.
 pub fn initalize_package(
     output_directory: &PathBuf,
     package_name: &str,
     package_template: CargoPackageTemplateOption,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!("- 📦 Initializing package for '{}'... ", package_name))?;
@@ -22,17 +24,17 @@ pub fn initalize_package(
         .join(package_name);
 
     if package_output_directory.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
-        fs::remove_dir_all(&package_output_directory)?;
-
-        
+        fs::remove_dir_all(&package_output_directory)?;  
     }
 
     let package_template_arg_str = match package_template {
