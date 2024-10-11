@@ -8,9 +8,11 @@ use crate::console_utils::ConsoleUtils;
 ///
 /// * `output_directory` - The output directory for the new solution.
 /// * `solution_name` - The name of the solution file.
+/// * `force` - Whether to forcefully overwrite.
 pub fn initalize_dotnet_solution(
     output_directory: &PathBuf,
     solution_name: &String,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!(
@@ -23,12 +25,14 @@ pub fn initalize_dotnet_solution(
     let output_file_path = PathBuf::from(output_directory).join(&output_file_name);
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(output_file_path)
@@ -54,8 +58,10 @@ pub fn initalize_dotnet_solution(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory for the project.
+/// * `force` - Whether to forcefully overwrite.
 pub fn add_dotnet_globaljson(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!("- 📄 Adding 'global.json' to project root... "))?;
@@ -65,12 +71,14 @@ pub fn add_dotnet_globaljson(
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(output_file_path)
@@ -96,8 +104,10 @@ pub fn add_dotnet_globaljson(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory for the project.
+/// * `force` - Whether to forcefully overwrite.
 pub fn add_dotnet_gitignore(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!("- 📄 Adding '.gitignore' to project root... "))?;
@@ -107,12 +117,14 @@ pub fn add_dotnet_gitignore(
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(output_file_path)
@@ -138,8 +150,10 @@ pub fn add_dotnet_gitignore(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory for the project.
+/// * `force` - Whether to forcefully overwrite.
 pub fn add_dotnet_buildprops(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!("- 📄 Adding 'Directory.Build.props' to project root... "))?;
@@ -149,12 +163,14 @@ pub fn add_dotnet_buildprops(
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(output_file_path)
@@ -180,8 +196,10 @@ pub fn add_dotnet_buildprops(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory for the project.
+/// * `force` - Whether to forcefully overwrite.
 pub fn add_dotnet_nugetconfig(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!("- 📄 Adding 'NuGet.Config' to project root... "))?;
@@ -191,12 +209,14 @@ pub fn add_dotnet_nugetconfig(
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(output_file_path)
@@ -222,8 +242,10 @@ pub fn add_dotnet_nugetconfig(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory for the project.
+/// * `force` - Whether to forcefully overwrite.
 pub fn add_dotnet_packagesprops(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!("- 📄 Adding 'Directory.Packages.props' to project root... "))?;
@@ -233,12 +255,14 @@ pub fn add_dotnet_packagesprops(
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(output_file_path)

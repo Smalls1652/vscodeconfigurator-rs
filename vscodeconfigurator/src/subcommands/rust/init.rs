@@ -31,7 +31,16 @@ pub struct RustInitCommandArgs {
         value_enum,
         default_value = "Library"
     )]
-    base_package_template: CargoPackageTemplateOption
+    base_package_template: CargoPackageTemplateOption,
+
+    /// Force the command to run without prompting for confirmation.
+    #[arg(
+        short = 'f',
+        long = "force",
+        required = false,
+        default_value = "false"
+    )]
+    force: bool
 }
 
 impl RustInitCommandArgs {
@@ -49,17 +58,17 @@ impl RustInitCommandArgs {
 
         console_utils.write_info(format!("🚀 Git\n"))?;
         git::initialize_git_repo(&output_directory_absolute, console_utils)?;
-        template_ops::rust::copy_gitignore(&output_directory_absolute, console_utils)?;
+        template_ops::rust::copy_gitignore(&output_directory_absolute, self.force, console_utils)?;
 
         console_utils.write_info(format!("\n🚀 VSCode\n"))?;
-        template_ops::rust::copy_vscode_settings(&output_directory_absolute, console_utils)?;
-        template_ops::rust::copy_vscode_tasks(&output_directory_absolute, &self.base_package_name, console_utils)?;
-        template_ops::rust::copy_build_pwsh_script(&output_directory_absolute, console_utils)?;
-        template_ops::rust::copy_clean_pwsh_script(&output_directory_absolute, console_utils)?;
+        template_ops::rust::copy_vscode_settings(&output_directory_absolute, self.force, console_utils)?;
+        template_ops::rust::copy_vscode_tasks(&output_directory_absolute, &self.base_package_name, self.force, console_utils)?;
+        template_ops::rust::copy_build_pwsh_script(&output_directory_absolute, self.force, console_utils)?;
+        template_ops::rust::copy_clean_pwsh_script(&output_directory_absolute, self.force, console_utils)?;
 
         console_utils.write_info(format!("\n🚀 Rust\n"))?;
-        template_ops::rust::copy_cargo_workspace_file(&output_directory_absolute, console_utils)?;
-        cargo::initalize_package(&output_directory_absolute, &self.base_package_name, self.base_package_template, console_utils)?;
+        template_ops::rust::copy_cargo_workspace_file(&output_directory_absolute, self.force, console_utils)?;
+        cargo::initalize_package(&output_directory_absolute, &self.base_package_name, self.base_package_template, self.force, console_utils)?;
 
         console_utils.write_info(format!("\n🥳 VSCode project initialized!\n"))?;
 

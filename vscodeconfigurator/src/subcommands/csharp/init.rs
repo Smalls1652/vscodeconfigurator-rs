@@ -61,6 +61,15 @@ pub struct InitCommandArgs {
         default_value = "CsharpLsp"
     )]
     csharp_lsp: CsharpLspOption,
+
+    /// Force the command to run without prompting for confirmation.
+    #[arg(
+        short = 'f',
+        long = "force",
+        required = false,
+        default_value = "false"
+    )]
+    force: bool
 }
 
 impl InitCommandArgs {
@@ -89,34 +98,34 @@ impl InitCommandArgs {
         let solution_name = parsed_solution_name.unwrap();
 
         console_utils.write_info(format!("🚀 Basic\n"))?;
-        dotnet::add_dotnet_globaljson(&output_directory_absolute, console_utils)?;
+        dotnet::add_dotnet_globaljson(&output_directory_absolute, self.force, console_utils)?;
 
         console_utils.write_info(format!("\n🚀 Git\n"))?;
         git::initialize_git_repo(&output_directory_absolute, console_utils)?;
-        dotnet::add_dotnet_gitignore(&output_directory_absolute, console_utils)?;
+        dotnet::add_dotnet_gitignore(&output_directory_absolute, self.force, console_utils)?;
 
         console_utils.write_info(format!("\n🚀 .NET\n"))?;
-        dotnet::initalize_dotnet_solution(&output_directory_absolute, &solution_name, console_utils)?;
-        dotnet::add_dotnet_buildprops(&output_directory_absolute, console_utils)?;
+        dotnet::initalize_dotnet_solution(&output_directory_absolute, &solution_name, self.force, console_utils)?;
+        dotnet::add_dotnet_buildprops(&output_directory_absolute, self.force, console_utils)?;
 
         if self.add_nuget_config {
-            dotnet::add_dotnet_nugetconfig(&output_directory_absolute, console_utils)?;
+            dotnet::add_dotnet_nugetconfig(&output_directory_absolute, self.force, console_utils)?;
         }
 
         if self.enable_centrally_managed_packages {
-            dotnet::add_dotnet_packagesprops(&output_directory_absolute, console_utils)?;
+            dotnet::add_dotnet_packagesprops(&output_directory_absolute, self.force, console_utils)?;
         }
 
         if self.add_gitversion {
             console_utils.write_info(format!("\n🚀 GitVersion\n"))?;
             dotnet::add_dotnet_tool(&output_directory_absolute, "GitVersion.Tool", console_utils)?;
-            template_ops::csharp::csharp_copy_gitversion(&output_directory_absolute, console_utils)?;
+            template_ops::csharp::csharp_copy_gitversion(&output_directory_absolute, self.force, console_utils)?;
         }
 
         console_utils.write_info(format!("\n🚀 VSCode\n"))?;
-        template_ops::csharp::csharp_copy_vscode_settings(&output_directory_absolute, &solution_name, console_utils)?;
+        template_ops::csharp::csharp_copy_vscode_settings(&output_directory_absolute, &solution_name, self.force, console_utils)?;
         vscode_ops::csharp::update_csharp_lsp(&output_directory_absolute, self.csharp_lsp, console_utils)?;
-        template_ops::csharp::csharp_copy_vscode_tasks(&output_directory_absolute, &solution_name, console_utils)?;
+        template_ops::csharp::csharp_copy_vscode_tasks(&output_directory_absolute, &solution_name, self.force, console_utils)?;
 
         console_utils.write_info(format!("\n🥳 VSCode project initialized!\n"))?;
 

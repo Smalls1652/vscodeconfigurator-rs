@@ -9,9 +9,11 @@ use super::vscode;
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory of the project.
+/// * `force` - Whether to forcefully overwrite.
 /// * `console_utils` - The console utilities.
 pub fn copy_gitignore(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let core_templates_path = utils::get_core_templates_path();
@@ -26,12 +28,14 @@ pub fn copy_gitignore(
     ))?;
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(&output_file_path)
@@ -52,9 +56,11 @@ pub fn copy_gitignore(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory of the project.
+/// * `force` - Whether to forcefully overwrite.
 /// * `console_utils` - The console utilities.
 pub fn copy_cargo_workspace_file(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let core_templates_path = utils::get_core_templates_path();
@@ -69,12 +75,14 @@ pub fn copy_cargo_workspace_file(
     ))?;
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(&output_file_path)
@@ -95,9 +103,11 @@ pub fn copy_cargo_workspace_file(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory of the project.
+/// * `force` - Whether to forcefully overwrite.
 /// * `console_utils` - The console utilities.
 pub fn copy_vscode_settings(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
@@ -114,12 +124,14 @@ pub fn copy_vscode_settings(
     ))?;
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(&output_file_path)
@@ -141,10 +153,13 @@ pub fn copy_vscode_settings(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory of the project.
+/// * `package_name` - The name of the package.
+/// * `force` - Whether to forcefully overwrite.
 /// * `console_utils` - The console utilities.
 pub fn copy_vscode_tasks(
     output_directory: &PathBuf,
     package_name: &str,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
@@ -161,12 +176,14 @@ pub fn copy_vscode_tasks(
     ))?;
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(&output_file_path)
@@ -211,9 +228,11 @@ pub fn ensure_tools_dir_exists(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory of the project.
+/// * `force` - Whether to forcefully overwrite.
 /// * `console_utils` - The console utilities.
 pub fn copy_build_pwsh_script(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     ensure_tools_dir_exists(output_directory, console_utils)?;
@@ -230,12 +249,14 @@ pub fn copy_build_pwsh_script(
     ))?;
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(&output_file_path)
@@ -256,9 +277,11 @@ pub fn copy_build_pwsh_script(
 /// ## Arguments
 ///
 /// * `output_directory` - The output directory of the project.
+/// * `force` - Whether to forcefully overwrite.
 /// * `console_utils` - The console utilities.
 pub fn copy_clean_pwsh_script(
     output_directory: &PathBuf,
+    force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
     ensure_tools_dir_exists(output_directory, console_utils)?;
@@ -275,12 +298,14 @@ pub fn copy_clean_pwsh_script(
     ))?;
 
     if output_file_path.exists() {
-        let overwrite_response = console_utils.ask_for_overwrite()?;
+        if !force {
+            let overwrite_response = console_utils.ask_for_overwrite()?;
 
-        if !overwrite_response {
-            
-            console_utils.write_warning(format!("Already exists 🟠\n"))?;
-            return Ok(());
+            if !overwrite_response {
+                
+                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
         }
 
         fs::remove_file(&output_file_path)
