@@ -1,7 +1,7 @@
 [package]
 name = "vscodeconfigurator"
 description = "Quickly bootstrap and manage projects for VSCode."
-version = "2.0.0-preview-03"
+version = "2.0.0-preview-04"
 edition = "2021"
 
 homepage.workspace = true
