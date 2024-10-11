@@ -1,4 +1,4 @@
-use std::{io::{Result, Stderr, Stdout, Write}, process};
+use std::{borrow::Cow, io::{Result, Stderr, Stdout, Write}, process};
 
 use crossterm::{
     cursor::{
@@ -63,16 +63,32 @@ impl ConsoleUtils {
         Self {
             stdout: stdout_item,
             stderr: stderr_item,
-            unicode_remove_regex: Regex::new(r"\\u\{[0-9a-fA-F]{1,6}\}").unwrap()
+            unicode_remove_regex: Regex::new(concat!(
+                "[",
+                "\u{1F680}", // 🚀
+                "\u{1F4C4}", // 📄
+                "\u{2705}", // ✅
+                "\u{1F7E0}", // 🟠
+                "\u{1F4C1}", // 📁
+                "\u{1F4E6}", // 📦
+                "\u{1F973}", // 🥳
+                "\u{270B}", // ✋
+                "\u{1F6D1}", // 🛑
+                "\u{1F6A8}", // 🚨
+                "]"
+            )).unwrap()
         }
     }
 
     /// Write an informational message to the console.
     pub fn write_info(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
+            let message_noemojis = &self.remove_emojis(&message);
+            let message_noemojis = message_noemojis.trim_start();
+
             execute!(
                 self.stdout,
-                Print(format!("[Info] - {}", message))
+                Print(format!("[Info] - {}", &message_noemojis))
             )?;
 
             return Ok(());
@@ -89,10 +105,14 @@ impl ConsoleUtils {
     /// Write a success message to the console.
     pub fn write_success(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
+            let message_noemojis = self.remove_emojis(&message);
+            let message_noemojis = message_noemojis.trim_start();
+
             execute!(
                 self.stdout,
-                Print(message)
+                Print(format!("{}", &message_noemojis))
             )?;
+
             return Ok(());
         }
 
@@ -107,6 +127,14 @@ impl ConsoleUtils {
     /// Write a warning message to the console.
     pub fn write_warning(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
+            let message_noemojis = self.remove_emojis(&message);
+            let message_noemojis = message_noemojis.trim_start();
+
+            execute!(
+                self.stdout,
+                Print(format!("[Warning] - {}", &message_noemojis))
+            )?;
+
             return Ok(());
         }
 
@@ -121,9 +149,12 @@ impl ConsoleUtils {
     /// Write an error message to the console.
     pub fn write_error(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
+            let message_noemojis = self.remove_emojis(&message);
+            let message_noemojis = message_noemojis.trim_start();
+
             execute!(
-                self.stderr,
-                Print(format!("[Error] - {}", message))
+                self.stdout,
+                Print(format!("[Error] - {}", &message_noemojis))
             )?;
 
             return Ok(());
@@ -330,6 +361,12 @@ impl ConsoleUtils {
         self.restore_cursor_position_and_clear_below()?;
 
         Ok(result)
+    }
+
+    /// Remove emojis from a message.
+    fn remove_emojis<'a>(&self, message: &'a str) -> Cow<'a, str> {
+        self.unicode_remove_regex
+            .replace_all(&message, "")
     }
 
     /// Flush and release the standard output stream.
