@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::console_utils::ConsoleUtils;
+use crate::console_utils::{ConsoleUtils, OutputEmoji};
 
 /// Initializes a Git repository in the output directory.
 /// 
@@ -12,7 +12,7 @@ pub fn initialize_git_repo(
     output_directory: &PathBuf,
     console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📦 Initializing Git repository... "))?;
+    console_utils.write_operation_log("Initializing Git repository...", OutputEmoji::Package)?;
     
     let git_proc_args = vec![
         "init"
@@ -23,6 +23,6 @@ pub fn initialize_git_repo(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
     Ok(())
 }

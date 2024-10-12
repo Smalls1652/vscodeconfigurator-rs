@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use serde_json::{json, Value};
 
 use crate::{
-    console_utils::ConsoleUtils,
+    console_utils::{ConsoleUtils, OutputEmoji},
     subcommands::csharp::CsharpLspOption,
     vscode_ops::{VSCodeSettingsFile, VSCodeTasksFile}
 };
@@ -20,7 +20,7 @@ pub fn update_csharp_lsp(
     csharp_lsp: CsharpLspOption,
     console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📄 Updating C# LSP option in tasks.json... "))?;
+    console_utils.write_operation_log("Updating C# LSP option in tasks.json...", OutputEmoji::Document)?;
 
     let mut vscode_settings = VSCodeSettingsFile::new(output_directory.join(".vscode/settings.json"));
 
@@ -36,7 +36,7 @@ pub fn update_csharp_lsp(
 
     vscode_settings.write_settings()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -59,7 +59,7 @@ pub fn add_csharp_project_to_tasks(
     is_watchable: bool,
     console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📄 Adding C# project to tasks.json... "))?;
+    console_utils.write_operation_log("Adding C# project to tasks.json...", OutputEmoji::Document)?;
 
     let mut vscode_tasks = VSCodeTasksFile::new(output_directory.join(".vscode/tasks.json"));
 
@@ -92,7 +92,7 @@ pub fn add_csharp_project_to_tasks(
 
     vscode_tasks.write_tasks()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }

@@ -19,7 +19,6 @@ build = "build.rs"
 clap = { version = "4.5.20", features = ["derive", "string", "cargo"] }
 clap_complete = "4.5.33"
 crossterm = { version = "0.28.1", features = ["events"] }
-regex-lite = "0.1.6"
 serde_json = { version = "1.0.128", features = ["preserve_order"] }
 
 [build-dependencies]

@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use serde_json::json;
 
 use crate::{
-    console_utils::ConsoleUtils,
+    console_utils::{ConsoleUtils, OutputEmoji},
     vscode_ops::VSCodeTasksFile
 };
 
@@ -22,7 +22,7 @@ pub fn add_package_to_tasks(
     package_friendly_name: &str,
     console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📄 Adding package to tasks.json... "))?;
+    console_utils.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?;
 
     let mut vscode_tasks = VSCodeTasksFile::new(output_directory.join(".vscode/tasks.json"));
 
@@ -43,7 +43,7 @@ pub fn add_package_to_tasks(
 
     vscode_tasks.write_tasks()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }

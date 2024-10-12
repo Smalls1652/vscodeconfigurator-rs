@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf, process};
 
-use crate::{console_utils::ConsoleUtils, subcommands::rust::CargoPackageTemplateOption};
+use crate::{console_utils::{ConsoleUtils, OutputEmoji}, subcommands::rust::CargoPackageTemplateOption};
 
 /// Initializes a new package with Cargo.
 ///
@@ -17,7 +17,10 @@ pub fn initalize_package(
     force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📦 Initializing package for '{}'... ", package_name))?;
+    console_utils.write_operation_log(
+        format!("Initializing package for '{}'... ", package_name).as_str(),
+        OutputEmoji::Package
+    )?;
     console_utils.save_cursor_position()?;
 
     let package_output_directory = output_directory
@@ -59,7 +62,7 @@ pub fn initalize_package(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }

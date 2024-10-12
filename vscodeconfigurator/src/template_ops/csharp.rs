@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf};
 
-use crate::{console_utils::ConsoleUtils, utils};
+use crate::{console_utils::{ConsoleUtils, OutputEmoji}, utils};
 
 use super::vscode;
 
@@ -18,7 +18,7 @@ pub fn csharp_copy_gitversion(output_directory: &PathBuf, force: bool, console_u
     let output_file_name = "GitVersion.yml";
     let output_file_path = output_directory.join(&output_file_name);
 
-    console_utils.write_info(format!("- 📄 Copying 'GitVersion.yml' to project root... "))?;
+    console_utils.write_operation_log("Copying 'GitVersion.yml' to project root...", OutputEmoji::Document)?;
 
     if output_file_path.exists() {
         if !force {
@@ -39,7 +39,7 @@ pub fn csharp_copy_gitversion(output_directory: &PathBuf, force: bool, console_u
 
     fs::copy(template_file_path, &output_file_path)?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -61,7 +61,7 @@ pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &S
     let output_file_name = "settings.json";
     let output_file_path = output_directory.join(".vscode").join(&output_file_name);
 
-    console_utils.write_info(format!("- 📄 Copying 'settings.json' to '.vscode' directory... "))?;
+    console_utils.write_operation_log("Copying 'settings.json' to '.vscode' directory...", OutputEmoji::Document)?;
 
     if output_file_path.exists() {
         if !force {
@@ -86,7 +86,7 @@ pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &S
 
     fs::write(&output_file_path, vscode_settings_json)?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -108,7 +108,7 @@ pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, solution_name: &Stri
     let output_file_name = "tasks.json";
     let output_file_path = output_directory.join(".vscode").join(&output_file_name);
 
-    console_utils.write_info(format!("- 📄 Copying 'tasks.json' to '.vscode' directory... "))?;
+    console_utils.write_operation_log("Copying 'tasks.json' to '.vscode' directory...", OutputEmoji::Document)?;
 
     if output_file_path.exists() {
         if !force {
@@ -133,7 +133,7 @@ pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, solution_name: &Stri
 
     fs::write(&output_file_path, vscode_tasks_json)?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }

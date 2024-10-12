@@ -97,14 +97,16 @@ impl InitCommandArgs {
 
         let solution_name = parsed_solution_name.unwrap();
 
-        console_utils.write_info(format!("🚀 Basic\n"))?;
+        console_utils.write_operation_category("Basic")?;
         dotnet::add_dotnet_globaljson(&output_directory_absolute, self.force, console_utils)?;
+        console_utils.write_newline()?;
 
-        console_utils.write_info(format!("\n🚀 Git\n"))?;
+        console_utils.write_operation_category("Git")?;
         git::initialize_git_repo(&output_directory_absolute, console_utils)?;
         dotnet::add_dotnet_gitignore(&output_directory_absolute, self.force, console_utils)?;
+        console_utils.write_newline()?;
 
-        console_utils.write_info(format!("\n🚀 .NET\n"))?;
+        console_utils.write_operation_category(".NET")?;
         dotnet::initalize_dotnet_solution(&output_directory_absolute, &solution_name, self.force, console_utils)?;
         dotnet::add_dotnet_buildprops(&output_directory_absolute, self.force, console_utils)?;
 
@@ -116,18 +118,22 @@ impl InitCommandArgs {
             dotnet::add_dotnet_packagesprops(&output_directory_absolute, self.force, console_utils)?;
         }
 
+        console_utils.write_newline()?;
+
         if self.add_gitversion {
-            console_utils.write_info(format!("\n🚀 GitVersion\n"))?;
+            console_utils.write_operation_category("GitVersion")?;
             dotnet::add_dotnet_tool(&output_directory_absolute, "GitVersion.Tool", console_utils)?;
             template_ops::csharp::csharp_copy_gitversion(&output_directory_absolute, self.force, console_utils)?;
+            console_utils.write_newline()?;
         }
 
-        console_utils.write_info(format!("\n🚀 VSCode\n"))?;
+        console_utils.write_operation_category("VSCode")?;
         template_ops::csharp::csharp_copy_vscode_settings(&output_directory_absolute, &solution_name, self.force, console_utils)?;
         vscode_ops::csharp::update_csharp_lsp(&output_directory_absolute, self.csharp_lsp, console_utils)?;
         template_ops::csharp::csharp_copy_vscode_tasks(&output_directory_absolute, &solution_name, self.force, console_utils)?;
+        console_utils.write_newline()?;
 
-        console_utils.write_info(format!("\n🥳 VSCode project initialized!\n"))?;
+        console_utils.write_project_initialized_log()?;
 
         Ok(())
     }

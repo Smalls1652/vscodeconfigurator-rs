@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf, process};
 
-use crate::console_utils::ConsoleUtils;
+use crate::console_utils::{ConsoleUtils, OutputEmoji};
 
 /// Initializes a new .NET solution.
 ///
@@ -15,10 +15,10 @@ pub fn initalize_dotnet_solution(
     force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!(
-        "- 📦 Initializing .NET solution '{:}.sln'... ",
-        solution_name
-    ))?;
+    console_utils.write_operation_log(
+        format!("Initializing .NET solution '{:}.sln'...", solution_name).as_str(),
+        OutputEmoji::Package
+    )?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = format!("{:}.sln", &solution_name);
@@ -48,7 +48,7 @@ pub fn initalize_dotnet_solution(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -64,7 +64,7 @@ pub fn add_dotnet_globaljson(
     force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📄 Adding 'global.json' to project root... "))?;
+    console_utils.write_operation_log("Adding 'global.json' to project root...", OutputEmoji::Document)?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = "global.json";
@@ -94,7 +94,7 @@ pub fn add_dotnet_globaljson(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -110,7 +110,7 @@ pub fn add_dotnet_gitignore(
     force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📄 Adding '.gitignore' to project root... "))?;
+    console_utils.write_operation_log("Adding '.gitignore' to project root...", OutputEmoji::Document)?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = ".gitignore";
@@ -140,7 +140,7 @@ pub fn add_dotnet_gitignore(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -156,7 +156,7 @@ pub fn add_dotnet_buildprops(
     force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📄 Adding 'Directory.Build.props' to project root... "))?;
+    console_utils.write_operation_log("Adding 'Directory.Build.props' to project root...", OutputEmoji::Document)?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = "Directory.Build.props";
@@ -186,7 +186,7 @@ pub fn add_dotnet_buildprops(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -202,7 +202,7 @@ pub fn add_dotnet_nugetconfig(
     force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📄 Adding 'NuGet.Config' to project root... "))?;
+    console_utils.write_operation_log("Adding 'NuGet.Config' to project root...", OutputEmoji::Document)?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = "NuGet.Config";
@@ -232,7 +232,7 @@ pub fn add_dotnet_nugetconfig(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -248,7 +248,7 @@ pub fn add_dotnet_packagesprops(
     force: bool,
     console_utils: &mut ConsoleUtils,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_info(format!("- 📄 Adding 'Directory.Packages.props' to project root... "))?;
+    console_utils.write_operation_log("Adding 'Directory.Packages.props' to project root...", OutputEmoji::Document)?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = "Directory.Packages.props";
@@ -278,7 +278,7 @@ pub fn add_dotnet_packagesprops(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -306,7 +306,7 @@ pub fn add_dotnet_tool(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -331,7 +331,7 @@ fn initialize_dotnet_tool_manifest(
         return Ok(());
     }
 
-    console_utils.write_info(format!("- 📦 Initializing .NET tool manifiest... "))?;
+    console_utils.write_operation_log("Initializing .NET tool manifiest...", OutputEmoji::Package)?;
     console_utils.save_cursor_position()?;
 
     let dotnet_proc_args = vec!["new", "tool-manifest"];
@@ -341,7 +341,7 @@ fn initialize_dotnet_tool_manifest(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -370,7 +370,7 @@ pub fn add_project_to_solution(
         .args(dotnet_proc_args)
         .output()?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }

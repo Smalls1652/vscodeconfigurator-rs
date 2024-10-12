@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::console_utils::ConsoleUtils;
+use crate::console_utils::{ConsoleUtils, OutputEmoji};
 
 /// Copies the `settings.json` file to the project root's `.vscode` directory.
 /// 
@@ -12,9 +12,9 @@ pub fn ensure_vscode_dir_exists(output_directory: &PathBuf, console_utils: &mut 
     let vscode_dir_path = output_directory.join(".vscode");
 
     if !vscode_dir_path.exists() {
-        console_utils.write_info(format!("- 📁 Creating '.vscode' directory... "))?;
+        console_utils.write_operation_log("Creating '.vscode' directory...", OutputEmoji::Folder)?;
         std::fs::create_dir(&vscode_dir_path)?;
-        console_utils.write_success(format!("Done! ✅\n"))?;
+        console_utils.write_operation_success_log()?;
     }
     
     Ok(())

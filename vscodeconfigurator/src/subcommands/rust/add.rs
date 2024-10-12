@@ -56,7 +56,7 @@ impl RustAddCommandArgs {
             None => self.package_name.as_str()
         };
 
-        console_utils.write_info(format!("🚀 Add project\n"))?;
+        console_utils.write_operation_category("Add package")?;
         vscode_ops::rust::add_package_to_tasks(&output_directory_absolute, self.package_name.as_str(), package_friendly_name, console_utils)?;
 
         Ok(())

@@ -1,4 +1,4 @@
-use std::{borrow::Cow, io::{Result, Stderr, Stdout, Write}, process};
+use std::{io::{Result, Stderr, Stdout, Write}, process};
 
 use crossterm::{
     cursor::{
@@ -31,15 +31,12 @@ use crossterm::{
     },
     tty::IsTty
 };
-use regex_lite::Regex;
 
 /// Utility for writing to the console.
 pub struct ConsoleUtils {
     pub stdout: Stdout,
 
-    pub stderr: Stderr,
-
-    unicode_remove_regex: Regex
+    pub stderr: Stderr
 }
 
 #[allow(dead_code)]
@@ -62,33 +59,16 @@ impl ConsoleUtils {
 
         Self {
             stdout: stdout_item,
-            stderr: stderr_item,
-            unicode_remove_regex: Regex::new(concat!(
-                "[",
-                "\u{1F680}", // 🚀
-                "\u{1F4C4}", // 📄
-                "\u{2705}", // ✅
-                "\u{1F7E0}", // 🟠
-                "\u{1F4C1}", // 📁
-                "\u{1F4E6}", // 📦
-                "\u{1F973}", // 🥳
-                "\u{270B}", // ✋
-                "\u{1F6D1}", // 🛑
-                "\u{1F6A8}", // 🚨
-                "]"
-            )).unwrap()
+            stderr: stderr_item
         }
     }
 
     /// Write an informational message to the console.
     pub fn write_info(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
-            let message_noemojis = &self.remove_emojis(&message);
-            let message_noemojis = message_noemojis.trim_start();
-
             execute!(
                 self.stdout,
-                Print(format!("[Info] - {}", &message_noemojis))
+                Print(format!("[Info] - {}", message))
             )?;
 
             return Ok(());
@@ -105,12 +85,9 @@ impl ConsoleUtils {
     /// Write a success message to the console.
     pub fn write_success(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
-            let message_noemojis = self.remove_emojis(&message);
-            let message_noemojis = message_noemojis.trim_start();
-
             execute!(
                 self.stdout,
-                Print(format!("{}", &message_noemojis))
+                Print(format!("{}", &message))
             )?;
 
             return Ok(());
@@ -127,12 +104,9 @@ impl ConsoleUtils {
     /// Write a warning message to the console.
     pub fn write_warning(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
-            let message_noemojis = self.remove_emojis(&message);
-            let message_noemojis = message_noemojis.trim_start();
-
             execute!(
                 self.stdout,
-                Print(format!("[Warning] - {}", &message_noemojis))
+                Print(format!("[Warning] - {}", &message))
             )?;
 
             return Ok(());
@@ -149,12 +123,9 @@ impl ConsoleUtils {
     /// Write an error message to the console.
     pub fn write_error(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
-            let message_noemojis = self.remove_emojis(&message);
-            let message_noemojis = message_noemojis.trim_start();
-
             execute!(
                 self.stdout,
-                Print(format!("[Error] - {}", &message_noemojis))
+                Print(format!("[Error] - {}", &message))
             )?;
 
             return Ok(());
@@ -363,10 +334,82 @@ impl ConsoleUtils {
         Ok(result)
     }
 
-    /// Remove emojis from a message.
-    fn remove_emojis<'a>(&self, message: &'a str) -> Cow<'a, str> {
-        self.unicode_remove_regex
-            .replace_all(&message, "")
+    /// Write a newline to the console.
+    pub fn write_newline(&mut self) -> Result<()> {
+        execute!(self.stdout, Print("\n"))
+    }
+
+    /// Writes an operation category header to the console.
+    /// 
+    /// ### Arguments
+    /// 
+    /// * `category` - The category of the operation.
+    /// 
+    /// ### Example
+    /// 
+    /// ```rust
+    /// console_utils.write_operation_category("Installing dependencies")?; // "🚀 Installing dependencies"
+    /// ```
+    pub fn write_operation_category(&mut self, name: &str) -> Result<()> {
+        let message = match self.stdout.is_tty() {
+            false => format!("{}\n", name),
+            true => format!("{} {}\n", OutputEmoji::Rocket, name)
+        };
+
+        self.write_info(message)
+    }
+
+    /// Writes an operation log to the console.
+    /// 
+    /// ### Arguments
+    /// 
+    /// * `message` - The message to write.
+    /// * `emoji` - The emoji to use.
+    /// 
+    /// ### Example
+    /// 
+    /// ```rust
+    /// console_utils.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?; // "📄 Adding package to tasks.json... "
+    /// ```
+    pub fn write_operation_log(&mut self, message: &str, emoji: OutputEmoji) -> Result<()> {
+        let message = match self.stdout.is_tty() {
+            false => format!("- {} ", message),
+            true => format!("- {} {} ", emoji, message)
+        };
+
+        self.write_info(message)
+    }
+
+    /// Writes an operation success log to the console.
+    /// 
+    /// ### Example
+    /// 
+    /// ```rust
+    /// console_utils.write_operation_success_log()?; // "Done! ✅"
+    /// ```
+    pub fn write_operation_success_log(&mut self) -> Result<()> {
+        let message = match self.stdout.is_tty() {
+            false => format!("Done!\n"),
+            true => format!("Done! {}\n", OutputEmoji::CheckMark)
+        };
+
+        self.write_success(message)
+    }
+
+    /// Writes a project initialized log to the console.
+    /// 
+    /// ### Example
+    /// 
+    /// ```rust
+    /// console_utils.write_project_initialized_log()?; // "🥳 VSCode project initialized!"
+    /// ```
+    pub fn write_project_initialized_log(&mut self) -> Result<()> {
+        let message = match self.stdout.is_tty() {
+            false => format!("VSCode project initialized!\n"),
+            true => format!("{} VSCode project initialized!\n", OutputEmoji::Party)
+        };
+
+        self.write_info(message)
     }
 
     /// Flush and release the standard output stream.
@@ -374,5 +417,57 @@ impl ConsoleUtils {
         self.stdout.flush().unwrap();
 
         self.stderr.flush().unwrap();
+    }
+}
+
+/// An emoji to use in the console.
+#[allow(dead_code)]
+pub enum OutputEmoji {
+    /// 🚀
+    Rocket,
+
+    /// 📄
+    Document,
+
+    /// ✅
+    CheckMark,
+
+    /// 🟠
+    OrangeCircle,
+
+    /// 📁
+    Folder,
+
+    /// 📦
+    Package,
+
+    /// 🥳
+    Party,
+
+    /// ✋
+    Hand,
+
+    /// 🛑
+    Stop,
+
+    /// 🚨
+    Siren
+}
+
+impl std::fmt::Display for OutputEmoji {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let emoji = match self {
+            OutputEmoji::Rocket => "🚀",
+            OutputEmoji::Document => "📄",
+            OutputEmoji::CheckMark => "✅",
+            OutputEmoji::OrangeCircle => "🟠",
+            OutputEmoji::Folder => "📁",
+            OutputEmoji::Package => "📦",
+            OutputEmoji::Party => "🥳",
+            OutputEmoji::Hand => "✋",
+            OutputEmoji::Stop => "🛑",
+            OutputEmoji::Siren => "🚨"
+        };
+        write!(f, "{}", emoji)
     }
 }
