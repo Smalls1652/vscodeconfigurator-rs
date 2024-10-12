@@ -102,7 +102,7 @@ impl AddCommandArgs {
             project_friendly_name = self.project_friendly_name.clone().unwrap();
         }
 
-        console_utils.write_info(format!("🚀 Add project\n"))?;
+        console_utils.write_operation_category("Add project")?;
         dotnet::add_project_to_solution(&solution_file_path, &self.project_path, console_utils)?;
         vscode_ops::csharp::add_csharp_project_to_tasks(&PathBuf::from(solution_file_path.parent().unwrap()), &self.project_path, &project_friendly_name, self.is_runnable, self.is_watchable, console_utils)?;
 

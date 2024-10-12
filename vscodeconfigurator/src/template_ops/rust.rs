@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf};
 
-use crate::{console_utils::ConsoleUtils, utils};
+use crate::{console_utils::{ConsoleUtils, OutputEmoji}, utils};
 
 use super::vscode;
 
@@ -22,10 +22,7 @@ pub fn copy_gitignore(
     let output_file_name = ".gitignore";
     let output_file_path = output_directory.join(&output_file_name);
 
-    console_utils.write_info(format!(
-        "- 📄 Copying '{}' to project root... ",
-        output_file_name
-    ))?;
+    console_utils.write_operation_log("Copying '.gitignore' to project root...", OutputEmoji::Document)?;
 
     if output_file_path.exists() {
         if !force {
@@ -46,7 +43,7 @@ pub fn copy_gitignore(
 
     fs::copy(template_file_path, &output_file_path)?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -69,10 +66,7 @@ pub fn copy_cargo_workspace_file(
     let output_file_name = "Cargo.toml";
     let output_file_path = output_directory.join(&output_file_name);
 
-    console_utils.write_info(format!(
-        "- 📄 Copying '{}' to project root... ",
-        output_file_name
-    ))?;
+    console_utils.write_operation_log("Copying 'Cargo.toml' to project root...", OutputEmoji::Document)?;
 
     if output_file_path.exists() {
         if !force {
@@ -93,7 +87,7 @@ pub fn copy_cargo_workspace_file(
 
     fs::copy(template_file_path, &output_file_path)?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -118,10 +112,7 @@ pub fn copy_vscode_settings(
     let output_file_name = "settings.json";
     let output_file_path = output_directory.join(".vscode").join(&output_file_name);
 
-    console_utils.write_info(format!(
-        "- 📄 Copying '{}' to '.vscode' directory... ",
-        output_file_name
-    ))?;
+    console_utils.write_operation_log("Copying 'settings.json' to '.vscode' directory...", OutputEmoji::Document)?;
 
     if output_file_path.exists() {
         if !force {
@@ -143,7 +134,7 @@ pub fn copy_vscode_settings(
     let vscode_settings_json = fs::read_to_string(&template_file_path)?;
     fs::write(&output_file_path, vscode_settings_json)?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -170,10 +161,7 @@ pub fn copy_vscode_tasks(
     let output_file_name = "tasks.json";
     let output_file_path = output_directory.join(".vscode").join(&output_file_name);
 
-    console_utils.write_info(format!(
-        "- 📄 Copying '{}' to '.vscode' directory... ",
-        output_file_name
-    ))?;
+    console_utils.write_operation_log("Copying 'tasks.json' to '.vscode' directory...", OutputEmoji::Document)?;
 
     if output_file_path.exists() {
         if !force {
@@ -197,7 +185,7 @@ pub fn copy_vscode_tasks(
 
     fs::write(&output_file_path, vscode_tasks_json)?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -215,9 +203,9 @@ pub fn ensure_tools_dir_exists(
     let vscode_dir_path = output_directory.join("tools");
 
     if !vscode_dir_path.exists() {
-        console_utils.write_info(format!("- 📁 Creating 'tools' directory... "))?;
+        console_utils.write_operation_log("Creating 'tools' directory...", OutputEmoji::Folder)?;
         std::fs::create_dir(&vscode_dir_path)?;
-        console_utils.write_success(format!("Done! ✅\n"))?;
+        console_utils.write_operation_success_log()?;
     }
 
     Ok(())
@@ -243,10 +231,7 @@ pub fn copy_build_pwsh_script(
     let output_file_name = "Build-Package.ps1";
     let output_file_path = output_directory.join("tools").join(&output_file_name);
 
-    console_utils.write_info(format!(
-        "- 📄 Copying '{}' to tools dir... ",
-        output_file_name
-    ))?;
+    console_utils.write_operation_log("Copying 'Build-Package.ps1' to tools directory... ", OutputEmoji::Document)?;
 
     if output_file_path.exists() {
         if !force {
@@ -267,7 +252,7 @@ pub fn copy_build_pwsh_script(
 
     fs::copy(template_file_path, &output_file_path)?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }
@@ -292,10 +277,7 @@ pub fn copy_clean_pwsh_script(
     let output_file_name = "Clean-Package.ps1";
     let output_file_path = output_directory.join("tools").join(&output_file_name);
 
-    console_utils.write_info(format!(
-        "- 📄 Copying '{}' to tools dir... ",
-        output_file_name
-    ))?;
+    console_utils.write_operation_log("Copying 'Clean-Package.ps1' to tools directory... ", OutputEmoji::Document)?;
 
     if output_file_path.exists() {
         if !force {
@@ -316,7 +298,7 @@ pub fn copy_clean_pwsh_script(
 
     fs::copy(template_file_path, &output_file_path)?;
 
-    console_utils.write_success(format!("Done! ✅\n"))?;
+    console_utils.write_operation_success_log()?;
 
     Ok(())
 }

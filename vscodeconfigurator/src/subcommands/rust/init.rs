@@ -56,21 +56,24 @@ impl RustInitCommandArgs {
 
         let output_directory_absolute = output_directory.to_absolute();
 
-        console_utils.write_info(format!("🚀 Git\n"))?;
+        console_utils.write_operation_category("Git")?;
         git::initialize_git_repo(&output_directory_absolute, console_utils)?;
         template_ops::rust::copy_gitignore(&output_directory_absolute, self.force, console_utils)?;
+        console_utils.write_newline()?;
 
-        console_utils.write_info(format!("\n🚀 VSCode\n"))?;
+        console_utils.write_operation_category("VSCode")?;
         template_ops::rust::copy_vscode_settings(&output_directory_absolute, self.force, console_utils)?;
         template_ops::rust::copy_vscode_tasks(&output_directory_absolute, &self.base_package_name, self.force, console_utils)?;
         template_ops::rust::copy_build_pwsh_script(&output_directory_absolute, self.force, console_utils)?;
         template_ops::rust::copy_clean_pwsh_script(&output_directory_absolute, self.force, console_utils)?;
+        console_utils.write_newline()?;
 
-        console_utils.write_info(format!("\n🚀 Rust\n"))?;
+        console_utils.write_operation_category("Rust")?;
         template_ops::rust::copy_cargo_workspace_file(&output_directory_absolute, self.force, console_utils)?;
         cargo::initalize_package(&output_directory_absolute, &self.base_package_name, self.base_package_template, self.force, console_utils)?;
+        console_utils.write_newline()?;
 
-        console_utils.write_info(format!("\n🥳 VSCode project initialized!\n"))?;
+        console_utils.write_project_initialized_log()?;
 
         Ok(())
     }
