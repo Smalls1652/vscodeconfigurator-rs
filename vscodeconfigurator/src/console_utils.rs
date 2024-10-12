@@ -376,3 +376,55 @@ impl ConsoleUtils {
         self.stderr.flush().unwrap();
     }
 }
+
+/// An emoji to use in the console.
+#[allow(dead_code)]
+pub enum OutputEmoji {
+    /// 🚀
+    Rocket,
+
+    /// 📄
+    Document,
+
+    /// ✅
+    CheckMark,
+
+    /// 🟠
+    OrangeCircle,
+
+    /// 📁
+    Folder,
+
+    /// 📦
+    Package,
+
+    /// 🥳
+    Party,
+
+    /// ✋
+    Hand,
+
+    /// 🛑
+    Stop,
+
+    /// 🚨
+    Siren
+}
+
+impl std::fmt::Display for OutputEmoji {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let emoji = match self {
+            OutputEmoji::Rocket => "🚀",
+            OutputEmoji::Document => "📄",
+            OutputEmoji::CheckMark => "✅",
+            OutputEmoji::OrangeCircle => "🟠",
+            OutputEmoji::Folder => "📁",
+            OutputEmoji::Package => "📦",
+            OutputEmoji::Party => "🥳",
+            OutputEmoji::Hand => "✋",
+            OutputEmoji::Stop => "🛑",
+            OutputEmoji::Siren => "🚨"
+        };
+        write!(f, "{}", emoji)
+    }
+}
