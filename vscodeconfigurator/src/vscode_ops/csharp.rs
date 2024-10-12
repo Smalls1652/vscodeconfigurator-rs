@@ -5,7 +5,7 @@ use serde_json::{json, Value};
 use crate::{
     console_utils::ConsoleUtils,
     subcommands::csharp::CsharpLspOption,
-    vscode_ops::{VSCodeSettings, VSCodeTasks}
+    vscode_ops::{VSCodeSettingsFile, VSCodeTasksFile}
 };
 
 /// Updates the C# LSP option in the `.vscode/settings.json` file.
@@ -22,7 +22,7 @@ pub fn update_csharp_lsp(
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!("- 📄 Updating C# LSP option in tasks.json... "))?;
 
-    let mut vscode_settings = VSCodeSettings::new(output_directory.join(".vscode/settings.json"));
+    let mut vscode_settings = VSCodeSettingsFile::new(output_directory.join(".vscode/settings.json"));
 
     vscode_settings.values["dotnet.server.useOmnisharp"] = match csharp_lsp {
         CsharpLspOption::CsharpLsp => Value::Bool(false),
@@ -61,7 +61,7 @@ pub fn add_csharp_project_to_tasks(
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!("- 📄 Adding C# project to tasks.json... "))?;
 
-    let mut vscode_tasks = VSCodeTasks::new(output_directory.join(".vscode/tasks.json"));
+    let mut vscode_tasks = VSCodeTasksFile::new(output_directory.join(".vscode/tasks.json"));
 
     let inputs_node = vscode_tasks.values["inputs"].as_array_mut().unwrap();
 

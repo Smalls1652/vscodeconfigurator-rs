@@ -4,7 +4,7 @@ use serde_json::json;
 
 use crate::{
     console_utils::ConsoleUtils,
-    vscode_ops::VSCodeTasks
+    vscode_ops::VSCodeTasksFile
 };
 
 
@@ -24,7 +24,7 @@ pub fn add_package_to_tasks(
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_info(format!("- 📄 Adding package to tasks.json... "))?;
 
-    let mut vscode_tasks = VSCodeTasks::new(output_directory.join(".vscode/tasks.json"));
+    let mut vscode_tasks = VSCodeTasksFile::new(output_directory.join(".vscode/tasks.json"));
 
     let inputs_node = vscode_tasks.values["inputs"].as_array_mut().unwrap();
 

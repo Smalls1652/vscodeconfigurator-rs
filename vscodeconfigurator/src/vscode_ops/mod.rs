@@ -11,12 +11,12 @@ use serde_json::Value;
 /// 
 /// * `file_path` - The path to the settings file.
 /// * `values` - The values in the settings file.
-pub struct VSCodeSettings {
+pub struct VSCodeSettingsFile {
     pub file_path: PathBuf,
     pub values: Value
 }
 
-impl VSCodeSettings {
+impl VSCodeSettingsFile {
     /// Creates a new `VSCodeSettings` instance.
     /// 
     /// ## Arguments
@@ -49,7 +49,7 @@ impl VSCodeSettings {
 }
 
 /// Represents the tasks file for a Visual Studio Code workspace.
-pub struct VSCodeTasks {
+pub struct VSCodeTasksFile {
     /// The path to the tasks file.
     pub file_path: PathBuf,
 
@@ -57,7 +57,7 @@ pub struct VSCodeTasks {
     pub values: Value
 }
 
-impl VSCodeTasks {
+impl VSCodeTasksFile {
     /// Creates a new `VSCodeTasks` instance.
     /// 
     /// ## Arguments
