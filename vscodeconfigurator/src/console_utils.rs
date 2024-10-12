@@ -1,4 +1,4 @@
-use std::{borrow::Cow, io::{Result, Stderr, Stdout, Write}, process};
+use std::{io::{Result, Stderr, Stdout, Write}, process};
 
 use crossterm::{
     cursor::{
@@ -31,15 +31,12 @@ use crossterm::{
     },
     tty::IsTty
 };
-use regex_lite::Regex;
 
 /// Utility for writing to the console.
 pub struct ConsoleUtils {
     pub stdout: Stdout,
 
-    pub stderr: Stderr,
-
-    unicode_remove_regex: Regex
+    pub stderr: Stderr
 }
 
 #[allow(dead_code)]
@@ -62,21 +59,7 @@ impl ConsoleUtils {
 
         Self {
             stdout: stdout_item,
-            stderr: stderr_item,
-            unicode_remove_regex: Regex::new(concat!(
-                "[",
-                "\u{1F680}", // 🚀
-                "\u{1F4C4}", // 📄
-                "\u{2705}", // ✅
-                "\u{1F7E0}", // 🟠
-                "\u{1F4C1}", // 📁
-                "\u{1F4E6}", // 📦
-                "\u{1F973}", // 🥳
-                "\u{270B}", // ✋
-                "\u{1F6D1}", // 🛑
-                "\u{1F6A8}", // 🚨
-                "]"
-            )).unwrap()
+            stderr: stderr_item
         }
     }
 
