@@ -1,9 +1,8 @@
 use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
-use vscodeconfigurator_lib::logging::ConsoleLogger;
+use vscodeconfigurator_lib::{io::OutputDirectory, logging::ConsoleLogger};
 
 use crate::{
     external_procs::{cargo, git},
-    io::OutputDirectory,
     template_ops
 };
 
@@ -62,27 +61,15 @@ impl RustInitCommandArgs {
         logger.write_newline()?;
 
         logger.write_operation_category("VSCode")?;
-        template_ops::rust::copy_vscode_settings(
-            &output_directory_absolute,
-            self.force,
-            logger
-        )?;
+        template_ops::rust::copy_vscode_settings(&output_directory_absolute, self.force, logger)?;
         template_ops::rust::copy_vscode_tasks(
             &output_directory_absolute,
             &self.base_package_name,
             self.force,
             logger
         )?;
-        template_ops::rust::copy_build_pwsh_script(
-            &output_directory_absolute,
-            self.force,
-            logger
-        )?;
-        template_ops::rust::copy_clean_pwsh_script(
-            &output_directory_absolute,
-            self.force,
-            logger
-        )?;
+        template_ops::rust::copy_build_pwsh_script(&output_directory_absolute, self.force, logger)?;
+        template_ops::rust::copy_clean_pwsh_script(&output_directory_absolute, self.force, logger)?;
         logger.write_newline()?;
 
         logger.write_operation_category("Rust")?;

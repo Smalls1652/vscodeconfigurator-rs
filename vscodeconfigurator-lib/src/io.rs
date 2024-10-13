@@ -6,7 +6,7 @@ use std::{
     path::{absolute, Path, PathBuf}
 };
 
-use vscodeconfigurator_lib::error::{CliError, CliErrorKind};
+use crate::error::{CliError, CliErrorKind};
 
 /// Represents an output directory.
 #[derive(Clone, Debug, PartialEq)]

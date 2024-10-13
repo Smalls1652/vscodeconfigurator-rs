@@ -1,12 +1,12 @@
 use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
 use vscodeconfigurator_lib::{
     error::{CliError, CliErrorKind},
+    io::OutputDirectory,
     logging::ConsoleLogger
 };
 
 use crate::{
     external_procs::{dotnet, git},
-    io::OutputDirectory,
     template_ops,
     vscode_ops
 };
