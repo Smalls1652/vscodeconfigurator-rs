@@ -30,7 +30,7 @@
 				"focus": true,
 				"panel": "shared",
 				"showReuseMessage": true,
-				"clear": true,
+				"clear": true
 			},
 			"problemMatcher": "$rustc"
 		},
@@ -63,7 +63,7 @@
 				"focus": true,
 				"panel": "shared",
 				"showReuseMessage": true,
-				"clear": true,
+				"clear": true
 			},
 			"problemMatcher": "$rustc"
         },
@@ -143,7 +143,7 @@
 				"focus": true,
 				"panel": "shared",
 				"showReuseMessage": true,
-				"clear": true,
+				"clear": true
 			},
 			"problemMatcher": [],
             "dependsOn": [
@@ -179,7 +179,7 @@
 				"focus": true,
 				"panel": "shared",
 				"showReuseMessage": true,
-				"clear": true,
+				"clear": true
 			},
 			"problemMatcher": []
 		}
