@@ -4,10 +4,11 @@ use vscodeconfigurator_lib::{
     external_procs::{dotnet, git},
     io::OutputDirectory,
     lang_options::CsharpLspOption,
-    logging::ConsoleLogger
+    logging::ConsoleLogger,
+    template_ops
 };
 
-use crate::{template_ops, vscode_ops};
+use crate::vscode_ops;
 
 /// Defines the arguments for the `csharp init` command and the logic to run the
 /// command.

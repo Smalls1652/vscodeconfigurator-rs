@@ -3,10 +3,9 @@ use vscodeconfigurator_lib::{
     external_procs::{cargo, git},
     io::OutputDirectory,
     lang_options::CargoPackageTemplateOption,
-    logging::ConsoleLogger
+    logging::ConsoleLogger,
+    template_ops
 };
-
-use crate::template_ops;
 
 /// Defines the arguments for the `rust init` command and the logic to run the
 /// command.

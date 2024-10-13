@@ -1,6 +1,4 @@
 mod subcommands;
-mod template_ops;
-mod utils;
 mod vscode_ops;
 
 use std::{error::Error, process};

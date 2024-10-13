@@ -1,9 +1,10 @@
 use std::{fs, path::PathBuf};
 
-use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
-
 use super::vscode;
-use crate::utils;
+use crate::{
+    logging::{ConsoleLogger, OutputEmoji},
+    utils
+};
 
 /// Copies the `GitVersion.yml` file to the project root.
 ///
@@ -11,8 +12,9 @@ use crate::utils;
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -73,8 +75,9 @@ pub fn csharp_copy_gitversion(
 /// - `output_directory` - The output directory of the project.
 /// - `solution_name` - The name of the solution.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -143,8 +146,9 @@ pub fn csharp_copy_vscode_settings(
 /// - `output_directory` - The output directory of the project.
 /// - `solution_name` - The name of the solution.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///

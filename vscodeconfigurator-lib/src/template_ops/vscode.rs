@@ -1,14 +1,15 @@
 use std::path::PathBuf;
 
-use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
+use crate::logging::{ConsoleLogger, OutputEmoji};
 
 /// Creates the `.vscode` directory in the project root if it does not exist.
 ///
 /// # Arguments
 ///
 /// - `output_directory` - The output directory of the project.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -31,8 +32,7 @@ pub fn ensure_vscode_dir_exists(
     let vscode_dir_path = output_directory.join(".vscode");
 
     if !vscode_dir_path.exists() {
-        logger
-            .write_operation_log("Creating '.vscode' directory...", OutputEmoji::Folder)?;
+        logger.write_operation_log("Creating '.vscode' directory...", OutputEmoji::Folder)?;
         std::fs::create_dir(&vscode_dir_path)?;
         logger.write_operation_success_log()?;
     }

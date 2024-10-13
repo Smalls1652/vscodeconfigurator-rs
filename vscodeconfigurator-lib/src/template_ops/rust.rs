@@ -1,9 +1,10 @@
 use std::{fs, path::PathBuf};
 
-use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
-
 use super::vscode;
-use crate::utils;
+use crate::{
+    logging::{ConsoleLogger, OutputEmoji},
+    utils
+};
 
 /// Copies the `.gitignore` file to the project root.
 ///
@@ -11,8 +12,9 @@ use crate::utils;
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -72,8 +74,9 @@ pub fn copy_gitignore(
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -133,8 +136,9 @@ pub fn copy_cargo_workspace_file(
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -198,8 +202,9 @@ pub fn copy_vscode_settings(
 /// - `output_directory` - The output directory of the project.
 /// - `package_name` - The name of the package.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -266,8 +271,9 @@ pub fn copy_vscode_tasks(
 /// # Arguments
 ///
 /// - `output_directory` - The output directory of the project.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -304,8 +310,9 @@ pub fn ensure_tools_dir_exists(
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -367,8 +374,9 @@ pub fn copy_build_pwsh_script(
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
