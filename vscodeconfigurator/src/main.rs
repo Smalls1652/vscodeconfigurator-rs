@@ -43,15 +43,13 @@ fn main() -> Result<(), Box<dyn Error>> {
             Ok(())
         }
 
-        Some(RootSubcommands::Csharp { command }) => command
-            .as_ref()
-            .unwrap()
-            .match_subcommand(&mut logger),
+        Some(RootSubcommands::Csharp { command }) => {
+            command.as_ref().unwrap().match_subcommand(&mut logger)
+        }
 
-        Some(RootSubcommands::Rust { command }) => command
-            .as_ref()
-            .unwrap()
-            .match_subcommand(&mut logger),
+        Some(RootSubcommands::Rust { command }) => {
+            command.as_ref().unwrap().match_subcommand(&mut logger)
+        }
 
         None => Err(CliError::new(
             "No subcommand provided.",
