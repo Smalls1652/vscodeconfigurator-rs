@@ -12,7 +12,10 @@ pub struct CliError {
 
 impl CliError {
     /// Creates a new instance of `CliError`.
-    pub fn new(message: &str, kind: CliErrorKind) -> Self {
+    pub fn new(
+        message: &str,
+        kind: CliErrorKind
+    ) -> Self {
         Self {
             message: message.to_string(),
             kind
@@ -21,14 +24,18 @@ impl CliError {
 }
 
 impl fmt::Display for CliError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(
+        &self,
+        f: &mut fmt::Formatter<'_>
+    ) -> fmt::Result {
         write!(f, "{}", self.message)
     }
 }
 
 impl Error for CliError {}
 
-/// Represents the kind of error that occurred during the execution of the CLI tool.
+/// Represents the kind of error that occurred during the execution of the CLI
+/// tool.
 #[derive(Debug, Clone)]
 pub enum CliErrorKind {
     /// No subcommand was provided.
@@ -53,7 +60,10 @@ pub enum CliErrorKind {
 }
 
 impl fmt::Display for CliErrorKind {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(
+        &self,
+        f: &mut fmt::Formatter<'_>
+    ) -> fmt::Result {
         write!(f, "{:?}", self)
     }
 }

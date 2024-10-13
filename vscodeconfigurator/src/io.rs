@@ -1,4 +1,10 @@
-use std::{env, ffi::OsString, fmt, io, path::{absolute, Path, PathBuf}};
+use std::{
+    env,
+    ffi::OsString,
+    fmt,
+    io,
+    path::{absolute, Path, PathBuf}
+};
 
 use crate::error::{CliError, CliErrorKind};
 
@@ -15,42 +21,30 @@ impl OutputDirectory {
         let current_dir = env::current_dir().unwrap().into_os_string();
 
         Self {
-            path: current_dir
-                .to_string_lossy()
-                .to_string()
+            path: current_dir.to_string_lossy().to_string()
         }
     }
 
     /// Creates a new `OutputDirectory` from an `OsString`.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `path` - The path to create the `OutputDirectory` from.
     pub fn from_os_string(path: OsString) -> Result<Self, io::Error> {
-        let input_path = PathBuf::from(&path)
-            .canonicalize();
+        let input_path = PathBuf::from(&path).canonicalize();
 
         let input_path_string = match input_path.is_err() {
-            true => {
-                absolute(PathBuf::from(&path))
-                    .unwrap()
-                    .to_string_lossy()
-                    .to_string()
-            }
+            true => absolute(PathBuf::from(&path))
+                .unwrap()
+                .to_string_lossy()
+                .to_string(),
 
-            false => {
-                input_path
-                    .unwrap()
-                    .to_string_lossy()
-                    .to_string()
-            }
+            false => input_path.unwrap().to_string_lossy().to_string()
         };
 
-        Ok(
-            Self {
-                path: input_path_string
-            }
-        )
+        Ok(Self {
+            path: input_path_string
+        })
     }
 
     /// Converts the `OutputDirectory` to a `PathBuf`.
@@ -64,19 +58,21 @@ impl OutputDirectory {
             let home_dir_env_var_key = match env::consts::OS {
                 "windows" => "USERPROFILE",
                 "unix" | "macos" => "HOME",
-                _ => return Err(CliError::new("The operating system is not supported.", CliErrorKind::UnsupportedOperatingSystem).into()),
+                _ => {
+                    return Err(CliError::new(
+                        "The operating system is not supported.",
+                        CliErrorKind::UnsupportedOperatingSystem
+                    )
+                    .into())
+                }
             };
             let home_dir_env_var = env::var(home_dir_env_var_key).unwrap();
             let home_dir = Path::new(&home_dir_env_var);
 
-            self.path =
-                PathBuf::from(&home_dir)
-                    .join(self.path
-                        .strip_prefix("~")
-                        .unwrap()
-                    )
-                    .to_string_lossy()
-                    .to_string();
+            self.path = PathBuf::from(&home_dir)
+                .join(self.path.strip_prefix("~").unwrap())
+                .to_string_lossy()
+                .to_string();
         }
 
         Ok(self.clone())
@@ -84,7 +80,8 @@ impl OutputDirectory {
 
     /// Trims trailing slashes from the path.
     pub fn trim_trailing_slashes(&mut self) -> Result<OutputDirectory, CliError> {
-        self.path = self.path
+        self.path = self
+            .path
             .trim_end_matches('/')
             .trim_end_matches('.')
             .to_string();
@@ -108,7 +105,10 @@ impl OutputDirectory {
 }
 
 impl fmt::Display for OutputDirectory {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(
+        &self,
+        f: &mut fmt::Formatter<'_>
+    ) -> fmt::Result {
         write!(f, "{}", self.path)
     }
 }

@@ -1,13 +1,11 @@
+use std::{env, io::ErrorKind, path::PathBuf, process};
+
 use clap::{Args, ValueHint};
-use std::{
-    env, io::ErrorKind, path::PathBuf, process
-};
 
-use crate::{
-    console_utils::ConsoleUtils, external_procs::dotnet, vscode_ops
-};
+use crate::{console_utils::ConsoleUtils, external_procs::dotnet, vscode_ops};
 
-/// Defines the arguments for the `csharp add` command and the logic to run the command.
+/// Defines the arguments for the `csharp add` command and the logic to run the
+/// command.
 #[derive(Args, Debug, PartialEq)]
 pub struct AddCommandArgs {
     /// The solution file to add the project to.
@@ -35,38 +33,33 @@ pub struct AddCommandArgs {
     project_friendly_name: Option<String>,
 
     /// Whether the project is runnable.
-    #[arg(
-        long = "is-runnable",
-        required = false,
-        default_value = "false"
-    )]
+    #[arg(long = "is-runnable", required = false, default_value = "false")]
     is_runnable: bool,
 
     /// Whether the project is watchable.
-    #[arg(
-        long = "is-watchable",
-        required = false,
-        default_value = "false"
-    )]
+    #[arg(long = "is-watchable", required = false, default_value = "false")]
     is_watchable: bool
 }
 
 impl AddCommandArgs {
     /// Runs the `csharp add` command.
-    pub fn run_command(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn run_command(
+        &self,
+        console_utils: &mut ConsoleUtils
+    ) -> Result<(), Box<dyn std::error::Error>> {
         let solution_file_path: PathBuf;
 
         if self.solution_file_path.is_none() {
             solution_file_path = match get_solution_file_path_default_value() {
                 Ok(path) => path,
                 Err(_) => {
-                    console_utils.write_error(format!("No solution file found in the current directory."))?;
+                    console_utils
+                        .write_error(format!("No solution file found in the current directory."))?;
 
                     process::exit(1);
                 }
             };
-        }
-        else {
+        } else {
             solution_file_path = self.solution_file_path.clone().unwrap();
             if !&solution_file_path.exists() {
                 console_utils.write_error(format!(
@@ -93,26 +86,33 @@ impl AddCommandArgs {
             project_friendly_name = match get_project_friendly_name(&self.project_path) {
                 Ok(name) => name,
                 Err(_) => {
-                    console_utils.write_error(format!("No project file found in the project directory."))?;
+                    console_utils
+                        .write_error(format!("No project file found in the project directory."))?;
 
                     process::exit(1);
                 }
             };
-        }
-        else {
+        } else {
             project_friendly_name = self.project_friendly_name.clone().unwrap();
         }
 
         console_utils.write_operation_category("Add project")?;
         dotnet::add_project_to_solution(&solution_file_path, &self.project_path, console_utils)?;
-        vscode_ops::csharp::add_csharp_project_to_tasks(&PathBuf::from(solution_file_path.parent().unwrap()), &self.project_path, &project_friendly_name, self.is_runnable, self.is_watchable, console_utils)?;
+        vscode_ops::csharp::add_csharp_project_to_tasks(
+            &PathBuf::from(solution_file_path.parent().unwrap()),
+            &self.project_path,
+            &project_friendly_name,
+            self.is_runnable,
+            self.is_watchable,
+            console_utils
+        )?;
 
         Ok(())
     }
 }
 
-/// Gets the default value for the `solution_file_path` (`--solution-file-path`) argument
-/// if it is not provided by the user.
+/// Gets the default value for the `solution_file_path` (`--solution-file-path`)
+/// argument if it is not provided by the user.
 fn get_solution_file_path_default_value() -> Result<PathBuf, ErrorKind> {
     let current_dir = env::current_dir().unwrap();
 
@@ -134,7 +134,7 @@ fn get_solution_file_path_default_value() -> Result<PathBuf, ErrorKind> {
 }
 
 /// Gets the friendly name of the project, if it is not provided by the user.
-fn get_project_friendly_name(project_path: &PathBuf) -> Result<String, ErrorKind> {    
+fn get_project_friendly_name(project_path: &PathBuf) -> Result<String, ErrorKind> {
     for file_item in project_path.read_dir().unwrap() {
         let file_item = file_item.unwrap();
 

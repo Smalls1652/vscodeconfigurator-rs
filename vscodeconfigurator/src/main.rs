@@ -30,7 +30,7 @@ use self::{
 )]
 struct Cli {
     #[command(subcommand)]
-    command: Option<RootSubcommands>,
+    command: Option<RootSubcommands>
 }
 
 /// The entry point for the CLI.
@@ -41,23 +41,30 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let result = match &cli.command {
         Some(RootSubcommands::Completions(command)) => {
-            generate(command.shell, &mut Cli::command(), "vscodeconfigurator", &mut std::io::stdout());
+            generate(
+                command.shell,
+                &mut Cli::command(),
+                "vscodeconfigurator",
+                &mut std::io::stdout()
+            );
             Ok(())
         }
 
-        Some(RootSubcommands::Csharp { command }) =>
-            command
-                .as_ref()
-                .unwrap()
-                .match_subcommand(&mut console_utils),
+        Some(RootSubcommands::Csharp { command }) => command
+            .as_ref()
+            .unwrap()
+            .match_subcommand(&mut console_utils),
 
-        Some(RootSubcommands::Rust { command }) =>
-            command
-                .as_ref()
-                .unwrap()
-                .match_subcommand(&mut console_utils),
+        Some(RootSubcommands::Rust { command }) => command
+            .as_ref()
+            .unwrap()
+            .match_subcommand(&mut console_utils),
 
-        None => Err(CliError::new("No subcommand provided.", CliErrorKind::NoSubcommandProvided).into())
+        None => Err(CliError::new(
+            "No subcommand provided.",
+            CliErrorKind::NoSubcommandProvided
+        )
+        .into())
     };
 
     match result {

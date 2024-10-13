@@ -1,8 +1,14 @@
 use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
 
-use crate::{console_utils::ConsoleUtils, external_procs::{cargo, git}, io::OutputDirectory, template_ops};
+use crate::{
+    console_utils::ConsoleUtils,
+    external_procs::{cargo, git},
+    io::OutputDirectory,
+    template_ops
+};
 
-/// Defines the arguments for the `rust init` command and the logic to run the command.
+/// Defines the arguments for the `rust init` command and the logic to run the
+/// command.
 #[derive(Args, Debug, PartialEq)]
 pub struct RustInitCommandArgs {
     /// The output directory for the new project.
@@ -17,11 +23,7 @@ pub struct RustInitCommandArgs {
     output_directory: OutputDirectory,
 
     /// The name of the base package.
-    #[arg(
-        short = 'n',
-        long = "base-package-name",
-        required = true
-    )]
+    #[arg(short = 'n', long = "base-package-name", required = true)]
     base_package_name: String,
 
     /// The type of Cargo package to create.
@@ -34,18 +36,16 @@ pub struct RustInitCommandArgs {
     base_package_template: CargoPackageTemplateOption,
 
     /// Force the command to run without prompting for confirmation.
-    #[arg(
-        short = 'f',
-        long = "force",
-        required = false,
-        default_value = "false"
-    )]
+    #[arg(short = 'f', long = "force", required = false, default_value = "false")]
     force: bool
 }
 
 impl RustInitCommandArgs {
     /// Runs the `run init` command.
-    pub fn run_command(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn run_command(
+        &self,
+        console_utils: &mut ConsoleUtils
+    ) -> Result<(), Box<dyn std::error::Error>> {
         let mut output_directory = self.output_directory.clone();
 
         output_directory = output_directory
@@ -62,15 +62,42 @@ impl RustInitCommandArgs {
         console_utils.write_newline()?;
 
         console_utils.write_operation_category("VSCode")?;
-        template_ops::rust::copy_vscode_settings(&output_directory_absolute, self.force, console_utils)?;
-        template_ops::rust::copy_vscode_tasks(&output_directory_absolute, &self.base_package_name, self.force, console_utils)?;
-        template_ops::rust::copy_build_pwsh_script(&output_directory_absolute, self.force, console_utils)?;
-        template_ops::rust::copy_clean_pwsh_script(&output_directory_absolute, self.force, console_utils)?;
+        template_ops::rust::copy_vscode_settings(
+            &output_directory_absolute,
+            self.force,
+            console_utils
+        )?;
+        template_ops::rust::copy_vscode_tasks(
+            &output_directory_absolute,
+            &self.base_package_name,
+            self.force,
+            console_utils
+        )?;
+        template_ops::rust::copy_build_pwsh_script(
+            &output_directory_absolute,
+            self.force,
+            console_utils
+        )?;
+        template_ops::rust::copy_clean_pwsh_script(
+            &output_directory_absolute,
+            self.force,
+            console_utils
+        )?;
         console_utils.write_newline()?;
 
         console_utils.write_operation_category("Rust")?;
-        template_ops::rust::copy_cargo_workspace_file(&output_directory_absolute, self.force, console_utils)?;
-        cargo::initalize_package(&output_directory_absolute, &self.base_package_name, self.base_package_template, self.force, console_utils)?;
+        template_ops::rust::copy_cargo_workspace_file(
+            &output_directory_absolute,
+            self.force,
+            console_utils
+        )?;
+        cargo::initalize_package(
+            &output_directory_absolute,
+            &self.base_package_name,
+            self.base_package_template,
+            self.force,
+            console_utils
+        )?;
         console_utils.write_newline()?;
 
         console_utils.write_project_initialized_log()?;
@@ -88,5 +115,5 @@ pub enum CargoPackageTemplateOption {
 
     /// A library.
     #[value(name = "Library")]
-    Library,
+    Library
 }

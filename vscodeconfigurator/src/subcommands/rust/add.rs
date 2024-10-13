@@ -1,8 +1,14 @@
 use clap::{builder::TypedValueParser, Args, ValueHint};
 
-use crate::{console_utils::ConsoleUtils, error::{CliError, CliErrorKind}, io::OutputDirectory, vscode_ops};
+use crate::{
+    console_utils::ConsoleUtils,
+    error::{CliError, CliErrorKind},
+    io::OutputDirectory,
+    vscode_ops
+};
 
-/// Defines the arguments for the `rust add` command and the logic to run the command.
+/// Defines the arguments for the `rust add` command and the logic to run the
+/// command.
 #[derive(Args, Debug, PartialEq)]
 pub struct RustAddCommandArgs {
     /// The output directory for the project.
@@ -35,7 +41,10 @@ pub struct RustAddCommandArgs {
 
 impl RustAddCommandArgs {
     /// Runs the `run add` command.
-    pub fn run_command(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn run_command(
+        &self,
+        console_utils: &mut ConsoleUtils
+    ) -> Result<(), Box<dyn std::error::Error>> {
         let mut output_directory = self.output_directory.clone();
 
         output_directory = output_directory
@@ -43,11 +52,11 @@ impl RustAddCommandArgs {
             .trim_trailing_slashes()?;
 
         if !output_directory.as_pathbuf().exists() {
-            return Err(
-                CliError::new(
-                    "The specified output directory does not exist.",
-                    CliErrorKind::OutputDirectoryDoesNotExist).into()
-            );
+            return Err(CliError::new(
+                "The specified output directory does not exist.",
+                CliErrorKind::OutputDirectoryDoesNotExist
+            )
+            .into());
         }
 
         let output_directory_absolute = output_directory.to_absolute();
@@ -58,7 +67,12 @@ impl RustAddCommandArgs {
         };
 
         console_utils.write_operation_category("Add package")?;
-        vscode_ops::rust::add_package_to_tasks(&output_directory_absolute, self.package_name.as_str(), package_friendly_name, console_utils)?;
+        vscode_ops::rust::add_package_to_tasks(
+            &output_directory_absolute,
+            self.package_name.as_str(),
+            package_friendly_name,
+            console_utils
+        )?;
 
         Ok(())
     }
