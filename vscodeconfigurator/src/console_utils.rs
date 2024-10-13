@@ -1,17 +1,11 @@
-use std::{io::{Result, Stderr, Stdout, Write}, process};
+use std::{
+    io::{Result, Stderr, Stdout, Write},
+    process
+};
 
 use crossterm::{
-    cursor::{
-        RestorePosition,
-        SavePosition
-    },
-    event:: {
-        read,
-        Event,
-        KeyCode,
-        KeyboardEnhancementFlags,
-        PushKeyboardEnhancementFlags
-    },
+    cursor::{RestorePosition, SavePosition},
+    event::{read, Event, KeyCode, KeyboardEnhancementFlags, PushKeyboardEnhancementFlags},
     execute,
     queue,
     style::{
@@ -23,12 +17,7 @@ use crossterm::{
         SetBackgroundColor,
         SetForegroundColor
     },
-    terminal::{
-        disable_raw_mode,
-        enable_raw_mode,
-        Clear,
-        ClearType
-    },
+    terminal::{disable_raw_mode, enable_raw_mode, Clear, ClearType},
     tty::IsTty
 };
 
@@ -44,12 +33,17 @@ pub struct ConsoleUtils {
 #[allow(dead_code)]
 impl ConsoleUtils {
     /// Creates a new instance of `ConsoleUtils`.
-    /// 
+    ///
     /// # Arguments
-    /// 
-    /// - `stdout` - The standard output stream. If `None`, the default standard output stream is used.
-    /// - `stderr` - The standard error stream. If `None`, the default standard error stream is used.
-    pub fn new(stdout: Option<Stdout>, stderr: Option<Stderr>) -> Self {
+    ///
+    /// - `stdout` - The standard output stream. If `None`, the default standard
+    ///   output stream is used.
+    /// - `stderr` - The standard error stream. If `None`, the default standard
+    ///   error stream is used.
+    pub fn new(
+        stdout: Option<Stdout>,
+        stderr: Option<Stderr>
+    ) -> Self {
         let stdout_item = match stdout.is_some() {
             true => stdout.unwrap(),
             false => std::io::stdout()
@@ -67,22 +61,22 @@ impl ConsoleUtils {
     }
 
     /// Write an informational message to the console.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `message` - The message to write.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// console_utils.write_info("This is an informational message.".to_string())?;
     /// ```
-    pub fn write_info(&mut self, message: String) -> Result<()> {
+    pub fn write_info(
+        &mut self,
+        message: String
+    ) -> Result<()> {
         if !self.stdout.is_tty() {
-            execute!(
-                self.stdout,
-                Print(format!("[Info] - {}", message))
-            )?;
+            execute!(self.stdout, Print(format!("[Info] - {}", message)))?;
 
             return Ok(());
         }
@@ -96,22 +90,22 @@ impl ConsoleUtils {
     }
 
     /// Write a success message to the console.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `message` - The message to write.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// console_utils.write_success("This is a success message.".to_string())?;
     /// ```
-    pub fn write_success(&mut self, message: String) -> Result<()> {
+    pub fn write_success(
+        &mut self,
+        message: String
+    ) -> Result<()> {
         if !self.stdout.is_tty() {
-            execute!(
-                self.stdout,
-                Print(format!("{}", &message))
-            )?;
+            execute!(self.stdout, Print(format!("{}", &message)))?;
 
             return Ok(());
         }
@@ -125,22 +119,22 @@ impl ConsoleUtils {
     }
 
     /// Write a warning message to the console.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `message` - The message to write.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// console_utils.write_warning("This is a warning message.".to_string())?;
     /// ```
-    pub fn write_warning(&mut self, message: String) -> Result<()> {
+    pub fn write_warning(
+        &mut self,
+        message: String
+    ) -> Result<()> {
         if !self.stdout.is_tty() {
-            execute!(
-                self.stdout,
-                Print(format!("[Warning] - {}", &message))
-            )?;
+            execute!(self.stdout, Print(format!("[Warning] - {}", &message)))?;
 
             return Ok(());
         }
@@ -154,22 +148,22 @@ impl ConsoleUtils {
     }
 
     /// Write an error message to the console.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `message` - The message to write.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// console_utils.write_error("This is an error message.".to_string())?;
     /// ```
-    pub fn write_error(&mut self, message: String) -> Result<()> {
+    pub fn write_error(
+        &mut self,
+        message: String
+    ) -> Result<()> {
         if !self.stdout.is_tty() {
-            execute!(
-                self.stdout,
-                Print(format!("[Error] - {}", &message))
-            )?;
+            execute!(self.stdout, Print(format!("[Error] - {}", &message)))?;
 
             return Ok(());
         }
@@ -183,48 +177,50 @@ impl ConsoleUtils {
     }
 
     /// Write an error message to the console by utilizing an error source.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `source_error` - The source error.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// use vscodeconfigurator::error::{CliError, CliErrorKind};
-    /// 
+    ///
     /// let error = CliError::new("An error occurred.".to_string(), CliErrorKind::UnknownError);
-    /// 
+    ///
     /// console_utils.write_error_extended(error)?;
     /// ```
-    pub fn write_error_extended(&mut self, source_error: Box<dyn std::error::Error>) -> Result<()> {
+    pub fn write_error_extended(
+        &mut self,
+        source_error: Box<dyn std::error::Error>
+    ) -> Result<()> {
         let source_error_type: &str;
         let mut source_error_kind: Option<String> = None;
 
         if source_error.is::<std::io::Error>() {
             source_error_type = "I/O error";
             source_error_kind = Some(
-                source_error.downcast_ref::<std::io::Error>()
+                source_error
+                    .downcast_ref::<std::io::Error>()
                     .unwrap()
                     .kind()
                     .to_string()
                     .clone()
             );
-        }
-        else if source_error.is::<clap::error::Error>() {
+        } else if source_error.is::<clap::error::Error>() {
             source_error_type = "CLI Argument Parser error";
-        }
-        else if source_error.is::<crate::error::CliError>() {
+        } else if source_error.is::<crate::error::CliError>() {
             source_error_type = "Internal error";
             source_error_kind = Some(
-                source_error.downcast_ref::<crate::error::CliError>()
+                source_error
+                    .downcast_ref::<crate::error::CliError>()
                     .unwrap()
                     .kind
                     .to_string()
                     .clone()
             );
-        }
-        else {
+        } else {
             source_error_type = "Unknown error";
         }
 
@@ -236,17 +232,10 @@ impl ConsoleUtils {
                     source_error_kind.unwrap(),
                     source_error
                 ),
-                false => format!(
-                    "[Error] - {}: {}",
-                    source_error_type,
-                    source_error
-                )
+                false => format!("[Error] - {}: {}", source_error_type, source_error)
             };
 
-            execute!(
-                self.stderr,
-                Print(error_message)
-            )?;
+            execute!(self.stderr, Print(error_message))?;
 
             return Ok(());
         }
@@ -296,7 +285,8 @@ impl ConsoleUtils {
         execute!(self.stdout, RestorePosition)
     }
 
-    /// Manually restore the cursor position and clear the screen below the cursor.
+    /// Manually restore the cursor position and clear the screen below the
+    /// cursor.
     pub fn restore_cursor_position_and_clear_below(&mut self) -> Result<()> {
         execute!(
             self.stdout,
@@ -343,41 +333,39 @@ impl ConsoleUtils {
         let result;
         loop {
             match read()? {
-                Event::Key(event) => {
-                    match event.code {
-                        KeyCode::Char('y') => {
-                            result = true;
-                            break;
-                        },
-                        KeyCode::Char('n') => {
-                            result = false;
-                            break;
-                        },
-                        KeyCode::Char('q') => {
-                            disable_raw_mode()?;
-                            execute!(
-                                self.stdout,
-                                SetForegroundColor(Color::Red),
-                                Print("\n\n🛑 Quitting...\n"),
-                                ResetColor
-                            )?;
-                            process::exit(1);
-                        },
-                        _ => {
-                            disable_raw_mode()?;
-                            self.restore_cursor_position_and_clear_below()?;
-                            self.save_cursor_position()?;
-                            execute!(
-                                self.stdout,
-                                SetForegroundColor(Color::Red),
-                                Print("🛑 Invalid input. "),
-                                SetForegroundColor(Color::Yellow),
-                                Print("✋ Overwrite? ([y]es/[n]o/[q]uit) "),
-                                ResetColor
-                            )?;
-                            enable_raw_mode()?;
-                            continue
-                        }
+                Event::Key(event) => match event.code {
+                    KeyCode::Char('y') => {
+                        result = true;
+                        break;
+                    }
+                    KeyCode::Char('n') => {
+                        result = false;
+                        break;
+                    }
+                    KeyCode::Char('q') => {
+                        disable_raw_mode()?;
+                        execute!(
+                            self.stdout,
+                            SetForegroundColor(Color::Red),
+                            Print("\n\n🛑 Quitting...\n"),
+                            ResetColor
+                        )?;
+                        process::exit(1);
+                    }
+                    _ => {
+                        disable_raw_mode()?;
+                        self.restore_cursor_position_and_clear_below()?;
+                        self.save_cursor_position()?;
+                        execute!(
+                            self.stdout,
+                            SetForegroundColor(Color::Red),
+                            Print("🛑 Invalid input. "),
+                            SetForegroundColor(Color::Yellow),
+                            Print("✋ Overwrite? ([y]es/[n]o/[q]uit) "),
+                            ResetColor
+                        )?;
+                        enable_raw_mode()?;
+                        continue;
                     }
                 },
                 _ => continue
@@ -397,17 +385,20 @@ impl ConsoleUtils {
     }
 
     /// Writes an operation category header to the console.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `name` - The category name of the operation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// console_utils.write_operation_category("Installing dependencies")?; // "🚀 Installing dependencies"
     /// ```
-    pub fn write_operation_category(&mut self, name: &str) -> Result<()> {
+    pub fn write_operation_category(
+        &mut self,
+        name: &str
+    ) -> Result<()> {
         let message = match self.stdout.is_tty() {
             false => format!("{}\n", name),
             true => format!("{} {}\n", OutputEmoji::Rocket, name)
@@ -417,18 +408,23 @@ impl ConsoleUtils {
     }
 
     /// Writes an operation log to the console.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `message` - The message to write.
     /// - `emoji` - The emoji to use.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
-    /// console_utils.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?; // "📄 Adding package to tasks.json... "
+    /// console_utils.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?;
+    /// // "📄 Adding package to tasks.json... "
     /// ```
-    pub fn write_operation_log(&mut self, message: &str, emoji: OutputEmoji) -> Result<()> {
+    pub fn write_operation_log(
+        &mut self,
+        message: &str,
+        emoji: OutputEmoji
+    ) -> Result<()> {
         let message = match self.stdout.is_tty() {
             false => format!("- {} ", message),
             true => format!("- {} {} ", emoji, message)
@@ -438,9 +434,9 @@ impl ConsoleUtils {
     }
 
     /// Writes an operation success log to the console.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// console_utils.write_operation_success_log()?; // "Done! ✅"
     /// ```
@@ -454,9 +450,9 @@ impl ConsoleUtils {
     }
 
     /// Writes a project initialized log to the console.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// console_utils.write_project_initialized_log()?; // "🥳 VSCode project initialized!"
     /// ```
@@ -512,7 +508,10 @@ pub enum OutputEmoji {
 }
 
 impl std::fmt::Display for OutputEmoji {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>
+    ) -> std::fmt::Result {
         let emoji = match self {
             OutputEmoji::Rocket => "🚀",
             OutputEmoji::Document => "📄",

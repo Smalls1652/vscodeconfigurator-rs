@@ -9,30 +9,31 @@ use crate::console_utils::{ConsoleUtils, OutputEmoji};
 /// - `output_directory` - The output directory for the new solution.
 /// - `solution_name` - The name of the solution file.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
-/// 
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+///   instance for logging.
+///
 /// # Examples
-/// 
+///
 /// ## Example 01
-/// 
-/// Initializes a new solution, named `MySolution`, in the `MySolution` directory in the temp directory.
-/// 
+///
+/// Initializes a new solution, named `MySolution`, in the `MySolution`
+/// directory in the temp directory.
+///
 /// ```rust
 /// use vscodeconfigurator::console_utils::ConsoleUtils;
-/// 
-/// let output_directory = std::env::temp_dir()
-///     .join("MySolution");
+///
+/// let output_directory = std::env::temp_dir().join("MySolution");
 /// let solution_name = "MySolution";
 /// let force = false;
 /// let mut console_utils = ConsoleUtils::new();
-/// 
+///
 /// initalize_dotnet_solution(&output_directory, &solution_name, force, console_utils);
 /// ```
 pub fn initalize_dotnet_solution(
     output_directory: &PathBuf,
     solution_name: &String,
     force: bool,
-    console_utils: &mut ConsoleUtils,
+    console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
     console_utils.write_operation_log(
         format!("Initializing .NET solution '{:}.sln'...", solution_name).as_str(),
@@ -48,7 +49,6 @@ pub fn initalize_dotnet_solution(
             let overwrite_response = console_utils.ask_for_overwrite()?;
 
             if !overwrite_response {
-                
                 console_utils.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
@@ -56,8 +56,6 @@ pub fn initalize_dotnet_solution(
 
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
-
-        
     }
 
     let dotnet_proc_args = vec!["new", "sln", "--name", solution_name];
@@ -78,30 +76,34 @@ pub fn initalize_dotnet_solution(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
-/// 
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+///   instance for logging.
+///
 /// # Examples
-/// 
+///
 /// ## Example 01
-/// 
-/// Add a `global.json` file to the `MySolution` directory in the temp directory.
-/// 
+///
+/// Add a `global.json` file to the `MySolution` directory in the temp
+/// directory.
+///
 /// ```rust
 /// use vscodeconfigurator::console_utils::ConsoleUtils;
-/// 
-/// let output_directory = std::env::temp_dir()
-///    .join("MySolution");
+///
+/// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
 /// let mut console_utils = ConsoleUtils::new();
-/// 
+///
 /// add_dotnet_globaljson(&output_directory, force, console_utils);
 /// ```
 pub fn add_dotnet_globaljson(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils,
+    console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log("Adding 'global.json' to project root...", OutputEmoji::Document)?;
+    console_utils.write_operation_log(
+        "Adding 'global.json' to project root...",
+        OutputEmoji::Document
+    )?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = "global.json";
@@ -112,7 +114,6 @@ pub fn add_dotnet_globaljson(
             let overwrite_response = console_utils.ask_for_overwrite()?;
 
             if !overwrite_response {
-                
                 console_utils.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
@@ -120,8 +121,6 @@ pub fn add_dotnet_globaljson(
 
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
-
-        
     }
 
     let dotnet_proc_args = vec!["new", "globaljson", "--roll-forward", "latestMinor"];
@@ -142,30 +141,33 @@ pub fn add_dotnet_globaljson(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
-/// 
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+///   instance for logging.
+///
 /// # Examples
-/// 
+///
 /// ## Example 01
-/// 
+///
 /// Add a `.gitignore` file to the `MySolution` directory in the temp directory.
-/// 
+///
 /// ```rust
 /// use vscodeconfigurator::console_utils::ConsoleUtils;
-/// 
-/// let output_directory = std::env::temp_dir()
-///   .join("MySolution");
+///
+/// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
 /// let mut console_utils = ConsoleUtils::new();
-/// 
+///
 /// add_dotnet_gitignore(&output_directory, force, console_utils);
 /// ```
 pub fn add_dotnet_gitignore(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils,
+    console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log("Adding '.gitignore' to project root...", OutputEmoji::Document)?;
+    console_utils.write_operation_log(
+        "Adding '.gitignore' to project root...",
+        OutputEmoji::Document
+    )?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = ".gitignore";
@@ -176,7 +178,6 @@ pub fn add_dotnet_gitignore(
             let overwrite_response = console_utils.ask_for_overwrite()?;
 
             if !overwrite_response {
-                
                 console_utils.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
@@ -184,8 +185,6 @@ pub fn add_dotnet_gitignore(
 
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
-
-        
     }
 
     let dotnet_proc_args = vec!["new", "gitignore"];
@@ -206,30 +205,34 @@ pub fn add_dotnet_gitignore(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
-/// 
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+///   instance for logging.
+///
 /// # Examples
-/// 
+///
 /// ## Example 01
-/// 
-/// Add a `Directory.Build.props` file to the `MySolution` directory in the temp directory.
-/// 
+///
+/// Add a `Directory.Build.props` file to the `MySolution` directory in the temp
+/// directory.
+///
 /// ```rust
 /// use vscodeconfigurator::console_utils::ConsoleUtils;
-/// 
-/// let output_directory = std::env::temp_dir()
-///    .join("MySolution");
+///
+/// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
 /// let mut console_utils = ConsoleUtils::new();
-/// 
+///
 /// add_dotnet_buildprops(&output_directory, force, console_utils);
 /// ```
 pub fn add_dotnet_buildprops(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils,
+    console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log("Adding 'Directory.Build.props' to project root...", OutputEmoji::Document)?;
+    console_utils.write_operation_log(
+        "Adding 'Directory.Build.props' to project root...",
+        OutputEmoji::Document
+    )?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = "Directory.Build.props";
@@ -240,7 +243,6 @@ pub fn add_dotnet_buildprops(
             let overwrite_response = console_utils.ask_for_overwrite()?;
 
             if !overwrite_response {
-                
                 console_utils.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
@@ -248,8 +250,6 @@ pub fn add_dotnet_buildprops(
 
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
-
-        
     }
 
     let dotnet_proc_args = vec!["new", "buildprops", "--use-artifacts"];
@@ -270,30 +270,34 @@ pub fn add_dotnet_buildprops(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
-/// 
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+///   instance for logging.
+///
 /// # Examples
-/// 
+///
 /// ## Example 01
-/// 
-/// Add a `NuGet.Config` file to the `MySolution` directory in the temp directory.
-/// 
+///
+/// Add a `NuGet.Config` file to the `MySolution` directory in the temp
+/// directory.
+///
 /// ```rust
 /// use vscodeconfigurator::console_utils::ConsoleUtils;
-/// 
-/// let output_directory = std::env::temp_dir()
-///   .join("MySolution");
+///
+/// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
 /// let mut console_utils = ConsoleUtils::new();
-/// 
+///
 /// add_dotnet_nugetconfig(&output_directory, force, console_utils);
 /// ```
 pub fn add_dotnet_nugetconfig(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils,
+    console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log("Adding 'NuGet.Config' to project root...", OutputEmoji::Document)?;
+    console_utils.write_operation_log(
+        "Adding 'NuGet.Config' to project root...",
+        OutputEmoji::Document
+    )?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = "NuGet.Config";
@@ -304,7 +308,6 @@ pub fn add_dotnet_nugetconfig(
             let overwrite_response = console_utils.ask_for_overwrite()?;
 
             if !overwrite_response {
-                
                 console_utils.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
@@ -312,8 +315,6 @@ pub fn add_dotnet_nugetconfig(
 
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
-
-        
     }
 
     let dotnet_proc_args = vec!["new", "nugetconfig"];
@@ -334,30 +335,34 @@ pub fn add_dotnet_nugetconfig(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
-/// 
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+///   instance for logging.
+///
 /// # Examples
-/// 
+///
 /// ## Example 01
-/// 
-/// Add a `Directory.Packages.props` file to the `MySolution` directory in the temp directory.
-/// 
+///
+/// Add a `Directory.Packages.props` file to the `MySolution` directory in the
+/// temp directory.
+///
 /// ```rust
 /// use vscodeconfigurator::console_utils::ConsoleUtils;
-/// 
-/// let output_directory = std::env::temp_dir()
-///  .join("MySolution");
+///
+/// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
 /// let mut console_utils = ConsoleUtils::new();
-/// 
+///
 /// add_dotnet_packagesprops(&output_directory, force, console_utils);
 /// ```
 pub fn add_dotnet_packagesprops(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils,
+    console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log("Adding 'Directory.Packages.props' to project root...", OutputEmoji::Document)?;
+    console_utils.write_operation_log(
+        "Adding 'Directory.Packages.props' to project root...",
+        OutputEmoji::Document
+    )?;
     console_utils.save_cursor_position()?;
 
     let output_file_name = "Directory.Packages.props";
@@ -368,7 +373,6 @@ pub fn add_dotnet_packagesprops(
             let overwrite_response = console_utils.ask_for_overwrite()?;
 
             if !overwrite_response {
-                
                 console_utils.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
@@ -376,8 +380,6 @@ pub fn add_dotnet_packagesprops(
 
         fs::remove_file(output_file_path)
             .expect(format!("Failed to remove existing '{:}' file.", output_file_name).as_str());
-
-        
     }
 
     let dotnet_proc_args = vec!["new", "packagesprops"];
@@ -398,28 +400,29 @@ pub fn add_dotnet_packagesprops(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `tool_name` - The name of the tool to add.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
-/// 
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+///   instance for logging.
+///
 /// # Examples
-/// 
+///
 /// ## Example 01
-/// 
-/// Add a .NET tool named `gitversion` to the `MySolution` directory in the temp directory.
-/// 
+///
+/// Add a .NET tool named `gitversion` to the `MySolution` directory in the temp
+/// directory.
+///
 /// ```rust
 /// use vscodeconfigurator::console_utils::ConsoleUtils;
-/// 
-/// let output_directory = std::env::temp_dir()
-///  .join("MySolution");
+///
+/// let output_directory = std::env::temp_dir().join("MySolution");
 /// let tool_name = "gitversion";
 /// let mut console_utils = ConsoleUtils::new();
-/// 
+///
 /// add_dotnet_tool(&output_directory, tool_name, console_utils);
 /// ```
 pub fn add_dotnet_tool(
     output_directory: &PathBuf,
     tool_name: &str,
-    console_utils: &mut ConsoleUtils,
+    console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
     initialize_dotnet_tool_manifest(output_directory, console_utils)?;
 
@@ -443,26 +446,27 @@ pub fn add_dotnet_tool(
 /// # Arguments
 ///
 /// - `output_directory` - The output directory for the project.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
-/// 
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+///   instance for logging.
+///
 /// # Examples
-/// 
+///
 /// ## Example 01
-/// 
-/// Add a tool manifest file to the `MySolution` directory in the temp directory.
-/// 
+///
+/// Add a tool manifest file to the `MySolution` directory in the temp
+/// directory.
+///
 /// ```rust
 /// use vscodeconfigurator::console_utils::ConsoleUtils;
-/// 
-/// let output_directory = std::env::temp_dir()
-///  .join("MySolution");
+///
+/// let output_directory = std::env::temp_dir().join("MySolution");
 /// let mut console_utils = ConsoleUtils::new();
-/// 
+///
 /// initialize_dotnet_tool_manifest(&output_directory, console_utils);
 /// ```
 fn initialize_dotnet_tool_manifest(
     output_directory: &PathBuf,
-    console_utils: &mut ConsoleUtils,
+    console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
     let config_directory = PathBuf::from(output_directory).join(".config");
     let tool_manifest_file_path = PathBuf::from(&config_directory).join("dotnet-tools.json");
@@ -475,7 +479,8 @@ fn initialize_dotnet_tool_manifest(
         return Ok(());
     }
 
-    console_utils.write_operation_log("Initializing .NET tool manifiest...", OutputEmoji::Package)?;
+    console_utils
+        .write_operation_log("Initializing .NET tool manifiest...", OutputEmoji::Package)?;
     console_utils.save_cursor_position()?;
 
     let dotnet_proc_args = vec!["new", "tool-manifest"];
@@ -491,28 +496,30 @@ fn initialize_dotnet_tool_manifest(
 }
 
 /// Add a project to a solution.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// - `solution_file_path` - The path to the solution file.
 /// - `project_file_path` - The path to the project file.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
-/// 
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+///   instance for logging.
+///
 /// # Examples
-/// 
+///
 /// ## Example 01
-/// 
-/// Add a project in the `ConsoleApp` directory to the `MySolution.sln` solution file in the `MySolution` directory in the temp directory.
-/// 
+///
+/// Add a project in the `ConsoleApp` directory to the `MySolution.sln` solution
+/// file in the `MySolution` directory in the temp directory.
+///
 /// ```rust
 /// use vscodeconfigurator::console_utils::ConsoleUtils;
-/// 
+///
 /// let solution_file_path = std::env::temp_dir()
 ///    .join("MySolution")
 /// let project_file_path = std::env::temp_dir()
 ///   .join("MySolution/ConsoleApp");
 /// let mut console_utils = ConsoleUtils::new();
-/// 
+///
 /// add_project_to_solution(&solution_file_path, &project_file_path, console_utils);
 /// ```
 pub fn add_project_to_solution(
@@ -521,12 +528,21 @@ pub fn add_project_to_solution(
     console_utils: &mut ConsoleUtils
 ) -> Result<(), Box<dyn std::error::Error>> {
     let project_file_path = project_file_path.canonicalize().unwrap();
-    let project_path_relative = project_file_path.strip_prefix(solution_file_path.parent().unwrap())?;
+    let project_path_relative =
+        project_file_path.strip_prefix(solution_file_path.parent().unwrap())?;
 
-    console_utils.write_info(format!("- 📄 Adding '{:}' to solution... ", project_path_relative.to_str().unwrap()))?;
+    console_utils.write_info(format!(
+        "- 📄 Adding '{:}' to solution... ",
+        project_path_relative.to_str().unwrap()
+    ))?;
     console_utils.save_cursor_position()?;
 
-    let dotnet_proc_args = vec!["sln", solution_file_path.to_str().unwrap(), "add", project_file_path.to_str().unwrap()];
+    let dotnet_proc_args = vec![
+        "sln",
+        solution_file_path.to_str().unwrap(),
+        "add",
+        project_file_path.to_str().unwrap(),
+    ];
 
     process::Command::new("dotnet")
         .args(dotnet_proc_args)

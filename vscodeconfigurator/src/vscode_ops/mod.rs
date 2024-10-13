@@ -16,13 +16,11 @@ pub struct VSCodeSettingsFile {
 
 impl VSCodeSettingsFile {
     /// Creates a new `VSCodeSettings` instance.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `file_path` - The path to the settings file.
-    pub fn new(
-        file_path: PathBuf
-    ) -> Self {
+    pub fn new(file_path: PathBuf) -> Self {
         if !file_path.exists() {
             panic!("The settings file does not exist.");
         }
@@ -57,13 +55,11 @@ pub struct VSCodeTasksFile {
 
 impl VSCodeTasksFile {
     /// Creates a new `VSCodeTasks` instance.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// - `file_path` - The path to the tasks file.
-    pub fn new(
-        file_path: PathBuf
-    ) -> Self {
+    pub fn new(file_path: PathBuf) -> Self {
         if !file_path.exists() {
             panic!("The tasks file does not exist.");
         }

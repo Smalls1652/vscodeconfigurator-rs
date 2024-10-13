@@ -1,24 +1,19 @@
 mod add;
 mod init;
 
-pub use init::CargoPackageTemplateOption;
-
-use self::{
-    add::RustAddCommandArgs,
-    init::RustInitCommandArgs
-};
-
 use std::error::Error;
 
 use clap::Subcommand;
+pub use init::CargoPackageTemplateOption;
 
+use self::{add::RustAddCommandArgs, init::RustInitCommandArgs};
 use crate::console_utils::ConsoleUtils;
 
 /// Subcommands for Rust projects.
 #[derive(Subcommand, Debug, PartialEq)]
 #[command(
     about = "Commands for creating and managing Rust projects.",
-    arg_required_else_help = true,
+    arg_required_else_help = true
 )]
 pub enum RustSubcommands {
     /// Initialize a new Rust project.
@@ -33,18 +28,20 @@ pub enum RustSubcommands {
         about = "Add a new package to a Rust project.",
         long_about = None
     )]
-    Add(RustAddCommandArgs),
+    Add(RustAddCommandArgs)
 }
 
 impl RustSubcommands {
-    /// Matches the subcommand provided by the user and runs the corresponding command.
-    pub fn match_subcommand(&self, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn Error>> {
+    /// Matches the subcommand provided by the user and runs the corresponding
+    /// command.
+    pub fn match_subcommand(
+        &self,
+        console_utils: &mut ConsoleUtils
+    ) -> Result<(), Box<dyn Error>> {
         match self {
-            RustSubcommands::Init(init_args) =>
-                init_args.run_command(console_utils)?,
+            RustSubcommands::Init(init_args) => init_args.run_command(console_utils)?,
 
-            RustSubcommands::Add(add_args) =>
-                add_args.run_command(console_utils)?            
+            RustSubcommands::Add(add_args) => add_args.run_command(console_utils)?
         };
 
         Ok(())

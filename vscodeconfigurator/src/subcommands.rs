@@ -1,7 +1,7 @@
 pub mod csharp;
 pub mod rust;
 
-use clap::{Subcommand, Args};
+use clap::{Args, Subcommand};
 use clap_complete::Shell;
 use csharp::CsharpSubcommands;
 use rust::RustSubcommands;
