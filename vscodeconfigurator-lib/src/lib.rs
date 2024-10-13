@@ -1,1 +1,2 @@
-mod logging;
+pub mod logging;
+pub mod error;
