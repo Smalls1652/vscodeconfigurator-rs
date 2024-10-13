@@ -2,10 +2,9 @@ use clap::{builder::TypedValueParser, Args, ValueHint};
 use vscodeconfigurator_lib::{
     error::{CliError, CliErrorKind},
     io::OutputDirectory,
-    logging::ConsoleLogger
+    logging::ConsoleLogger,
+    vscode_ops
 };
-
-use crate::vscode_ops;
 
 /// Defines the arguments for the `rust add` command and the logic to run the
 /// command.

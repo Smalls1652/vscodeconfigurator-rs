@@ -1,12 +1,12 @@
 use std::path::PathBuf;
 
 use serde_json::{json, Value};
-use vscodeconfigurator_lib::{
-    lang_options::CsharpLspOption,
-    logging::{ConsoleLogger, OutputEmoji}
-};
 
-use crate::vscode_ops::{VSCodeSettingsFile, VSCodeTasksFile};
+use crate::{
+    lang_options::CsharpLspOption,
+    logging::{ConsoleLogger, OutputEmoji},
+    vscode_ops::{VSCodeSettingsFile, VSCodeTasksFile}
+};
 
 /// Updates the C# LSP option in the `.vscode/settings.json` file.
 ///

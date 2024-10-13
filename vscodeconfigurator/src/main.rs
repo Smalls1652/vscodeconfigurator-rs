@@ -1,5 +1,4 @@
 mod subcommands;
-mod vscode_ops;
 
 use std::{error::Error, process};
 

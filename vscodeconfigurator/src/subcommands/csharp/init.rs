@@ -5,10 +5,9 @@ use vscodeconfigurator_lib::{
     io::OutputDirectory,
     lang_options::CsharpLspOption,
     logging::ConsoleLogger,
-    template_ops
+    template_ops,
+    vscode_ops
 };
-
-use crate::vscode_ops;
 
 /// Defines the arguments for the `csharp init` command and the logic to run the
 /// command.

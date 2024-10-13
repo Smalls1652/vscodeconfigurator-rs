@@ -1,9 +1,11 @@
 use std::path::PathBuf;
 
 use serde_json::json;
-use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
 
-use crate::vscode_ops::VSCodeTasksFile;
+use crate::{
+    logging::{ConsoleLogger, OutputEmoji},
+    vscode_ops::VSCodeTasksFile
+};
 
 /// Adds a Rust package to the `.vscode/tasks.json` file.
 ///
@@ -12,8 +14,9 @@ use crate::vscode_ops::VSCodeTasksFile;
 /// - `output_directory` - The output directory of the project.
 /// - `package_name` - The name of the package.
 /// - `package_friendly_name` - The friendly name of the package.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
