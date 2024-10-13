@@ -6,11 +6,28 @@ use super::vscode;
 
 /// Copies the `.gitignore` file to the project root.
 ///
-/// ## Arguments
+/// # Arguments
 ///
-/// * `output_directory` - The output directory of the project.
-/// * `force` - Whether to forcefully overwrite.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Copies the `.gitignore` file to the project root.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///   .join("my-project");
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// copy_gitignore(&output_directory, force, console_utils);
+/// ```
 pub fn copy_gitignore(
     output_directory: &PathBuf,
     force: bool,
@@ -50,11 +67,28 @@ pub fn copy_gitignore(
 
 /// Copies the `Cargo.toml` workspace file to the project root.
 ///
-/// ## Arguments
+/// # Arguments
 ///
-/// * `output_directory` - The output directory of the project.
-/// * `force` - Whether to forcefully overwrite.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Copies the `Cargo.toml` workspace file to the project root.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///  .join("my-project");
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// copy_cargo_workspace_file(&output_directory, force, console_utils);
+/// ```
 pub fn copy_cargo_workspace_file(
     output_directory: &PathBuf,
     force: bool,
@@ -94,11 +128,28 @@ pub fn copy_cargo_workspace_file(
 
 /// Copies the `settings.json` file to the project root's `.vscode` directory.
 ///
-/// ## Arguments
+/// # Arguments
 ///
-/// * `output_directory` - The output directory of the project.
-/// * `force` - Whether to forcefully overwrite.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Copies the `settings.json` file to the project root's `.vscode` directory.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///  .join("my-project");
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// copy_vscode_settings(&output_directory, force, console_utils);
+/// ```
 pub fn copy_vscode_settings(
     output_directory: &PathBuf,
     force: bool,
@@ -141,12 +192,30 @@ pub fn copy_vscode_settings(
 
 /// Copies the `tasks.json` file to the project root's `.vscode` directory.
 ///
-/// ## Arguments
+/// # Arguments
 ///
-/// * `output_directory` - The output directory of the project.
-/// * `package_name` - The name of the package.
-/// * `force` - Whether to forcefully overwrite.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `package_name` - The name of the package.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Copies the `tasks.json` file to the project root's `.vscode` directory with the package name `my_package`.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///     .join("my-project");
+/// let package_name = "my_package";
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// copy_vscode_tasks(&output_directory, &package_name, force, console_utils);
+/// ```
 pub fn copy_vscode_tasks(
     output_directory: &PathBuf,
     package_name: &str,
@@ -192,10 +261,26 @@ pub fn copy_vscode_tasks(
 
 /// Creates the `tools` directory in the project root.
 ///
-/// ## Arguments
+/// # Arguments
 ///
-/// * `output_directory` - The output directory of the project.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Creates the `tools` directory in the project root.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///    .join("my-project");
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// ensure_tools_dir_exists(&output_directory, console_utils);
+/// ```
 pub fn ensure_tools_dir_exists(
     output_directory: &PathBuf,
     console_utils: &mut ConsoleUtils,
@@ -213,11 +298,28 @@ pub fn ensure_tools_dir_exists(
 
 /// Copies the `Build-Package.ps1` file to the tools dir.
 ///
-/// ## Arguments
+/// # Arguments
 ///
-/// * `output_directory` - The output directory of the project.
-/// * `force` - Whether to forcefully overwrite.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Copy the `Build-Package.ps1` file to the tools directory.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///   .join("my-project");
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// copy_build_pwsh_script(&output_directory, force, console_utils);
+/// ```
 pub fn copy_build_pwsh_script(
     output_directory: &PathBuf,
     force: bool,
@@ -259,11 +361,28 @@ pub fn copy_build_pwsh_script(
 
 /// Copies the `Clean-Package.ps1` file to the tools dir.
 ///
-/// ## Arguments
+/// # Arguments
 ///
-/// * `output_directory` - The output directory of the project.
-/// * `force` - Whether to forcefully overwrite.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Copy the `Clean-Package.ps1` file to the tools directory.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///  .join("my-project");
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// copy_clean_pwsh_script(&output_directory, force, console_utils);
+/// ```
 pub fn copy_clean_pwsh_script(
     output_directory: &PathBuf,
     force: bool,

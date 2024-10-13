@@ -4,12 +4,35 @@ use crate::{console_utils::{ConsoleUtils, OutputEmoji}, subcommands::rust::Cargo
 
 /// Initializes a new package with Cargo.
 ///
-/// ## Arguments
+/// # Arguments
 ///
-/// * `output_directory` - The output directory for the new solution.
-/// * `package_name` - The name of the package.
-/// * `package_template` - The type of package to create.
-/// * `force` - Whether to forcefully overwrite.
+/// - `output_directory` - The output directory for the new solution.
+/// - `package_name` - The name of the package.
+/// - `package_template` - The type of package to create.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Initializes a new package, named `my_package`, with the binary template in `my-project` directory in the temp directory.
+/// 
+/// ```rust
+/// use vscodeconfigurator::{
+///    console_utils::ConsoleUtils,
+///    subcommands::rust::CargoPackageTemplateOption
+/// };
+/// 
+/// let output_directory = std::env::temp_dir()
+///     .join("my-project");
+/// let package_name = "my_package";
+/// let package_template = CargoPackageTemplateOption::Binary;
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// initalize_package(&output_directory, &package_name, package_template, force, console_utils);
+/// ```
 pub fn initalize_package(
     output_directory: &PathBuf,
     package_name: &str,

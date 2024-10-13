@@ -7,6 +7,7 @@ use crate::{
     console_utils::ConsoleUtils, external_procs::dotnet, vscode_ops
 };
 
+/// Defines the arguments for the `csharp add` command and the logic to run the command.
 #[derive(Args, Debug, PartialEq)]
 pub struct AddCommandArgs {
     /// The solution file to add the project to.

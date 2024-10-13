@@ -10,11 +10,43 @@ use crate::{
 
 /// Updates the C# LSP option in the `.vscode/settings.json` file.
 /// 
-/// ## Arguments
+/// # Arguments
 /// 
-/// * `output_directory` - The output directory of the project.
-/// * `csharp_lsp` - The C# language server to use.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `csharp_lsp` - The C# language server to use.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Update the C# LSP option in the `.vscode/settings.json` file to use OmniSharp.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///   .join("my-project");
+/// let csharp_lsp = CsharpLspOption::OmniSharp;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// update_csharp_lsp(&output_directory, csharp_lsp, console_utils);
+/// ```
+/// 
+/// ## Example 02
+/// 
+/// Update the C# LSP option in the `.vscode/settings.json` file to use C# LSP.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///  .join("my-project");
+/// let csharp_lsp = CsharpLspOption::CsharpLsp;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// update_csharp_lsp(&output_directory, csharp_lsp, console_utils);
+/// ```
 pub fn update_csharp_lsp(
     output_directory: &PathBuf,
     csharp_lsp: CsharpLspOption,
@@ -43,14 +75,35 @@ pub fn update_csharp_lsp(
 
 /// Adds a C# project to the `.vscode/tasks.json` file.
 /// 
-/// ## Arguments
+/// # Arguments
 /// 
-/// * `output_directory` - The output directory of the project.
-/// * `project_path` - The path to the C# project.
-/// * `project_friendly_name` - The friendly name of the project.
-/// * `is_runnable` - Whether the project is runnable.
-/// * `is_watchable` - Whether the project is watchable.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `project_path` - The path to the C# project.
+/// - `project_friendly_name` - The friendly name of the project.
+/// - `is_runnable` - Whether the project is runnable.
+/// - `is_watchable` - Whether the project is watchable.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Add a C# project named `ConsoleApp` in the `ConsoleApp/` directory to the `.vscode/tasks.json` file.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///     .join("my-project");
+/// let project_path = std::env::temp_dir()
+///     .join("my-project/ConsoleApp");
+/// let project_friendly_name = "ConsoleApp";
+/// let is_runnable = true;
+/// let is_watchable = true;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// add_csharp_project_to_tasks(&output_directory, &project_path, project_friendly_name, is_runnable, is_watchable, console_utils);
+/// ```
 pub fn add_csharp_project_to_tasks(
     output_directory: &PathBuf,
     project_path: &PathBuf,
