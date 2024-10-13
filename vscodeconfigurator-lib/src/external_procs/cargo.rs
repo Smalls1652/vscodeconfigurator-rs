@@ -14,7 +14,7 @@ use crate::{
 /// - `package_template` - The type of package to create.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples

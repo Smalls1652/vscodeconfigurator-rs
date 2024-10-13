@@ -10,7 +10,7 @@ use crate::logging::{ConsoleLogger, OutputEmoji};
 /// - `solution_name` - The name of the solution file.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -78,7 +78,7 @@ pub fn initalize_dotnet_solution(
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -144,7 +144,7 @@ pub fn add_dotnet_globaljson(
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -209,7 +209,7 @@ pub fn add_dotnet_gitignore(
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -275,7 +275,7 @@ pub fn add_dotnet_buildprops(
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -341,7 +341,7 @@ pub fn add_dotnet_nugetconfig(
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -407,7 +407,7 @@ pub fn add_dotnet_packagesprops(
 /// - `output_directory` - The output directory for the project.
 /// - `tool_name` - The name of the tool to add.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -454,7 +454,7 @@ pub fn add_dotnet_tool(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -509,7 +509,7 @@ fn initialize_dotnet_tool_manifest(
 /// - `solution_file_path` - The path to the solution file.
 /// - `project_file_path` - The path to the project file.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples

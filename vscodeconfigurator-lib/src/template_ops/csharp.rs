@@ -13,7 +13,7 @@ use crate::{
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -76,7 +76,7 @@ pub fn csharp_copy_gitversion(
 /// - `solution_name` - The name of the solution.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -147,7 +147,7 @@ pub fn csharp_copy_vscode_settings(
 /// - `solution_name` - The name of the solution.
 /// - `force` - Whether to forcefully overwrite.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples

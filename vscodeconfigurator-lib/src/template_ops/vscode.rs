@@ -8,7 +8,7 @@ use crate::logging::{ConsoleLogger, OutputEmoji};
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples

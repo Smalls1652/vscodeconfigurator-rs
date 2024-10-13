@@ -15,7 +15,7 @@ use crate::{
 /// - `output_directory` - The output directory of the project.
 /// - `csharp_lsp` - The C# language server to use.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -88,7 +88,7 @@ pub fn update_csharp_lsp(
 /// - `is_runnable` - Whether the project is runnable.
 /// - `is_watchable` - Whether the project is watchable.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples

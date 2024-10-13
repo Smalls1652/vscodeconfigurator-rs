@@ -15,7 +15,7 @@ use crate::{
 /// - `package_name` - The name of the package.
 /// - `package_friendly_name` - The friendly name of the package.
 /// - `logger` - The
-///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
