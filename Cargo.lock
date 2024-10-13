@@ -481,6 +481,7 @@ version = "2.0.0-preview-04"
 dependencies = [
  "clap",
  "crossterm",
+ "serde_json",
 ]
 
 [[package]]
