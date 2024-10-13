@@ -5,7 +5,7 @@ use std::error::Error;
 
 use clap::Subcommand;
 pub use init::CsharpLspOption;
-use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
+use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 use self::{add::AddCommandArgs, init::InitCommandArgs};
 
@@ -39,13 +39,9 @@ impl CsharpSubcommands {
         logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn Error>> {
         match self {
-            CsharpSubcommands::Init(init_args) => {
-                InitCommandArgs::run_command(init_args, logger)?
-            }
+            CsharpSubcommands::Init(init_args) => InitCommandArgs::run_command(init_args, logger)?,
 
-            CsharpSubcommands::Add(add_args) => {
-                AddCommandArgs::run_command(add_args, logger)?
-            }
+            CsharpSubcommands::Add(add_args) => AddCommandArgs::run_command(add_args, logger)?
         };
 
         Ok(())

@@ -1,7 +1,7 @@
 use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
 use vscodeconfigurator_lib::{
     error::{CliError, CliErrorKind},
-    logging::{ConsoleLogger, OutputEmoji}
+    logging::ConsoleLogger
 };
 
 use crate::{
@@ -118,11 +118,7 @@ impl InitCommandArgs {
         }
 
         if self.enable_centrally_managed_packages {
-            dotnet::add_dotnet_packagesprops(
-                &output_directory_absolute,
-                self.force,
-                logger
-            )?;
+            dotnet::add_dotnet_packagesprops(&output_directory_absolute, self.force, logger)?;
         }
 
         logger.write_newline()?;
@@ -145,11 +141,7 @@ impl InitCommandArgs {
             self.force,
             logger
         )?;
-        vscode_ops::csharp::update_csharp_lsp(
-            &output_directory_absolute,
-            self.csharp_lsp,
-            logger
-        )?;
+        vscode_ops::csharp::update_csharp_lsp(&output_directory_absolute, self.csharp_lsp, logger)?;
         template_ops::csharp::csharp_copy_vscode_tasks(
             &output_directory_absolute,
             &solution_name,
