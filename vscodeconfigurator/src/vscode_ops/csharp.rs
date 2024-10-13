@@ -1,12 +1,12 @@
 use std::path::PathBuf;
 
 use serde_json::{json, Value};
-use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
-
-use crate::{
-    subcommands::csharp::CsharpLspOption,
-    vscode_ops::{VSCodeSettingsFile, VSCodeTasksFile}
+use vscodeconfigurator_lib::{
+    lang_options::CsharpLspOption,
+    logging::{ConsoleLogger, OutputEmoji}
 };
+
+use crate::vscode_ops::{VSCodeSettingsFile, VSCodeTasksFile};
 
 /// Updates the C# LSP option in the `.vscode/settings.json` file.
 ///
@@ -14,8 +14,9 @@ use crate::{
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `csharp_lsp` - The C# language server to use.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -86,8 +87,9 @@ pub fn update_csharp_lsp(
 /// - `project_friendly_name` - The friendly name of the project.
 /// - `is_runnable` - Whether the project is runnable.
 /// - `is_watchable` - Whether the project is watchable.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -123,8 +125,7 @@ pub fn add_csharp_project_to_tasks(
     is_watchable: bool,
     logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    logger
-        .write_operation_log("Adding C# project to tasks.json...", OutputEmoji::Document)?;
+    logger.write_operation_log("Adding C# project to tasks.json...", OutputEmoji::Document)?;
 
     let mut vscode_tasks = VSCodeTasksFile::new(output_directory.join(".vscode/tasks.json"));
 

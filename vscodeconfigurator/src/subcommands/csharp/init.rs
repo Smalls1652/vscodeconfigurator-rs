@@ -1,7 +1,8 @@
-use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
+use clap::{builder::TypedValueParser, Args, ValueHint};
 use vscodeconfigurator_lib::{
     error::{CliError, CliErrorKind},
     io::OutputDirectory,
+    lang_options::CsharpLspOption,
     logging::ConsoleLogger
 };
 
@@ -173,17 +174,4 @@ impl InitCommandArgs {
             false => Some(self.solution_name.as_ref().unwrap().clone())
         }
     }
-}
-
-/// The type of C# language server to use.
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
-pub enum CsharpLspOption {
-    /// The C# language server provided by the C# extension for Visual Studio
-    /// Code.
-    #[value(name = "CsharpLsp")]
-    CsharpLsp,
-
-    /// The original C# language server provided by OmniSharp.
-    #[value(name = "OmniSharp")]
-    OmniSharp
 }

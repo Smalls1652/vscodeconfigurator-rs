@@ -4,7 +4,6 @@ mod init;
 use std::error::Error;
 
 use clap::Subcommand;
-pub use init::CsharpLspOption;
 use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 use self::{add::AddCommandArgs, init::InitCommandArgs};

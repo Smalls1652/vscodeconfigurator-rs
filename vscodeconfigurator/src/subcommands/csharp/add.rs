@@ -1,8 +1,7 @@
 use std::{env, io::ErrorKind, path::PathBuf, process};
 
 use clap::{Args, ValueHint};
-
-use vscodeconfigurator_lib::logging::{ConsoleLogger};
+use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 use crate::{external_procs::dotnet, vscode_ops};
 
