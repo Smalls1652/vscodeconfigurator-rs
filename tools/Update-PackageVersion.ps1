@@ -3,9 +3,6 @@ param(
     [Parameter(Position = 0)]
     [string]$RootDirectory = (Get-Location).Path,
     [Parameter(Position = 1, Mandatory)]
-    [ValidateSet(
-        "vscodeconfigurator"
-    )]
     [string]$PackageName = "vscodeconfigurator",
     [Parameter(Position = 2)]
     [string]$CustomVersion

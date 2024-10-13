@@ -1,9 +1,6 @@
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet(
-        "vscodeconfigurator"
-    )]
     [string]$PackageName = "vscodeconfigurator",
     [Parameter(Position = 1)]
     [ValidateSet(
