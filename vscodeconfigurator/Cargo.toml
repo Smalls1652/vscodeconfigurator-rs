@@ -4,6 +4,7 @@ description = "Quickly bootstrap and manage projects for VSCode."
 version = "2.0.0-preview-04"
 edition = "2021"
 
+authors.workspace = true
 homepage.workspace = true
 repository.workspace = true
 license-file.workspace = true
@@ -20,6 +21,7 @@ clap = { version = "4.5.20", features = ["derive", "string", "cargo"] }
 clap_complete = "4.5.33"
 crossterm = { version = "0.28.1", features = ["events"] }
 serde_json = { version = "1.0.128", features = ["preserve_order"] }
+vscodeconfigurator-lib = { path = "../vscodeconfigurator-lib" }
 
 [build-dependencies]
 git-version = "0.3.9"

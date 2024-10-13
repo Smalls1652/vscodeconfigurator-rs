@@ -472,6 +472,14 @@ dependencies = [
  "git-version",
  "serde_json",
  "toml_edit",
+ "vscodeconfigurator-lib",
+]
+
+[[package]]
+name = "vscodeconfigurator-lib"
+version = "2.0.0-preview-04"
+dependencies = [
+ "crossterm",
 ]
 
 [[package]]
