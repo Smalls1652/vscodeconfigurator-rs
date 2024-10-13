@@ -1,8 +1,9 @@
 use std::{fs, path::PathBuf, process};
 
-use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
-
-use crate::subcommands::rust::CargoPackageTemplateOption;
+use vscodeconfigurator_lib::{
+    lang_options::CargoPackageTemplateOption,
+    logging::{ConsoleLogger, OutputEmoji}
+};
 
 /// Initializes a new package with Cargo.
 ///
@@ -12,8 +13,9 @@ use crate::subcommands::rust::CargoPackageTemplateOption;
 /// - `package_name` - The name of the package.
 /// - `package_template` - The type of package to create.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -23,10 +25,7 @@ use crate::subcommands::rust::CargoPackageTemplateOption;
 /// `my-project` directory in the temp directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::{
-///     logger::ConsoleLogger,
-///     subcommands::rust::CargoPackageTemplateOption
-/// };
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
 /// let package_name = "my_package";

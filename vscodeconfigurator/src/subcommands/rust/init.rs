@@ -1,5 +1,5 @@
-use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
-use vscodeconfigurator_lib::{io::OutputDirectory, logging::ConsoleLogger};
+use clap::{builder::TypedValueParser, Args, ValueHint};
+use vscodeconfigurator_lib::{io::OutputDirectory, lang_options::CargoPackageTemplateOption, logging::ConsoleLogger};
 
 use crate::{
     external_procs::{cargo, git},
@@ -91,16 +91,4 @@ impl RustInitCommandArgs {
 
         Ok(())
     }
-}
-
-/// The type of Cargo package template to use.
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
-pub enum CargoPackageTemplateOption {
-    /// A binary.
-    #[value(name = "Binary")]
-    Binary,
-
-    /// A library.
-    #[value(name = "Library")]
-    Library
 }
