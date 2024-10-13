@@ -5,9 +5,9 @@ use std::error::Error;
 
 use clap::Subcommand;
 pub use init::CargoPackageTemplateOption;
+use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 use self::{add::RustAddCommandArgs, init::RustInitCommandArgs};
-use crate::console_utils::ConsoleUtils;
 
 /// Subcommands for Rust projects.
 #[derive(Subcommand, Debug, PartialEq)]
@@ -36,12 +36,12 @@ impl RustSubcommands {
     /// command.
     pub fn match_subcommand(
         &self,
-        console_utils: &mut ConsoleUtils
+        logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn Error>> {
         match self {
-            RustSubcommands::Init(init_args) => init_args.run_command(console_utils)?,
+            RustSubcommands::Init(init_args) => init_args.run_command(logger)?,
 
-            RustSubcommands::Add(add_args) => add_args.run_command(console_utils)?
+            RustSubcommands::Add(add_args) => add_args.run_command(logger)?
         };
 
         Ok(())

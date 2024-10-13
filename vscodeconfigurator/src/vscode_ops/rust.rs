@@ -1,11 +1,9 @@
 use std::path::PathBuf;
 
 use serde_json::json;
+use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
 
-use crate::{
-    console_utils::{ConsoleUtils, OutputEmoji},
-    vscode_ops::VSCodeTasksFile
-};
+use crate::vscode_ops::VSCodeTasksFile;
 
 /// Adds a Rust package to the `.vscode/tasks.json` file.
 ///
@@ -14,7 +12,7 @@ use crate::{
 /// - `output_directory` - The output directory of the project.
 /// - `package_name` - The name of the package.
 /// - `package_friendly_name` - The friendly name of the package.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -24,27 +22,27 @@ use crate::{
 /// Adds the package named `my_package` to the `.vscode/tasks.json` file.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
 /// let package_name = "my_package";
 /// let package_friendly_name = "My Package";
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
 /// add_package_to_tasks(
 ///     &output_directory,
 ///     package_name,
 ///     package_friendly_name,
-///     console_utils
+///     logger
 /// );
 /// ```
 pub fn add_package_to_tasks(
     output_directory: &PathBuf,
     package_name: &str,
     package_friendly_name: &str,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?;
+    logger.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?;
 
     let mut vscode_tasks = VSCodeTasksFile::new(output_directory.join(".vscode/tasks.json"));
 
@@ -65,7 +63,7 @@ pub fn add_package_to_tasks(
 
     vscode_tasks.write_tasks()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }

@@ -479,6 +479,7 @@ dependencies = [
 name = "vscodeconfigurator-lib"
 version = "2.0.0-preview-04"
 dependencies = [
+ "clap",
  "crossterm",
 ]
 

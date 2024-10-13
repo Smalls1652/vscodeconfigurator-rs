@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf, process};
 
-use crate::console_utils::{ConsoleUtils, OutputEmoji};
+use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
 
 /// Initializes a new .NET solution.
 ///
@@ -9,7 +9,7 @@ use crate::console_utils::{ConsoleUtils, OutputEmoji};
 /// - `output_directory` - The output directory for the new solution.
 /// - `solution_name` - The name of the solution file.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -20,36 +20,36 @@ use crate::console_utils::{ConsoleUtils, OutputEmoji};
 /// directory in the temp directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("MySolution");
 /// let solution_name = "MySolution";
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// initalize_dotnet_solution(&output_directory, &solution_name, force, console_utils);
+/// initalize_dotnet_solution(&output_directory, &solution_name, force, logger);
 /// ```
 pub fn initalize_dotnet_solution(
     output_directory: &PathBuf,
     solution_name: &String,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         format!("Initializing .NET solution '{:}.sln'...", solution_name).as_str(),
         OutputEmoji::Package
     )?;
-    console_utils.save_cursor_position()?;
+    logger.save_cursor_position()?;
 
     let output_file_name = format!("{:}.sln", &solution_name);
     let output_file_path = PathBuf::from(output_directory).join(&output_file_name);
 
     if output_file_path.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -65,7 +65,7 @@ pub fn initalize_dotnet_solution(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -76,7 +76,7 @@ pub fn initalize_dotnet_solution(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -87,34 +87,34 @@ pub fn initalize_dotnet_solution(
 /// directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// add_dotnet_globaljson(&output_directory, force, console_utils);
+/// add_dotnet_globaljson(&output_directory, force, logger);
 /// ```
 pub fn add_dotnet_globaljson(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         "Adding 'global.json' to project root...",
         OutputEmoji::Document
     )?;
-    console_utils.save_cursor_position()?;
+    logger.save_cursor_position()?;
 
     let output_file_name = "global.json";
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -130,7 +130,7 @@ pub fn add_dotnet_globaljson(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -141,7 +141,7 @@ pub fn add_dotnet_globaljson(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -151,34 +151,34 @@ pub fn add_dotnet_globaljson(
 /// Add a `.gitignore` file to the `MySolution` directory in the temp directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// add_dotnet_gitignore(&output_directory, force, console_utils);
+/// add_dotnet_gitignore(&output_directory, force, logger);
 /// ```
 pub fn add_dotnet_gitignore(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         "Adding '.gitignore' to project root...",
         OutputEmoji::Document
     )?;
-    console_utils.save_cursor_position()?;
+    logger.save_cursor_position()?;
 
     let output_file_name = ".gitignore";
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -194,7 +194,7 @@ pub fn add_dotnet_gitignore(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -205,7 +205,7 @@ pub fn add_dotnet_gitignore(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -216,34 +216,34 @@ pub fn add_dotnet_gitignore(
 /// directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// add_dotnet_buildprops(&output_directory, force, console_utils);
+/// add_dotnet_buildprops(&output_directory, force, logger);
 /// ```
 pub fn add_dotnet_buildprops(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         "Adding 'Directory.Build.props' to project root...",
         OutputEmoji::Document
     )?;
-    console_utils.save_cursor_position()?;
+    logger.save_cursor_position()?;
 
     let output_file_name = "Directory.Build.props";
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -259,7 +259,7 @@ pub fn add_dotnet_buildprops(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -270,7 +270,7 @@ pub fn add_dotnet_buildprops(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -281,34 +281,34 @@ pub fn add_dotnet_buildprops(
 /// directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// add_dotnet_nugetconfig(&output_directory, force, console_utils);
+/// add_dotnet_nugetconfig(&output_directory, force, logger);
 /// ```
 pub fn add_dotnet_nugetconfig(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         "Adding 'NuGet.Config' to project root...",
         OutputEmoji::Document
     )?;
-    console_utils.save_cursor_position()?;
+    logger.save_cursor_position()?;
 
     let output_file_name = "NuGet.Config";
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -324,7 +324,7 @@ pub fn add_dotnet_nugetconfig(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -335,7 +335,7 @@ pub fn add_dotnet_nugetconfig(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -346,34 +346,34 @@ pub fn add_dotnet_nugetconfig(
 /// temp directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("MySolution");
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// add_dotnet_packagesprops(&output_directory, force, console_utils);
+/// add_dotnet_packagesprops(&output_directory, force, logger);
 /// ```
 pub fn add_dotnet_packagesprops(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         "Adding 'Directory.Packages.props' to project root...",
         OutputEmoji::Document
     )?;
-    console_utils.save_cursor_position()?;
+    logger.save_cursor_position()?;
 
     let output_file_name = "Directory.Packages.props";
     let output_file_path = PathBuf::from(output_directory).join(output_file_name);
 
     if output_file_path.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -389,7 +389,7 @@ pub fn add_dotnet_packagesprops(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -400,7 +400,7 @@ pub fn add_dotnet_packagesprops(
 ///
 /// - `output_directory` - The output directory for the project.
 /// - `tool_name` - The name of the tool to add.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -411,23 +411,23 @@ pub fn add_dotnet_packagesprops(
 /// directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("MySolution");
 /// let tool_name = "gitversion";
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// add_dotnet_tool(&output_directory, tool_name, console_utils);
+/// add_dotnet_tool(&output_directory, tool_name, logger);
 /// ```
 pub fn add_dotnet_tool(
     output_directory: &PathBuf,
     tool_name: &str,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    initialize_dotnet_tool_manifest(output_directory, console_utils)?;
+    initialize_dotnet_tool_manifest(output_directory, logger)?;
 
-    console_utils.write_info(format!("- 📦 Adding .NET tool '{:}'... ", tool_name))?;
-    console_utils.save_cursor_position()?;
+    logger.write_info(format!("- 📦 Adding .NET tool '{:}'... ", tool_name))?;
+    logger.save_cursor_position()?;
 
     let dotnet_proc_args = vec!["tool", "install", tool_name, "--tool-manifest"];
 
@@ -436,7 +436,7 @@ pub fn add_dotnet_tool(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -446,7 +446,7 @@ pub fn add_dotnet_tool(
 /// # Arguments
 ///
 /// - `output_directory` - The output directory for the project.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -457,16 +457,16 @@ pub fn add_dotnet_tool(
 /// directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("MySolution");
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// initialize_dotnet_tool_manifest(&output_directory, console_utils);
+/// initialize_dotnet_tool_manifest(&output_directory, logger);
 /// ```
 fn initialize_dotnet_tool_manifest(
     output_directory: &PathBuf,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
     let config_directory = PathBuf::from(output_directory).join(".config");
     let tool_manifest_file_path = PathBuf::from(&config_directory).join("dotnet-tools.json");
@@ -479,9 +479,9 @@ fn initialize_dotnet_tool_manifest(
         return Ok(());
     }
 
-    console_utils
+    logger
         .write_operation_log("Initializing .NET tool manifiest...", OutputEmoji::Package)?;
-    console_utils.save_cursor_position()?;
+    logger.save_cursor_position()?;
 
     let dotnet_proc_args = vec!["new", "tool-manifest"];
 
@@ -490,7 +490,7 @@ fn initialize_dotnet_tool_manifest(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -501,7 +501,7 @@ fn initialize_dotnet_tool_manifest(
 ///
 /// - `solution_file_path` - The path to the solution file.
 /// - `project_file_path` - The path to the project file.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
+/// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger)
 ///   instance for logging.
 ///
 /// # Examples
@@ -512,30 +512,30 @@ fn initialize_dotnet_tool_manifest(
 /// file in the `MySolution` directory in the temp directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let solution_file_path = std::env::temp_dir()
 ///    .join("MySolution")
 /// let project_file_path = std::env::temp_dir()
 ///   .join("MySolution/ConsoleApp");
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// add_project_to_solution(&solution_file_path, &project_file_path, console_utils);
+/// add_project_to_solution(&solution_file_path, &project_file_path, logger);
 /// ```
 pub fn add_project_to_solution(
     solution_file_path: &PathBuf,
     project_file_path: &PathBuf,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
     let project_file_path = project_file_path.canonicalize().unwrap();
     let project_path_relative =
         project_file_path.strip_prefix(solution_file_path.parent().unwrap())?;
 
-    console_utils.write_info(format!(
+    logger.write_info(format!(
         "- 📄 Adding '{:}' to solution... ",
         project_path_relative.to_str().unwrap()
     ))?;
-    console_utils.save_cursor_position()?;
+    logger.save_cursor_position()?;
 
     let dotnet_proc_args = vec![
         "sln",
@@ -548,7 +548,7 @@ pub fn add_project_to_solution(
         .args(dotnet_proc_args)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }

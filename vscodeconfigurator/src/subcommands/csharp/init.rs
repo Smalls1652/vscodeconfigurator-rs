@@ -1,8 +1,10 @@
 use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
+use vscodeconfigurator_lib::{
+    error::{CliError, CliErrorKind},
+    logging::{ConsoleLogger, OutputEmoji}
+};
 
 use crate::{
-    console_utils::ConsoleUtils,
-    error::{CliError, CliErrorKind},
     external_procs::{dotnet, git},
     io::OutputDirectory,
     template_ops,
@@ -69,7 +71,7 @@ impl InitCommandArgs {
     /// Runs the `csharp init` command.
     pub fn run_command(
         &self,
-        console_utils: &mut ConsoleUtils
+        logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn std::error::Error>> {
         let mut output_directory = self.output_directory.clone();
 
@@ -93,70 +95,70 @@ impl InitCommandArgs {
 
         let solution_name = parsed_solution_name.unwrap();
 
-        console_utils.write_operation_category("Basic")?;
-        dotnet::add_dotnet_globaljson(&output_directory_absolute, self.force, console_utils)?;
-        console_utils.write_newline()?;
+        logger.write_operation_category("Basic")?;
+        dotnet::add_dotnet_globaljson(&output_directory_absolute, self.force, logger)?;
+        logger.write_newline()?;
 
-        console_utils.write_operation_category("Git")?;
-        git::initialize_git_repo(&output_directory_absolute, console_utils)?;
-        dotnet::add_dotnet_gitignore(&output_directory_absolute, self.force, console_utils)?;
-        console_utils.write_newline()?;
+        logger.write_operation_category("Git")?;
+        git::initialize_git_repo(&output_directory_absolute, logger)?;
+        dotnet::add_dotnet_gitignore(&output_directory_absolute, self.force, logger)?;
+        logger.write_newline()?;
 
-        console_utils.write_operation_category(".NET")?;
+        logger.write_operation_category(".NET")?;
         dotnet::initalize_dotnet_solution(
             &output_directory_absolute,
             &solution_name,
             self.force,
-            console_utils
+            logger
         )?;
-        dotnet::add_dotnet_buildprops(&output_directory_absolute, self.force, console_utils)?;
+        dotnet::add_dotnet_buildprops(&output_directory_absolute, self.force, logger)?;
 
         if self.add_nuget_config {
-            dotnet::add_dotnet_nugetconfig(&output_directory_absolute, self.force, console_utils)?;
+            dotnet::add_dotnet_nugetconfig(&output_directory_absolute, self.force, logger)?;
         }
 
         if self.enable_centrally_managed_packages {
             dotnet::add_dotnet_packagesprops(
                 &output_directory_absolute,
                 self.force,
-                console_utils
+                logger
             )?;
         }
 
-        console_utils.write_newline()?;
+        logger.write_newline()?;
 
         if self.add_gitversion {
-            console_utils.write_operation_category("GitVersion")?;
-            dotnet::add_dotnet_tool(&output_directory_absolute, "GitVersion.Tool", console_utils)?;
+            logger.write_operation_category("GitVersion")?;
+            dotnet::add_dotnet_tool(&output_directory_absolute, "GitVersion.Tool", logger)?;
             template_ops::csharp::csharp_copy_gitversion(
                 &output_directory_absolute,
                 self.force,
-                console_utils
+                logger
             )?;
-            console_utils.write_newline()?;
+            logger.write_newline()?;
         }
 
-        console_utils.write_operation_category("VSCode")?;
+        logger.write_operation_category("VSCode")?;
         template_ops::csharp::csharp_copy_vscode_settings(
             &output_directory_absolute,
             &solution_name,
             self.force,
-            console_utils
+            logger
         )?;
         vscode_ops::csharp::update_csharp_lsp(
             &output_directory_absolute,
             self.csharp_lsp,
-            console_utils
+            logger
         )?;
         template_ops::csharp::csharp_copy_vscode_tasks(
             &output_directory_absolute,
             &solution_name,
             self.force,
-            console_utils
+            logger
         )?;
-        console_utils.write_newline()?;
+        logger.write_newline()?;
 
-        console_utils.write_project_initialized_log()?;
+        logger.write_project_initialized_log()?;
 
         Ok(())
     }
