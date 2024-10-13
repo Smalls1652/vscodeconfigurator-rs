@@ -2,6 +2,7 @@ use clap::{builder::TypedValueParser, Args, ValueHint};
 
 use crate::{console_utils::ConsoleUtils, error::{CliError, CliErrorKind}, io::OutputDirectory, vscode_ops};
 
+/// Defines the arguments for the `rust add` command and the logic to run the command.
 #[derive(Args, Debug, PartialEq)]
 pub struct RustAddCommandArgs {
     /// The output directory for the project.

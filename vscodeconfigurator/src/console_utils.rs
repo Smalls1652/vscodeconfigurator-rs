@@ -34,8 +34,10 @@ use crossterm::{
 
 /// Utility for writing to the console.
 pub struct ConsoleUtils {
+    /// The standard output stream.
     pub stdout: Stdout,
 
+    /// The standard error stream.
     pub stderr: Stderr
 }
 
@@ -43,9 +45,10 @@ pub struct ConsoleUtils {
 impl ConsoleUtils {
     /// Creates a new instance of `ConsoleUtils`.
     /// 
-    /// ## Arguments
+    /// # Arguments
     /// 
-    /// * `stdout` - The standard output stream. If `None`, the default standard output stream is used.
+    /// - `stdout` - The standard output stream. If `None`, the default standard output stream is used.
+    /// - `stderr` - The standard error stream. If `None`, the default standard error stream is used.
     pub fn new(stdout: Option<Stdout>, stderr: Option<Stderr>) -> Self {
         let stdout_item = match stdout.is_some() {
             true => stdout.unwrap(),
@@ -64,6 +67,16 @@ impl ConsoleUtils {
     }
 
     /// Write an informational message to the console.
+    /// 
+    /// # Arguments
+    /// 
+    /// - `message` - The message to write.
+    /// 
+    /// # Example
+    /// 
+    /// ```rust
+    /// console_utils.write_info("This is an informational message.".to_string())?;
+    /// ```
     pub fn write_info(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
             execute!(
@@ -83,6 +96,16 @@ impl ConsoleUtils {
     }
 
     /// Write a success message to the console.
+    /// 
+    /// # Arguments
+    /// 
+    /// - `message` - The message to write.
+    /// 
+    /// # Example
+    /// 
+    /// ```rust
+    /// console_utils.write_success("This is a success message.".to_string())?;
+    /// ```
     pub fn write_success(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
             execute!(
@@ -102,6 +125,16 @@ impl ConsoleUtils {
     }
 
     /// Write a warning message to the console.
+    /// 
+    /// # Arguments
+    /// 
+    /// - `message` - The message to write.
+    /// 
+    /// # Example
+    /// 
+    /// ```rust
+    /// console_utils.write_warning("This is a warning message.".to_string())?;
+    /// ```
     pub fn write_warning(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
             execute!(
@@ -121,6 +154,16 @@ impl ConsoleUtils {
     }
 
     /// Write an error message to the console.
+    /// 
+    /// # Arguments
+    /// 
+    /// - `message` - The message to write.
+    /// 
+    /// # Example
+    /// 
+    /// ```rust
+    /// console_utils.write_error("This is an error message.".to_string())?;
+    /// ```
     pub fn write_error(&mut self, message: String) -> Result<()> {
         if !self.stdout.is_tty() {
             execute!(
@@ -140,6 +183,20 @@ impl ConsoleUtils {
     }
 
     /// Write an error message to the console by utilizing an error source.
+    /// 
+    /// # Arguments
+    /// 
+    /// - `source_error` - The source error.
+    /// 
+    /// # Example
+    /// 
+    /// ```rust
+    /// use vscodeconfigurator::error::{CliError, CliErrorKind};
+    /// 
+    /// let error = CliError::new("An error occurred.".to_string(), CliErrorKind::UnknownError);
+    /// 
+    /// console_utils.write_error_extended(error)?;
+    /// ```
     pub fn write_error_extended(&mut self, source_error: Box<dyn std::error::Error>) -> Result<()> {
         let source_error_type: &str;
         let mut source_error_kind: Option<String> = None;
@@ -341,11 +398,11 @@ impl ConsoleUtils {
 
     /// Writes an operation category header to the console.
     /// 
-    /// ### Arguments
+    /// # Arguments
     /// 
-    /// * `category` - The category of the operation.
+    /// - `name` - The category name of the operation.
     /// 
-    /// ### Example
+    /// # Example
     /// 
     /// ```rust
     /// console_utils.write_operation_category("Installing dependencies")?; // "🚀 Installing dependencies"
@@ -361,12 +418,12 @@ impl ConsoleUtils {
 
     /// Writes an operation log to the console.
     /// 
-    /// ### Arguments
+    /// # Arguments
     /// 
-    /// * `message` - The message to write.
-    /// * `emoji` - The emoji to use.
+    /// - `message` - The message to write.
+    /// - `emoji` - The emoji to use.
     /// 
-    /// ### Example
+    /// # Example
     /// 
     /// ```rust
     /// console_utils.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?; // "📄 Adding package to tasks.json... "
@@ -382,7 +439,7 @@ impl ConsoleUtils {
 
     /// Writes an operation success log to the console.
     /// 
-    /// ### Example
+    /// # Example
     /// 
     /// ```rust
     /// console_utils.write_operation_success_log()?; // "Done! ✅"
@@ -398,7 +455,7 @@ impl ConsoleUtils {
 
     /// Writes a project initialized log to the console.
     /// 
-    /// ### Example
+    /// # Example
     /// 
     /// ```rust
     /// console_utils.write_project_initialized_log()?; // "🥳 VSCode project initialized!"

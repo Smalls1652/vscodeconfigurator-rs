@@ -6,22 +6,20 @@ use std::{fs, path::PathBuf};
 use serde_json::Value;
 
 /// Represents the settings file for a Visual Studio Code workspace.
-/// 
-/// ## Fields
-/// 
-/// * `file_path` - The path to the settings file.
-/// * `values` - The values in the settings file.
 pub struct VSCodeSettingsFile {
+    /// The path to the settings file.
     pub file_path: PathBuf,
+
+    /// The values in the settings file.
     pub values: Value
 }
 
 impl VSCodeSettingsFile {
     /// Creates a new `VSCodeSettings` instance.
     /// 
-    /// ## Arguments
+    /// # Arguments
     /// 
-    /// * `file_path` - The path to the settings file.
+    /// - `file_path` - The path to the settings file.
     pub fn new(
         file_path: PathBuf
     ) -> Self {
@@ -60,9 +58,9 @@ pub struct VSCodeTasksFile {
 impl VSCodeTasksFile {
     /// Creates a new `VSCodeTasks` instance.
     /// 
-    /// ## Arguments
+    /// # Arguments
     /// 
-    /// * `file_path` - The path to the tasks file.
+    /// - `file_path` - The path to the tasks file.
     pub fn new(
         file_path: PathBuf
     ) -> Self {

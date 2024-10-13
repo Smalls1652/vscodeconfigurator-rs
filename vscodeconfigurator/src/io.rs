@@ -5,6 +5,7 @@ use crate::error::{CliError, CliErrorKind};
 /// Represents an output directory.
 #[derive(Clone, Debug, PartialEq)]
 pub struct OutputDirectory {
+    /// The string representation of the path.
     pub path: String
 }
 
@@ -22,9 +23,9 @@ impl OutputDirectory {
 
     /// Creates a new `OutputDirectory` from an `OsString`.
     /// 
-    /// ### Arguments
+    /// # Arguments
     /// 
-    /// * `path` - The path to create the `OutputDirectory` from.
+    /// - `path` - The path to create the `OutputDirectory` from.
     pub fn from_os_string(path: OsString) -> Result<Self, io::Error> {
         let input_path = PathBuf::from(&path)
             .canonicalize();
@@ -91,7 +92,7 @@ impl OutputDirectory {
         Ok(self.clone())
     }
 
-    /// Creates the directory if it does not exist.
+    /// Create the directory if it does not exist.
     pub fn create_if_not_exists(&self) -> Result<(), io::Error> {
         if !Path::new(&self.path).exists() {
             std::fs::create_dir(&self.path)?;

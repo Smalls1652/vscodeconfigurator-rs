@@ -10,12 +10,30 @@ use crate::{
 
 /// Adds a Rust package to the `.vscode/tasks.json` file.
 /// 
-/// ## Arguments
+/// # Arguments
 /// 
-/// * `output_directory` - The output directory of the project.
-/// * `package_name` - The name of the package.
-/// * `package_friendly_name` - The friendly name of the package.
-/// * `console_utils` - The console utilities.
+/// - `output_directory` - The output directory of the project.
+/// - `package_name` - The name of the package.
+/// - `package_friendly_name` - The friendly name of the package.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Adds the package named `my_package` to the `.vscode/tasks.json` file.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///    .join("my-project");
+/// let package_name = "my_package";
+/// let package_friendly_name = "My Package";
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// add_package_to_tasks(&output_directory, package_name, package_friendly_name, console_utils);
+/// ```
 pub fn add_package_to_tasks(
     output_directory: &PathBuf,
     package_name: &str,

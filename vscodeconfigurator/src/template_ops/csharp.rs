@@ -6,11 +6,28 @@ use super::vscode;
 
 /// Copies the `GitVersion.yml` file to the project root.
 /// 
-/// ## Arguments
+/// # Arguments
 /// 
-/// * `output_directory` - The output directory of the project.
-/// * `console_utils` - The console utilities.
-/// * `force` - Whether to forcefully overwrite.
+/// - `output_directory` - The output directory of the project.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Copies the `GitVersion.yml` file to the project root.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///    .join("my-project");
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// csharp_copy_gitversion(&output_directory, force, console_utils);
+/// ```
 pub fn csharp_copy_gitversion(output_directory: &PathBuf, force: bool, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
     let core_templates_path = utils::get_core_templates_path();
     let template_file_path = core_templates_path.join("csharp/GitVersion/GitVersion.yml");
@@ -46,13 +63,36 @@ pub fn csharp_copy_gitversion(output_directory: &PathBuf, force: bool, console_u
 
 /// Copies the `settings.json` file to the project root's `.vscode` directory.
 /// 
-/// ## Arguments
+/// # Arguments
 /// 
-/// * `output_directory` - The output directory of the project.
-/// * `solution_name` - The name of the solution.
-/// * `force` - Whether to forcefully overwrite.
-/// * `console_utils` - The console utilities.
-pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &String, force: bool, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+/// - `output_directory` - The output directory of the project.
+/// - `solution_name` - The name of the solution.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Copies the `settings.json` file to the project root's `.vscode` directory.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///   .join("my-project");
+/// let solution_name = "MySolution".to_string();
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// csharp_copy_vscode_settings(&output_directory, &solution_name, force, console_utils);
+/// ```
+pub fn csharp_copy_vscode_settings(
+    output_directory: &PathBuf,
+    solution_name: &String,
+    force: bool,
+    console_utils: &mut ConsoleUtils
+) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
 
     let core_templates_path = utils::get_core_templates_path();
@@ -93,13 +133,36 @@ pub fn csharp_copy_vscode_settings(output_directory: &PathBuf, solution_name: &S
 
 /// Copies the `tasks.json` file to the project root's `.vscode` directory.
 /// 
-/// ## Arguments
+/// # Arguments
 /// 
-/// * `output_directory` - The output directory of the project.
-/// * `solution_name` - The name of the solution.
-/// * `force` - Whether to forcefully overwrite.
-/// * `console_utils` - The console utilities.
-pub fn csharp_copy_vscode_tasks(output_directory: &PathBuf, solution_name: &String, force: bool, console_utils: &mut ConsoleUtils) -> Result<(), Box<dyn std::error::Error>> {
+/// - `output_directory` - The output directory of the project.
+/// - `solution_name` - The name of the solution.
+/// - `force` - Whether to forcefully overwrite.
+/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils) instance for logging.
+/// 
+/// # Examples
+/// 
+/// ## Example 01
+/// 
+/// Copies the `tasks.json` file to the project root's `.vscode` directory.
+/// 
+/// ```rust
+/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// 
+/// let output_directory = std::env::temp_dir()
+///  .join("my-project");
+/// let solution_name = "MySolution".to_string();
+/// let force = false;
+/// let mut console_utils = ConsoleUtils::new();
+/// 
+/// csharp_copy_vscode_tasks(&output_directory, &solution_name, force, console_utils);
+/// ```
+pub fn csharp_copy_vscode_tasks(
+    output_directory: &PathBuf,
+    solution_name: &String,
+    force: bool,
+    console_utils: &mut ConsoleUtils
+) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
 
     let core_templates_path = utils::get_core_templates_path();
