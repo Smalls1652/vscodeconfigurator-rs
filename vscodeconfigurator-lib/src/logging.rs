@@ -22,7 +22,7 @@ use crossterm::{
 };
 
 /// Utility for writing to the console.
-pub struct ConsoleUtils {
+pub struct ConsoleLogger {
     /// The standard output stream.
     pub stdout: Stdout,
 
@@ -31,8 +31,8 @@ pub struct ConsoleUtils {
 }
 
 #[allow(dead_code)]
-impl ConsoleUtils {
-    /// Creates a new instance of `ConsoleUtils`.
+impl ConsoleLogger {
+    /// Creates a new instance of `ConsoleLogger`.
     ///
     /// # Arguments
     ///
@@ -69,7 +69,7 @@ impl ConsoleUtils {
     /// # Example
     ///
     /// ```rust
-    /// console_utils.write_info("This is an informational message.".to_string())?;
+    /// logger.write_info("This is an informational message.".to_string())?;
     /// ```
     pub fn write_info(
         &mut self,
@@ -98,7 +98,7 @@ impl ConsoleUtils {
     /// # Example
     ///
     /// ```rust
-    /// console_utils.write_success("This is a success message.".to_string())?;
+    /// logger.write_success("This is a success message.".to_string())?;
     /// ```
     pub fn write_success(
         &mut self,
@@ -127,7 +127,7 @@ impl ConsoleUtils {
     /// # Example
     ///
     /// ```rust
-    /// console_utils.write_warning("This is a warning message.".to_string())?;
+    /// logger.write_warning("This is a warning message.".to_string())?;
     /// ```
     pub fn write_warning(
         &mut self,
@@ -156,7 +156,7 @@ impl ConsoleUtils {
     /// # Example
     ///
     /// ```rust
-    /// console_utils.write_error("This is an error message.".to_string())?;
+    /// logger.write_error("This is an error message.".to_string())?;
     /// ```
     pub fn write_error(
         &mut self,
@@ -189,7 +189,7 @@ impl ConsoleUtils {
     ///
     /// let error = CliError::new("An error occurred.".to_string(), CliErrorKind::UnknownError);
     ///
-    /// console_utils.write_error_extended(error)?;
+    /// logger.write_error_extended(error)?;
     /// ```
     pub fn write_error_extended(
         &mut self,
@@ -393,7 +393,7 @@ impl ConsoleUtils {
     /// # Example
     ///
     /// ```rust
-    /// console_utils.write_operation_category("Installing dependencies")?; // "🚀 Installing dependencies"
+    /// logger.write_operation_category("Installing dependencies")?; // "🚀 Installing dependencies"
     /// ```
     pub fn write_operation_category(
         &mut self,
@@ -417,7 +417,7 @@ impl ConsoleUtils {
     /// # Example
     ///
     /// ```rust
-    /// console_utils.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?;
+    /// logger.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?;
     /// // "📄 Adding package to tasks.json... "
     /// ```
     pub fn write_operation_log(
@@ -438,7 +438,7 @@ impl ConsoleUtils {
     /// # Example
     ///
     /// ```rust
-    /// console_utils.write_operation_success_log()?; // "Done! ✅"
+    /// logger.write_operation_success_log()?; // "Done! ✅"
     /// ```
     pub fn write_operation_success_log(&mut self) -> Result<()> {
         let message = match self.stdout.is_tty() {
@@ -454,7 +454,7 @@ impl ConsoleUtils {
     /// # Example
     ///
     /// ```rust
-    /// console_utils.write_project_initialized_log()?; // "🥳 VSCode project initialized!"
+    /// logger.write_project_initialized_log()?; // "🥳 VSCode project initialized!"
     /// ```
     pub fn write_project_initialized_log(&mut self) -> Result<()> {
         let message = match self.stdout.is_tty() {
