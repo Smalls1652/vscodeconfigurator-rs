@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf, process};
 
-use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
+use crate::logging::{ConsoleLogger, OutputEmoji};
 
 /// Initializes a new .NET solution.
 ///

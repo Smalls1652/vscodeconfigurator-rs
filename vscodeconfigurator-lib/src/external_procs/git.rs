@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
+use crate::logging::{ConsoleLogger, OutputEmoji};
 
 /// Initializes a Git repository in the output directory.
 ///

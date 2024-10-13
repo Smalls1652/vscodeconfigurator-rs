@@ -1,9 +1,9 @@
 use std::{env, io::ErrorKind, path::PathBuf, process};
 
 use clap::{Args, ValueHint};
-use vscodeconfigurator_lib::logging::ConsoleLogger;
+use vscodeconfigurator_lib::{external_procs::dotnet, logging::ConsoleLogger};
 
-use crate::{external_procs::dotnet, vscode_ops};
+use crate::vscode_ops;
 
 /// Defines the arguments for the `csharp add` command and the logic to run the
 /// command.

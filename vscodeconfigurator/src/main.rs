@@ -1,4 +1,3 @@
-mod external_procs;
 mod subcommands;
 mod template_ops;
 mod utils;

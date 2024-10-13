@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf, process};
 
-use vscodeconfigurator_lib::{
+use crate::{
     lang_options::CargoPackageTemplateOption,
     logging::{ConsoleLogger, OutputEmoji}
 };

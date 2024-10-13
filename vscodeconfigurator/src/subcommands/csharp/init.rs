@@ -1,16 +1,13 @@
 use clap::{builder::TypedValueParser, Args, ValueHint};
 use vscodeconfigurator_lib::{
     error::{CliError, CliErrorKind},
+    external_procs::{dotnet, git},
     io::OutputDirectory,
     lang_options::CsharpLspOption,
     logging::ConsoleLogger
 };
 
-use crate::{
-    external_procs::{dotnet, git},
-    template_ops,
-    vscode_ops
-};
+use crate::{template_ops, vscode_ops};
 
 /// Defines the arguments for the `csharp init` command and the logic to run the
 /// command.
