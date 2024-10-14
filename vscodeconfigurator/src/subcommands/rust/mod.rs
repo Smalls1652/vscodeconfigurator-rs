@@ -32,8 +32,6 @@ pub enum RustSubcommands {
 }
 
 impl ConfiguratorSubcommand for RustSubcommands {
-    /// Matches the subcommand provided by the user and runs the corresponding
-    /// command.
     fn match_subcommand(
         &self,
         logger: &mut ConsoleLogger

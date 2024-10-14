@@ -37,5 +37,9 @@ pub struct Completions {
 pub trait ConfiguratorSubcommand {
     /// Matches the subcommand provided by the user and runs the corresponding
     /// command.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) to use for logging.
     fn match_subcommand(&self, logger: &mut ConsoleLogger) -> Result<(), Box<dyn std::error::Error>>;
 }

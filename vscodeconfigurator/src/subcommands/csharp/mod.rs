@@ -33,8 +33,6 @@ pub enum CsharpSubcommands {
 }
 
 impl ConfiguratorSubcommand for CsharpSubcommands {
-    /// Matches the subcommand provided by the user and runs the corresponding
-    /// command.
     fn match_subcommand(
         &self,
         logger: &mut ConsoleLogger
