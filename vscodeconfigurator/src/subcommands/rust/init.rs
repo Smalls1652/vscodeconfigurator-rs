@@ -7,6 +7,8 @@ use vscodeconfigurator_lib::{
     template_ops
 };
 
+use crate::subcommands::ConfiguratorSubcommandArgs;
+
 /// Defines the arguments for the `rust init` command and the logic to run the
 /// command.
 #[derive(Args, Debug, PartialEq)]
@@ -40,9 +42,8 @@ pub struct RustInitCommandArgs {
     force: bool
 }
 
-impl RustInitCommandArgs {
-    /// Runs the `run init` command.
-    pub fn run_command(
+impl ConfiguratorSubcommandArgs for RustInitCommandArgs {
+    fn run_command(
         &self,
         logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn std::error::Error>> {

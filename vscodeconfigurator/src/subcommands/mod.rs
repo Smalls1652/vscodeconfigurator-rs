@@ -43,3 +43,13 @@ pub trait ConfiguratorSubcommand {
     /// * `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) to use for logging.
     fn match_subcommand(&self, logger: &mut ConsoleLogger) -> Result<(), Box<dyn std::error::Error>>;
 }
+
+/// A trait for subcommand arguments used in the VSCode Configurator CLI.
+pub trait ConfiguratorSubcommandArgs {
+    /// Runs the subcommand with the provided arguments.
+    /// 
+    /// # Arguments
+    /// 
+    /// - `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) to use for logging messages.
+    fn run_command(&self, logger: &mut ConsoleLogger) -> Result<(), Box<dyn std::error::Error>>;
+}

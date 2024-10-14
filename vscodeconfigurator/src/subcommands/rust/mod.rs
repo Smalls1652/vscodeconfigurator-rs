@@ -7,7 +7,7 @@ use clap::Subcommand;
 use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 use self::{add::RustAddCommandArgs, init::RustInitCommandArgs};
-use crate::subcommands::ConfiguratorSubcommand;
+use crate::subcommands::{ConfiguratorSubcommand, ConfiguratorSubcommandArgs};
 
 /// Subcommands for Rust projects.
 #[derive(Subcommand, Debug, PartialEq)]

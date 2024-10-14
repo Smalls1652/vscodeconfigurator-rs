@@ -3,6 +3,8 @@ use std::{env, io::ErrorKind, path::PathBuf, process};
 use clap::{Args, ValueHint};
 use vscodeconfigurator_lib::{external_procs::dotnet, logging::ConsoleLogger, vscode_ops};
 
+use crate::subcommands::ConfiguratorSubcommandArgs;
+
 /// Defines the arguments for the `csharp add` command and the logic to run the
 /// command.
 #[derive(Args, Debug, PartialEq)]
@@ -40,9 +42,8 @@ pub struct AddCommandArgs {
     is_watchable: bool
 }
 
-impl AddCommandArgs {
-    /// Runs the `csharp add` command.
-    pub fn run_command(
+impl ConfiguratorSubcommandArgs for AddCommandArgs {
+    fn run_command(
         &self,
         logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn std::error::Error>> {
