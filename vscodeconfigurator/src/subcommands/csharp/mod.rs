@@ -8,7 +8,7 @@ use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 use self::{add::AddCommandArgs, init::InitCommandArgs};
 
-use super::ConfiguratorSubcommand;
+use super::{ConfiguratorSubcommand, ConfiguratorSubcommandArgs};
 
 /// Subcommands for C# projects.
 #[derive(Subcommand, Debug, PartialEq)]

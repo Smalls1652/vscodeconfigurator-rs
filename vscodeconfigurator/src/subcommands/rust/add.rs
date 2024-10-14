@@ -6,6 +6,8 @@ use vscodeconfigurator_lib::{
     vscode_ops
 };
 
+use crate::subcommands::ConfiguratorSubcommandArgs;
+
 /// Defines the arguments for the `rust add` command and the logic to run the
 /// command.
 #[derive(Args, Debug, PartialEq)]
@@ -38,9 +40,8 @@ pub struct RustAddCommandArgs {
     package_friendly_name: Option<String>
 }
 
-impl RustAddCommandArgs {
-    /// Runs the `run add` command.
-    pub fn run_command(
+impl ConfiguratorSubcommandArgs for RustAddCommandArgs {
+    fn run_command(
         &self,
         logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn std::error::Error>> {

@@ -9,6 +9,8 @@ use vscodeconfigurator_lib::{
     vscode_ops
 };
 
+use crate::subcommands::ConfiguratorSubcommandArgs;
+
 /// Defines the arguments for the `csharp init` command and the logic to run the
 /// command.
 #[derive(Args, Debug, PartialEq)]
@@ -65,9 +67,8 @@ pub struct InitCommandArgs {
     force: bool
 }
 
-impl InitCommandArgs {
-    /// Runs the `csharp init` command.
-    pub fn run_command(
+impl ConfiguratorSubcommandArgs for InitCommandArgs {
+    fn run_command(
         &self,
         logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn std::error::Error>> {
@@ -152,7 +153,9 @@ impl InitCommandArgs {
 
         Ok(())
     }
+}
 
+impl InitCommandArgs {
     /// Gets the default value for the `solution_name` (`--solution-name`)
     /// argument if it is not provided by the user.
     fn get_solution_name_value(&self) -> Option<String> {
