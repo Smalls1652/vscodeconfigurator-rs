@@ -4,10 +4,9 @@ mod init;
 use std::error::Error;
 
 use clap::Subcommand;
-pub use init::CsharpLspOption;
+use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 use self::{add::AddCommandArgs, init::InitCommandArgs};
-use crate::console_utils::ConsoleUtils;
 
 /// Subcommands for C# projects.
 #[derive(Subcommand, Debug, PartialEq)]
@@ -36,16 +35,12 @@ impl CsharpSubcommands {
     /// command.
     pub fn match_subcommand(
         &self,
-        console_utils: &mut ConsoleUtils
+        logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn Error>> {
         match self {
-            CsharpSubcommands::Init(init_args) => {
-                InitCommandArgs::run_command(init_args, console_utils)?
-            }
+            CsharpSubcommands::Init(init_args) => InitCommandArgs::run_command(init_args, logger)?,
 
-            CsharpSubcommands::Add(add_args) => {
-                AddCommandArgs::run_command(add_args, console_utils)?
-            }
+            CsharpSubcommands::Add(add_args) => AddCommandArgs::run_command(add_args, logger)?
         };
 
         Ok(())

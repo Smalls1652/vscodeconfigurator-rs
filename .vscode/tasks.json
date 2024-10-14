@@ -1,228 +1,232 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-			"label": "Build package",
-			"detail": "Build a package in the workspace",
-			"icon": {
-				"id": "tools",
-				"color": "terminal.ansiGreen"
-			},
-			"type": "process",
-			"command": "pwsh",
-			"args": [
-				"-NoLogo",
-                "-NoProfile",
-				"-File",
-				"${workspaceFolder}/tools/Build-Package.ps1",
-				"-PackageName",
-				"${input:packageName}",
-                "-BuildProfile",
-                "${input:buildProfile}",
-				"-Verbose"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": true,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": true,
-			},
-			"problemMatcher": "$rustc"
-		},
-        {
-            "label": "Clean package",
-            "detail": "Clean a package in the workspace",
-            "icon": {
-                "id": "trash",
-                "color": "terminal.ansiYellow"
-            },
-            "type": "process",
-			"command": "pwsh",
-			"args": [
-				"-NoLogo",
-                "-NoProfile",
-				"-File",
-				"${workspaceFolder}/tools/Clean-Package.ps1",
-				"-PackageName",
-				"${input:packageName}",
-                "-BuildProfile",
-                "${input:buildProfile}",
-				"-Verbose"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": true,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": true,
-			},
-			"problemMatcher": "$rustc"
-        },
-        {
-            "label": "Run vscodeconfigurator",
-            "detail": "Run vscodeconfigurator (with optional arguments)",
-            "icon": {
-                "id": "play",
-                "color": "terminal.ansiBlue"
-            },
-            "type": "shell",
-            "command": "cargo run --quiet --bin vscodeconfigurator -- ${input:runExtraArgs}",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "linux": {
-                "options": {
-                    "shell": {
-                        "executable": "/bin/bash",
-                        "args": [
-                            "-c"
-                        ]
-                    }
-                }
-            },
-            "osx": {
-                "options": {
-                    "shell": {
-                        "executable": "/bin/zsh",
-                        "args": [
-                            "-c"
-                        ]
-                    }
-                }
-            },
-            "windows": {
-                "options": {
-                    "shell": {
-                        "executable": "pwsh.exe"
-                    }
-                }
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            },
-            "problemMatcher": "$rustc"
-        },
-        {
-			"label": "Install vscodeconfigurator locally",
-			"detail": "Copy the vscodeconfigurator binary to the \"~/.vscodeconfigurator/bin\" directory.",
-			"icon": {
-				"id": "move",
-				"color": "terminal.ansiBlue"
-			},
-			"type": "process",
-			"command": "pwsh",
-			"args": [
-				"-NoLogo",
-				"-NoProfile",
-				"-File",
-				"Install-VSCodeConfigurator.ps1",
-				"-Configuration",
-				"${input:buildProfile}",
-				"-Verbose"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": true,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": true,
-			},
-			"problemMatcher": [],
-            "dependsOn": [
-                "Build package"
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build package",
+      "detail": "Build a package in the workspace",
+      "icon": {
+        "id": "tools",
+        "color": "terminal.ansiGreen"
+      },
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-File",
+        "${workspaceFolder}/tools/Build-Package.ps1",
+        "-PackageName",
+        "${input:packageName}",
+        "-BuildProfile",
+        "${input:buildProfile}",
+        "-Verbose"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true
+      },
+      "problemMatcher": "$rustc"
+    },
+    {
+      "label": "Clean package",
+      "detail": "Clean a package in the workspace",
+      "icon": {
+        "id": "trash",
+        "color": "terminal.ansiYellow"
+      },
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-File",
+        "${workspaceFolder}/tools/Clean-Package.ps1",
+        "-PackageName",
+        "${input:packageName}",
+        "-BuildProfile",
+        "${input:buildProfile}",
+        "-Verbose"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true
+      },
+      "problemMatcher": "$rustc"
+    },
+    {
+      "label": "Run vscodeconfigurator",
+      "detail": "Run vscodeconfigurator (with optional arguments)",
+      "icon": {
+        "id": "play",
+        "color": "terminal.ansiBlue"
+      },
+      "type": "shell",
+      "command": "cargo run --quiet --bin vscodeconfigurator -- ${input:runExtraArgs}",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "linux": {
+        "options": {
+          "shell": {
+            "executable": "/bin/bash",
+            "args": [
+              "-c"
             ]
-		},
-        {
-			"label": "Update package version",
-			"detail": "Update the version for a package in the workspace.",
-			"icon": {
-				"id": "versions",
-				"color": "terminal.ansiBlack"
-			},
-			"type": "process",
-			"command": "pwsh",
-			"args": [
-				"-NoLogo",
-				"-NoProfile",
-				"-File",
-				"${workspaceFolder}/tools/Update-PackageVersion.ps1",
-				"-PackageName",
-				"${input:packageName}",
-                "-CustomVersion",
-                "${input:newPackageVersion}",
-				"-Verbose"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": true,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": true,
-			},
-			"problemMatcher": []
-		}
-    ],
-    "inputs": [
-        {
-            "id": "packageName",
-            "type": "pickString",
-            "description": "Select a package to build",
-            "default": "vscodeconfigurator",
-            "options": [
-                {
-                    "label": "vscodeconfigurator (Binary)",
-                    "value": "vscodeconfigurator"
-                }
-            ]
-        },
-        {
-            "id": "runExtraArgs",
-            "description": "Extra arguments to pass to the binary",
-            "type": "promptString"
-        },
-        {
-            "id": "buildProfile",
-            "description": "Select the build profile",
-            "type": "pickString",
-            "default": "Debug",
-            "options": [
-                {
-                    "label": "Debug",
-                    "value": "Debug"
-                },
-                {
-                    "label": "Release",
-                    "value": "Release"
-                }
-            ]
-        },
-        {
-            "id": "newPackageVersion",
-            "description": "Enter the new version for the package",
-            "type": "promptString",
-            "default": ""
+          }
         }
-    ]
+      },
+      "osx": {
+        "options": {
+          "shell": {
+            "executable": "/bin/zsh",
+            "args": [
+              "-c"
+            ]
+          }
+        }
+      },
+      "windows": {
+        "options": {
+          "shell": {
+            "executable": "pwsh.exe"
+          }
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true
+      },
+      "problemMatcher": "$rustc"
+    },
+    {
+      "label": "Install vscodeconfigurator locally",
+      "detail": "Copy the vscodeconfigurator binary to the \"~/.vscodeconfigurator/bin\" directory.",
+      "icon": {
+        "id": "move",
+        "color": "terminal.ansiBlue"
+      },
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-File",
+        "Install-VSCodeConfigurator.ps1",
+        "-Configuration",
+        "${input:buildProfile}",
+        "-Verbose"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true
+      },
+      "problemMatcher": [],
+      "dependsOn": [
+        "Build package"
+      ]
+    },
+    {
+      "label": "Update package version",
+      "detail": "Update the version for a package in the workspace.",
+      "icon": {
+        "id": "versions",
+        "color": "terminal.ansiBlack"
+      },
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-File",
+        "${workspaceFolder}/tools/Update-PackageVersion.ps1",
+        "-PackageName",
+        "${input:packageName}",
+        "-CustomVersion",
+        "${input:newPackageVersion}",
+        "-Verbose"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "packageName",
+      "type": "pickString",
+      "description": "Select a package to build",
+      "default": "vscodeconfigurator",
+      "options": [
+        {
+          "label": "vscodeconfigurator (Binary)",
+          "value": "vscodeconfigurator"
+        },
+        {
+          "label": "vscodeconfigurator-lib",
+          "value": "vscodeconfigurator-lib"
+        }
+      ]
+    },
+    {
+      "id": "runExtraArgs",
+      "description": "Extra arguments to pass to the binary",
+      "type": "promptString"
+    },
+    {
+      "id": "buildProfile",
+      "description": "Select the build profile",
+      "type": "pickString",
+      "default": "Debug",
+      "options": [
+        {
+          "label": "Debug",
+          "value": "Debug"
+        },
+        {
+          "label": "Release",
+          "value": "Release"
+        }
+      ]
+    },
+    {
+      "id": "newPackageVersion",
+      "description": "Enter the new version for the package",
+      "type": "promptString",
+      "default": ""
+    }
+  ]
 }

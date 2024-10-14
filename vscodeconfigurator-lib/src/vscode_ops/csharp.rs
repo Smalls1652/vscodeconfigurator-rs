@@ -3,8 +3,8 @@ use std::path::PathBuf;
 use serde_json::{json, Value};
 
 use crate::{
-    console_utils::{ConsoleUtils, OutputEmoji},
-    subcommands::csharp::CsharpLspOption,
+    lang_options::CsharpLspOption,
+    logging::{ConsoleLogger, OutputEmoji},
     vscode_ops::{VSCodeSettingsFile, VSCodeTasksFile}
 };
 
@@ -14,8 +14,9 @@ use crate::{
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `csharp_lsp` - The C# language server to use.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -25,13 +26,13 @@ use crate::{
 /// OmniSharp.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
 /// let csharp_lsp = CsharpLspOption::OmniSharp;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// update_csharp_lsp(&output_directory, csharp_lsp, console_utils);
+/// update_csharp_lsp(&output_directory, csharp_lsp, logger);
 /// ```
 ///
 /// ## Example 02
@@ -39,20 +40,20 @@ use crate::{
 /// Update the C# LSP option in the `.vscode/settings.json` file to use C# LSP.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
 /// let csharp_lsp = CsharpLspOption::CsharpLsp;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// update_csharp_lsp(&output_directory, csharp_lsp, console_utils);
+/// update_csharp_lsp(&output_directory, csharp_lsp, logger);
 /// ```
 pub fn update_csharp_lsp(
     output_directory: &PathBuf,
     csharp_lsp: CsharpLspOption,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         "Updating C# LSP option in tasks.json...",
         OutputEmoji::Document
     )?;
@@ -72,7 +73,7 @@ pub fn update_csharp_lsp(
 
     vscode_settings.write_settings()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -86,8 +87,9 @@ pub fn update_csharp_lsp(
 /// - `project_friendly_name` - The friendly name of the project.
 /// - `is_runnable` - Whether the project is runnable.
 /// - `is_watchable` - Whether the project is watchable.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -97,14 +99,14 @@ pub fn update_csharp_lsp(
 /// `.vscode/tasks.json` file.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
 /// let project_path = std::env::temp_dir().join("my-project/ConsoleApp");
 /// let project_friendly_name = "ConsoleApp";
 /// let is_runnable = true;
 /// let is_watchable = true;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
 /// add_csharp_project_to_tasks(
 ///     &output_directory,
@@ -112,7 +114,7 @@ pub fn update_csharp_lsp(
 ///     project_friendly_name,
 ///     is_runnable,
 ///     is_watchable,
-///     console_utils
+///     logger
 /// );
 /// ```
 pub fn add_csharp_project_to_tasks(
@@ -121,10 +123,9 @@ pub fn add_csharp_project_to_tasks(
     project_friendly_name: &str,
     is_runnable: bool,
     is_watchable: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils
-        .write_operation_log("Adding C# project to tasks.json...", OutputEmoji::Document)?;
+    logger.write_operation_log("Adding C# project to tasks.json...", OutputEmoji::Document)?;
 
     let mut vscode_tasks = VSCodeTasksFile::new(output_directory.join(".vscode/tasks.json"));
 
@@ -157,7 +158,7 @@ pub fn add_csharp_project_to_tasks(
 
     vscode_tasks.write_tasks()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }

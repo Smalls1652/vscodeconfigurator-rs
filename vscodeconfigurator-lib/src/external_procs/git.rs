@@ -1,14 +1,15 @@
 use std::path::PathBuf;
 
-use crate::console_utils::{ConsoleUtils, OutputEmoji};
+use crate::logging::{ConsoleLogger, OutputEmoji};
 
 /// Initializes a Git repository in the output directory.
 ///
 /// # Arguments
 ///
 /// - `output_directory` - The output directory of the project.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -18,18 +19,18 @@ use crate::console_utils::{ConsoleUtils, OutputEmoji};
 /// directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// initialize_git_repo(&output_directory, console_utils);
+/// initialize_git_repo(&output_directory, logger);
 /// ```
 pub fn initialize_git_repo(
     output_directory: &PathBuf,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log("Initializing Git repository...", OutputEmoji::Package)?;
+    logger.write_operation_log("Initializing Git repository...", OutputEmoji::Package)?;
 
     let git_proc_args = vec!["init"];
 
@@ -38,6 +39,6 @@ pub fn initialize_git_repo(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
     Ok(())
 }

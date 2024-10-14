@@ -1,8 +1,7 @@
 use std::{env, io::ErrorKind, path::PathBuf, process};
 
 use clap::{Args, ValueHint};
-
-use crate::{console_utils::ConsoleUtils, external_procs::dotnet, vscode_ops};
+use vscodeconfigurator_lib::{external_procs::dotnet, logging::ConsoleLogger, vscode_ops};
 
 /// Defines the arguments for the `csharp add` command and the logic to run the
 /// command.
@@ -45,7 +44,7 @@ impl AddCommandArgs {
     /// Runs the `csharp add` command.
     pub fn run_command(
         &self,
-        console_utils: &mut ConsoleUtils
+        logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn std::error::Error>> {
         let solution_file_path: PathBuf;
 
@@ -53,7 +52,7 @@ impl AddCommandArgs {
             solution_file_path = match get_solution_file_path_default_value() {
                 Ok(path) => path,
                 Err(_) => {
-                    console_utils
+                    logger
                         .write_error(format!("No solution file found in the current directory."))?;
 
                     process::exit(1);
@@ -62,7 +61,7 @@ impl AddCommandArgs {
         } else {
             solution_file_path = self.solution_file_path.clone().unwrap();
             if !&solution_file_path.exists() {
-                console_utils.write_error(format!(
+                logger.write_error(format!(
                     "The solution file path '{}' does not exist.",
                     &solution_file_path.display()
                 ))?;
@@ -72,7 +71,7 @@ impl AddCommandArgs {
         }
 
         if !&self.project_path.exists() {
-            console_utils.write_error(format!(
+            logger.write_error(format!(
                 "The project path '{}' does not exist.",
                 &self.project_path.display()
             ))?;
@@ -86,7 +85,7 @@ impl AddCommandArgs {
             project_friendly_name = match get_project_friendly_name(&self.project_path) {
                 Ok(name) => name,
                 Err(_) => {
-                    console_utils
+                    logger
                         .write_error(format!("No project file found in the project directory."))?;
 
                     process::exit(1);
@@ -96,15 +95,15 @@ impl AddCommandArgs {
             project_friendly_name = self.project_friendly_name.clone().unwrap();
         }
 
-        console_utils.write_operation_category("Add project")?;
-        dotnet::add_project_to_solution(&solution_file_path, &self.project_path, console_utils)?;
+        logger.write_operation_category("Add project")?;
+        dotnet::add_project_to_solution(&solution_file_path, &self.project_path, logger)?;
         vscode_ops::csharp::add_csharp_project_to_tasks(
             &PathBuf::from(solution_file_path.parent().unwrap()),
             &self.project_path,
             &project_friendly_name,
             self.is_runnable,
             self.is_watchable,
-            console_utils
+            logger
         )?;
 
         Ok(())

@@ -1,5 +1,5 @@
 [workspace]
-members = ["vscodeconfigurator"]
+members = ["vscodeconfigurator", "vscodeconfigurator-lib"]
 resolver = "2"
 
 package.authors = [

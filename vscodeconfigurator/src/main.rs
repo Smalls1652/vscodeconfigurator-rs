@@ -1,22 +1,15 @@
-mod console_utils;
-mod error;
-mod external_procs;
-mod io;
 mod subcommands;
-mod template_ops;
-mod utils;
-mod vscode_ops;
 
 use std::{error::Error, process};
 
 use clap::{crate_version, CommandFactory, Parser};
 use clap_complete::aot::generate;
-
-use self::{
-    console_utils::ConsoleUtils,
+use vscodeconfigurator_lib::{
     error::{CliError, CliErrorKind},
-    subcommands::RootSubcommands
+    logging::ConsoleLogger
 };
+
+use self::subcommands::RootSubcommands;
 
 /// The main CLI struct.
 #[derive(Parser, Debug, PartialEq)]
@@ -35,7 +28,7 @@ struct Cli {
 
 /// The entry point for the CLI.
 fn main() -> Result<(), Box<dyn Error>> {
-    let mut console_utils = ConsoleUtils::new(None, None);
+    let mut logger = ConsoleLogger::new(None, None);
 
     let cli = Cli::parse();
 
@@ -50,15 +43,13 @@ fn main() -> Result<(), Box<dyn Error>> {
             Ok(())
         }
 
-        Some(RootSubcommands::Csharp { command }) => command
-            .as_ref()
-            .unwrap()
-            .match_subcommand(&mut console_utils),
+        Some(RootSubcommands::Csharp { command }) => {
+            command.as_ref().unwrap().match_subcommand(&mut logger)
+        }
 
-        Some(RootSubcommands::Rust { command }) => command
-            .as_ref()
-            .unwrap()
-            .match_subcommand(&mut console_utils),
+        Some(RootSubcommands::Rust { command }) => {
+            command.as_ref().unwrap().match_subcommand(&mut logger)
+        }
 
         None => Err(CliError::new(
             "No subcommand provided.",
@@ -69,7 +60,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     match result {
         Err(e) => {
-            console_utils.write_error_extended(e)?;
+            logger.write_error_extended(e)?;
             process::exit(1);
         }
 

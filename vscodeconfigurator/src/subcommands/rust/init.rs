@@ -1,9 +1,9 @@
-use clap::{builder::TypedValueParser, Args, ValueEnum, ValueHint};
-
-use crate::{
-    console_utils::ConsoleUtils,
+use clap::{builder::TypedValueParser, Args, ValueHint};
+use vscodeconfigurator_lib::{
     external_procs::{cargo, git},
     io::OutputDirectory,
+    lang_options::CargoPackageTemplateOption,
+    logging::ConsoleLogger,
     template_ops
 };
 
@@ -44,7 +44,7 @@ impl RustInitCommandArgs {
     /// Runs the `run init` command.
     pub fn run_command(
         &self,
-        console_utils: &mut ConsoleUtils
+        logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn std::error::Error>> {
         let mut output_directory = self.output_directory.clone();
 
@@ -56,64 +56,40 @@ impl RustInitCommandArgs {
 
         let output_directory_absolute = output_directory.to_absolute();
 
-        console_utils.write_operation_category("Git")?;
-        git::initialize_git_repo(&output_directory_absolute, console_utils)?;
-        template_ops::rust::copy_gitignore(&output_directory_absolute, self.force, console_utils)?;
-        console_utils.write_newline()?;
+        logger.write_operation_category("Git")?;
+        git::initialize_git_repo(&output_directory_absolute, logger)?;
+        template_ops::rust::copy_gitignore(&output_directory_absolute, self.force, logger)?;
+        logger.write_newline()?;
 
-        console_utils.write_operation_category("VSCode")?;
-        template_ops::rust::copy_vscode_settings(
-            &output_directory_absolute,
-            self.force,
-            console_utils
-        )?;
+        logger.write_operation_category("VSCode")?;
+        template_ops::rust::copy_vscode_settings(&output_directory_absolute, self.force, logger)?;
         template_ops::rust::copy_vscode_tasks(
             &output_directory_absolute,
             &self.base_package_name,
             self.force,
-            console_utils
+            logger
         )?;
-        template_ops::rust::copy_build_pwsh_script(
-            &output_directory_absolute,
-            self.force,
-            console_utils
-        )?;
-        template_ops::rust::copy_clean_pwsh_script(
-            &output_directory_absolute,
-            self.force,
-            console_utils
-        )?;
-        console_utils.write_newline()?;
+        template_ops::rust::copy_build_pwsh_script(&output_directory_absolute, self.force, logger)?;
+        template_ops::rust::copy_clean_pwsh_script(&output_directory_absolute, self.force, logger)?;
+        logger.write_newline()?;
 
-        console_utils.write_operation_category("Rust")?;
+        logger.write_operation_category("Rust")?;
         template_ops::rust::copy_cargo_workspace_file(
             &output_directory_absolute,
             self.force,
-            console_utils
+            logger
         )?;
         cargo::initalize_package(
             &output_directory_absolute,
             &self.base_package_name,
             self.base_package_template,
             self.force,
-            console_utils
+            logger
         )?;
-        console_utils.write_newline()?;
+        logger.write_newline()?;
 
-        console_utils.write_project_initialized_log()?;
+        logger.write_project_initialized_log()?;
 
         Ok(())
     }
-}
-
-/// The type of Cargo package template to use.
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
-pub enum CargoPackageTemplateOption {
-    /// A binary.
-    #[value(name = "Binary")]
-    Binary,
-
-    /// A library.
-    #[value(name = "Library")]
-    Library
 }

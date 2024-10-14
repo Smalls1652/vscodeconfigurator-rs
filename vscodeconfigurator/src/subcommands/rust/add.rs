@@ -1,9 +1,8 @@
 use clap::{builder::TypedValueParser, Args, ValueHint};
-
-use crate::{
-    console_utils::ConsoleUtils,
+use vscodeconfigurator_lib::{
     error::{CliError, CliErrorKind},
     io::OutputDirectory,
+    logging::ConsoleLogger,
     vscode_ops
 };
 
@@ -43,7 +42,7 @@ impl RustAddCommandArgs {
     /// Runs the `run add` command.
     pub fn run_command(
         &self,
-        console_utils: &mut ConsoleUtils
+        logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn std::error::Error>> {
         let mut output_directory = self.output_directory.clone();
 
@@ -66,12 +65,12 @@ impl RustAddCommandArgs {
             None => self.package_name.as_str()
         };
 
-        console_utils.write_operation_category("Add package")?;
+        logger.write_operation_category("Add package")?;
         vscode_ops::rust::add_package_to_tasks(
             &output_directory_absolute,
             self.package_name.as_str(),
             package_friendly_name,
-            console_utils
+            logger
         )?;
 
         Ok(())

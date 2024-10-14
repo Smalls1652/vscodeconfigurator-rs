@@ -1,8 +1,8 @@
 use std::{fs, path::PathBuf, process};
 
 use crate::{
-    console_utils::{ConsoleUtils, OutputEmoji},
-    subcommands::rust::CargoPackageTemplateOption
+    lang_options::CargoPackageTemplateOption,
+    logging::{ConsoleLogger, OutputEmoji}
 };
 
 /// Initializes a new package with Cargo.
@@ -13,8 +13,9 @@ use crate::{
 /// - `package_name` - The name of the package.
 /// - `package_template` - The type of package to create.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -24,23 +25,20 @@ use crate::{
 /// `my-project` directory in the temp directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::{
-///     console_utils::ConsoleUtils,
-///     subcommands::rust::CargoPackageTemplateOption
-/// };
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
 /// let package_name = "my_package";
 /// let package_template = CargoPackageTemplateOption::Binary;
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
 /// initalize_package(
 ///     &output_directory,
 ///     &package_name,
 ///     package_template,
 ///     force,
-///     console_utils
+///     logger
 /// );
 /// ```
 pub fn initalize_package(
@@ -48,22 +46,22 @@ pub fn initalize_package(
     package_name: &str,
     package_template: CargoPackageTemplateOption,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         format!("Initializing package for '{}'... ", package_name).as_str(),
         OutputEmoji::Package
     )?;
-    console_utils.save_cursor_position()?;
+    logger.save_cursor_position()?;
 
     let package_output_directory = output_directory.join(package_name);
 
     if package_output_directory.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -91,7 +89,7 @@ pub fn initalize_package(
         .current_dir(output_directory)
         .output()?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }

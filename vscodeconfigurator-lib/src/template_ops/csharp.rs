@@ -2,7 +2,7 @@ use std::{fs, path::PathBuf};
 
 use super::vscode;
 use crate::{
-    console_utils::{ConsoleUtils, OutputEmoji},
+    logging::{ConsoleLogger, OutputEmoji},
     utils
 };
 
@@ -12,8 +12,9 @@ use crate::{
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -22,18 +23,18 @@ use crate::{
 /// Copies the `GitVersion.yml` file to the project root.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// csharp_copy_gitversion(&output_directory, force, console_utils);
+/// csharp_copy_gitversion(&output_directory, force, logger);
 /// ```
 pub fn csharp_copy_gitversion(
     output_directory: &PathBuf,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
     let core_templates_path = utils::get_core_templates_path();
     let template_file_path = core_templates_path.join("csharp/GitVersion/GitVersion.yml");
@@ -41,17 +42,17 @@ pub fn csharp_copy_gitversion(
     let output_file_name = "GitVersion.yml";
     let output_file_path = output_directory.join(&output_file_name);
 
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         "Copying 'GitVersion.yml' to project root...",
         OutputEmoji::Document
     )?;
 
     if output_file_path.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -62,7 +63,7 @@ pub fn csharp_copy_gitversion(
 
     fs::copy(template_file_path, &output_file_path)?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -74,8 +75,9 @@ pub fn csharp_copy_gitversion(
 /// - `output_directory` - The output directory of the project.
 /// - `solution_name` - The name of the solution.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -84,22 +86,22 @@ pub fn csharp_copy_gitversion(
 /// Copies the `settings.json` file to the project root's `.vscode` directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
 /// let solution_name = "MySolution".to_string();
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// csharp_copy_vscode_settings(&output_directory, &solution_name, force, console_utils);
+/// csharp_copy_vscode_settings(&output_directory, &solution_name, force, logger);
 /// ```
 pub fn csharp_copy_vscode_settings(
     output_directory: &PathBuf,
     solution_name: &String,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
+    vscode::ensure_vscode_dir_exists(output_directory, logger)?;
 
     let core_templates_path = utils::get_core_templates_path();
     let template_file_path = core_templates_path.join("csharp/VSCode/settings.json");
@@ -107,17 +109,17 @@ pub fn csharp_copy_vscode_settings(
     let output_file_name = "settings.json";
     let output_file_path = output_directory.join(".vscode").join(&output_file_name);
 
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         "Copying 'settings.json' to '.vscode' directory...",
         OutputEmoji::Document
     )?;
 
     if output_file_path.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -132,7 +134,7 @@ pub fn csharp_copy_vscode_settings(
 
     fs::write(&output_file_path, vscode_settings_json)?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
@@ -144,8 +146,9 @@ pub fn csharp_copy_vscode_settings(
 /// - `output_directory` - The output directory of the project.
 /// - `solution_name` - The name of the solution.
 /// - `force` - Whether to forcefully overwrite.
-/// - `console_utils` - The [`ConsoleUtils`](crate::console_utils::ConsoleUtils)
-///   instance for logging.
+/// - `logger` - The
+///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+///   for logging.
 ///
 /// # Examples
 ///
@@ -154,22 +157,22 @@ pub fn csharp_copy_vscode_settings(
 /// Copies the `tasks.json` file to the project root's `.vscode` directory.
 ///
 /// ```rust
-/// use vscodeconfigurator::console_utils::ConsoleUtils;
+/// use vscodeconfigurator::logger::ConsoleLogger;
 ///
 /// let output_directory = std::env::temp_dir().join("my-project");
 /// let solution_name = "MySolution".to_string();
 /// let force = false;
-/// let mut console_utils = ConsoleUtils::new();
+/// let mut logger = ConsoleLogger::new();
 ///
-/// csharp_copy_vscode_tasks(&output_directory, &solution_name, force, console_utils);
+/// csharp_copy_vscode_tasks(&output_directory, &solution_name, force, logger);
 /// ```
 pub fn csharp_copy_vscode_tasks(
     output_directory: &PathBuf,
     solution_name: &String,
     force: bool,
-    console_utils: &mut ConsoleUtils
+    logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    vscode::ensure_vscode_dir_exists(output_directory, console_utils)?;
+    vscode::ensure_vscode_dir_exists(output_directory, logger)?;
 
     let core_templates_path = utils::get_core_templates_path();
     let template_file_path = core_templates_path.join("csharp/VSCode/tasks.json");
@@ -177,17 +180,17 @@ pub fn csharp_copy_vscode_tasks(
     let output_file_name = "tasks.json";
     let output_file_path = output_directory.join(".vscode").join(&output_file_name);
 
-    console_utils.write_operation_log(
+    logger.write_operation_log(
         "Copying 'tasks.json' to '.vscode' directory...",
         OutputEmoji::Document
     )?;
 
     if output_file_path.exists() {
         if !force {
-            let overwrite_response = console_utils.ask_for_overwrite()?;
+            let overwrite_response = logger.ask_for_overwrite()?;
 
             if !overwrite_response {
-                console_utils.write_warning(format!("Already exists 🟠\n"))?;
+                logger.write_warning(format!("Already exists 🟠\n"))?;
                 return Ok(());
             }
         }
@@ -202,7 +205,7 @@ pub fn csharp_copy_vscode_tasks(
 
     fs::write(&output_file_path, vscode_tasks_json)?;
 
-    console_utils.write_operation_success_log()?;
+    logger.write_operation_success_log()?;
 
     Ok(())
 }
