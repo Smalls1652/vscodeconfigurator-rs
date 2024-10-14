@@ -7,6 +7,7 @@ use clap::Subcommand;
 use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 use self::{add::RustAddCommandArgs, init::RustInitCommandArgs};
+use crate::subcommands::ConfiguratorSubcommand;
 
 /// Subcommands for Rust projects.
 #[derive(Subcommand, Debug, PartialEq)]
@@ -30,10 +31,10 @@ pub enum RustSubcommands {
     Add(RustAddCommandArgs)
 }
 
-impl RustSubcommands {
+impl ConfiguratorSubcommand for RustSubcommands {
     /// Matches the subcommand provided by the user and runs the corresponding
     /// command.
-    pub fn match_subcommand(
+    fn match_subcommand(
         &self,
         logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn Error>> {

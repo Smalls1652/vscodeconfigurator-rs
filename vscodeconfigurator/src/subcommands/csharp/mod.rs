@@ -8,6 +8,8 @@ use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 use self::{add::AddCommandArgs, init::InitCommandArgs};
 
+use super::ConfiguratorSubcommand;
+
 /// Subcommands for C# projects.
 #[derive(Subcommand, Debug, PartialEq)]
 #[command(
@@ -30,10 +32,10 @@ pub enum CsharpSubcommands {
     Add(AddCommandArgs)
 }
 
-impl CsharpSubcommands {
+impl ConfiguratorSubcommand for CsharpSubcommands {
     /// Matches the subcommand provided by the user and runs the corresponding
     /// command.
-    pub fn match_subcommand(
+    fn match_subcommand(
         &self,
         logger: &mut ConsoleLogger
     ) -> Result<(), Box<dyn Error>> {

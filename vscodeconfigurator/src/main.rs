@@ -9,7 +9,7 @@ use vscodeconfigurator_lib::{
     logging::ConsoleLogger
 };
 
-use self::subcommands::RootSubcommands;
+use crate::subcommands::{ConfiguratorSubcommand, RootSubcommands};
 
 /// The main CLI struct.
 #[derive(Parser, Debug, PartialEq)]
