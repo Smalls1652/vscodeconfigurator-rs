@@ -5,6 +5,7 @@ use clap::{Args, Subcommand};
 use clap_complete::Shell;
 use csharp::CsharpSubcommands;
 use rust::RustSubcommands;
+use vscodeconfigurator_lib::logging::ConsoleLogger;
 
 /// The root subcommands for the CLI.
 #[derive(Subcommand, Debug, PartialEq)]
@@ -30,4 +31,15 @@ pub enum RootSubcommands {
 pub struct Completions {
     /// The shell to generate completions for.
     pub shell: Shell
+}
+
+/// A trait for subcommands used in the VSCode Configurator CLI.
+pub trait ConfiguratorSubcommand {
+    /// Matches the subcommand provided by the user and runs the corresponding
+    /// command.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `logger` - The [`ConsoleLogger`](vscodeconfigurator_lib::logging::ConsoleLogger) to use for logging.
+    fn match_subcommand(&self, logger: &mut ConsoleLogger) -> Result<(), Box<dyn std::error::Error>>;
 }
