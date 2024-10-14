@@ -40,6 +40,14 @@ impl ConsoleLogger {
     ///   output stream is used.
     /// - `stderr` - The standard error stream. If `None`, the default standard
     ///   error stream is used.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use vscodeconfigurator_lib::logging::ConsoleLogger;
+    ///
+    /// let logger = ConsoleLogger::new(None, None);
+    /// ```
     pub fn new(
         stdout: Option<Stdout>,
         stderr: Option<Stderr>
@@ -69,7 +77,11 @@ impl ConsoleLogger {
     /// # Example
     ///
     /// ```rust
-    /// logger.write_info("This is an informational message.".to_string())?;
+    /// use vscodeconfigurator_lib::logging::ConsoleLogger;
+    ///
+    /// let mut logger = ConsoleLogger::new(None, None);
+    ///
+    /// logger.write_info("This is an informational message.".to_string());
     /// ```
     pub fn write_info(
         &mut self,
@@ -98,7 +110,11 @@ impl ConsoleLogger {
     /// # Example
     ///
     /// ```rust
-    /// logger.write_success("This is a success message.".to_string())?;
+    /// use vscodeconfigurator_lib::logging::ConsoleLogger;
+    ///
+    /// let mut logger = ConsoleLogger::new(None, None);
+    ///
+    /// logger.write_success("This is a success message.".to_string());
     /// ```
     pub fn write_success(
         &mut self,
@@ -127,7 +143,11 @@ impl ConsoleLogger {
     /// # Example
     ///
     /// ```rust
-    /// logger.write_warning("This is a warning message.".to_string())?;
+    /// use vscodeconfigurator_lib::logging::ConsoleLogger;
+    ///
+    /// let mut logger = ConsoleLogger::new(None, None);
+    ///
+    /// logger.write_warning("This is a warning message.".to_string());
     /// ```
     pub fn write_warning(
         &mut self,
@@ -156,7 +176,11 @@ impl ConsoleLogger {
     /// # Example
     ///
     /// ```rust
-    /// logger.write_error("This is an error message.".to_string())?;
+    /// use vscodeconfigurator_lib::logging::ConsoleLogger;
+    ///
+    /// let mut logger = ConsoleLogger::new(None, None);
+    ///
+    /// logger.write_error("This is an error message.".to_string());
     /// ```
     pub fn write_error(
         &mut self,
@@ -185,11 +209,15 @@ impl ConsoleLogger {
     /// # Example
     ///
     /// ```rust
-    /// use vscodeconfigurator::error::{CliError, CliErrorKind};
+    /// use vscodeconfigurator_lib::{
+    ///     error::{CliError, CliErrorKind},
+    ///     logging::ConsoleLogger
+    /// };
     ///
-    /// let error = CliError::new("An error occurred.".to_string(), CliErrorKind::UnknownError);
+    /// let mut logger = ConsoleLogger::new(None, None);
+    /// let error = CliError::new("An error occurred.", CliErrorKind::UnknownError);
     ///
-    /// logger.write_error_extended(error)?;
+    /// logger.write_error_extended(Box::new(error));
     /// ```
     pub fn write_error_extended(
         &mut self,
@@ -393,7 +421,11 @@ impl ConsoleLogger {
     /// # Example
     ///
     /// ```rust
-    /// logger.write_operation_category("Installing dependencies")?; // "🚀 Installing dependencies"
+    /// use vscodeconfigurator_lib::logging::ConsoleLogger;
+    ///
+    /// let mut logger = ConsoleLogger::new(None, None);
+    ///
+    /// logger.write_operation_category("Installing dependencies"); // "🚀 Installing dependencies"
     /// ```
     pub fn write_operation_category(
         &mut self,
@@ -417,7 +449,11 @@ impl ConsoleLogger {
     /// # Example
     ///
     /// ```rust
-    /// logger.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document)?;
+    /// use vscodeconfigurator_lib::logging::{ConsoleLogger, OutputEmoji};
+    ///
+    /// let mut logger = ConsoleLogger::new(None, None);
+    ///
+    /// logger.write_operation_log("Adding package to tasks.json...", OutputEmoji::Document);
     /// // "📄 Adding package to tasks.json... "
     /// ```
     pub fn write_operation_log(
@@ -438,7 +474,11 @@ impl ConsoleLogger {
     /// # Example
     ///
     /// ```rust
-    /// logger.write_operation_success_log()?; // "Done! ✅"
+    /// use vscodeconfigurator_lib::logging::ConsoleLogger;
+    ///
+    /// let mut logger = ConsoleLogger::new(None, None);
+    ///
+    /// logger.write_operation_success_log(); // "Done! ✅"
     /// ```
     pub fn write_operation_success_log(&mut self) -> Result<()> {
         let message = match self.stdout.is_tty() {
@@ -454,7 +494,11 @@ impl ConsoleLogger {
     /// # Example
     ///
     /// ```rust
-    /// logger.write_project_initialized_log()?; // "🥳 VSCode project initialized!"
+    /// use vscodeconfigurator_lib::logging::ConsoleLogger;
+    ///
+    /// let mut logger = ConsoleLogger::new(None, None);
+    ///
+    /// logger.write_project_initialized_log(); // "🥳 VSCode project initialized!"
     /// ```
     pub fn write_project_initialized_log(&mut self) -> Result<()> {
         let message = match self.stdout.is_tty() {
