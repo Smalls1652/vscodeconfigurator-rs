@@ -268,12 +268,12 @@ impl ConsoleLogger {
         if !self.stdout.is_tty() {
             let error_message = match source_error_kind.is_some() {
                 true => format!(
-                    "[Error] - {} (Kind: {}): {}",
+                    "\n[Error] - {} (Kind: {}): {}",
                     source_error_type,
                     source_error_kind.unwrap(),
                     source_error
                 ),
-                false => format!("[Error] - {}: {}", source_error_type, source_error)
+                false => format!("\n[Error] - {}: {}", source_error_type, source_error)
             };
 
             execute!(self.stderr, Print(error_message))?;
@@ -283,6 +283,7 @@ impl ConsoleLogger {
 
         execute!(
             self.stdout,
+            Print(format!("\n\n")),
             SetAttribute(Attribute::Bold),
             SetBackgroundColor(Color::Red),
             SetForegroundColor(Color::White),
