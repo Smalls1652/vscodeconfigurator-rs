@@ -59,7 +59,7 @@ pub fn update_csharp_lsp(
     )?;
 
     let mut vscode_settings =
-        VSCodeSettingsFile::new(output_directory.join(".vscode/settings.json"));
+        VSCodeSettingsFile::new(output_directory.join(".vscode/settings.json"))?;
 
     vscode_settings.values["dotnet.server.useOmnisharp"] = match csharp_lsp {
         CsharpLspOption::CsharpLsp => Value::Bool(false),
@@ -127,7 +127,7 @@ pub fn add_csharp_project_to_tasks(
 ) -> Result<(), Box<dyn std::error::Error>> {
     logger.write_operation_log("Adding C# project to tasks.json...", OutputEmoji::Document)?;
 
-    let mut vscode_tasks = VSCodeTasksFile::new(output_directory.join(".vscode/tasks.json"));
+    let mut vscode_tasks = VSCodeTasksFile::new(output_directory.join(".vscode/tasks.json"))?;
 
     let inputs_node = vscode_tasks.values["inputs"].as_array_mut().unwrap();
 

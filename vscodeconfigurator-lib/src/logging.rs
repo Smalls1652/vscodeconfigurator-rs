@@ -238,6 +238,19 @@ impl ConsoleLogger {
             );
         } else if source_error.is::<clap::error::Error>() {
             source_error_type = "CLI Argument Parser error";
+        } else if source_error.is::<serde_json::Error>() {
+            source_error_type = "JSON parsing error";
+
+            let source_error_downcast = source_error
+                .downcast_ref::<serde_json::Error>()
+                .unwrap();
+
+            source_error_kind = Some(match source_error_downcast.classify() {
+                serde_json::error::Category::Io => "I/O error",
+                serde_json::error::Category::Syntax => "Syntax error",
+                serde_json::error::Category::Data => "Data error",
+                serde_json::error::Category::Eof => "End of file error"
+            }.to_string());
         } else if source_error.is::<crate::error::CliError>() {
             source_error_type = "Internal error";
             source_error_kind = Some(
