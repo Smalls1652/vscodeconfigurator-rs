@@ -20,18 +20,18 @@ impl VSCodeSettingsFile {
     /// # Arguments
     ///
     /// - `file_path` - The path to the settings file.
-    pub fn new(file_path: PathBuf) -> Self {
+    pub fn new(file_path: PathBuf) -> Result<Self, Box<dyn std::error::Error>> {
         if !file_path.exists() {
             panic!("The settings file does not exist.");
         }
 
-        let settings_json = fs::read_to_string(&file_path).unwrap();
-        let settings = serde_json::from_str(&settings_json.as_str()).unwrap();
+        let settings_json = fs::read_to_string(&file_path)?;
+        let settings = serde_json::from_str(&settings_json.as_str())?;
 
-        Self {
+        Ok(Self {
             file_path: file_path,
             values: settings
-        }
+        })
     }
 
     /// Writes the settings to the settings file.
@@ -59,18 +59,18 @@ impl VSCodeTasksFile {
     /// # Arguments
     ///
     /// - `file_path` - The path to the tasks file.
-    pub fn new(file_path: PathBuf) -> Self {
+    pub fn new(file_path: PathBuf) -> Result<Self, Box<dyn std::error::Error>> {
         if !file_path.exists() {
             panic!("The tasks file does not exist.");
         }
 
-        let tasks_json = fs::read_to_string(&file_path).unwrap();
-        let tasks = serde_json::from_str(&tasks_json.as_str()).unwrap();
+        let tasks_json = fs::read_to_string(&file_path)?;
+        let tasks = serde_json::from_str(&tasks_json.as_str())?;
 
-        Self {
+        Ok(Self {
             file_path: file_path,
             values: tasks
-        }
+        })
     }
 
     /// Writes the tasks to the tasks file.
