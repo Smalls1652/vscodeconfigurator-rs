@@ -1,10 +1,7 @@
-use std::{fs, path::PathBuf};
+use std::{borrow::Borrow, fs, path::PathBuf};
 
-use super::vscode;
-use crate::{
-    logging::{ConsoleLogger, OutputEmoji},
-    utils
-};
+use super::{vscode, TemplateFile};
+use crate::logging::{ConsoleLogger, OutputEmoji};
 
 /// Copies the `.gitignore` file to the project root.
 ///
@@ -12,8 +9,7 @@ use crate::{
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -36,18 +32,18 @@ pub fn copy_gitignore(
     force: bool,
     logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let core_templates_path = utils::get_core_templates_path();
-    let template_file_path = core_templates_path.join("rust/Git/gitignore");
-
-    let output_file_name = ".gitignore";
-    let output_file_path = output_directory.join(&output_file_name);
+    let template_file = TemplateFile::new("rust/Git/gitignore", output_directory, ".gitignore");
 
     logger.write_operation_log(
-        "Copying '.gitignore' to project root...",
+        format!(
+            "Copying '{}' to project root...",
+            &template_file.output_file_name
+        )
+        .as_str(),
         OutputEmoji::Document
     )?;
 
-    if output_file_path.exists() {
+    if template_file.output_file_exists {
         if !force {
             let overwrite_response = logger.ask_for_overwrite()?;
 
@@ -56,12 +52,9 @@ pub fn copy_gitignore(
                 return Ok(());
             }
         }
-
-        fs::remove_file(&output_file_path)
-            .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
     }
 
-    fs::copy(template_file_path, &output_file_path)?;
+    template_file.copy_file()?;
 
     logger.write_operation_success_log()?;
 
@@ -74,8 +67,7 @@ pub fn copy_gitignore(
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -98,18 +90,22 @@ pub fn copy_cargo_workspace_file(
     force: bool,
     logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let core_templates_path = utils::get_core_templates_path();
-    let template_file_path = core_templates_path.join("rust/Cargo/Cargo.workspace.toml");
-
-    let output_file_name = "Cargo.toml";
-    let output_file_path = output_directory.join(&output_file_name);
+    let template_file = TemplateFile::new(
+        "rust/Cargo/Cargo.workspace.toml",
+        output_directory,
+        "Cargo.toml"
+    );
 
     logger.write_operation_log(
-        "Copying 'Cargo.toml' to project root...",
+        format!(
+            "Copying '{}' to project root...",
+            &template_file.output_file_name
+        )
+        .as_str(),
         OutputEmoji::Document
     )?;
 
-    if output_file_path.exists() {
+    if template_file.output_file_exists {
         if !force {
             let overwrite_response = logger.ask_for_overwrite()?;
 
@@ -118,12 +114,9 @@ pub fn copy_cargo_workspace_file(
                 return Ok(());
             }
         }
-
-        fs::remove_file(&output_file_path)
-            .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
     }
 
-    fs::copy(template_file_path, &output_file_path)?;
+    template_file.copy_file()?;
 
     logger.write_operation_success_log()?;
 
@@ -136,8 +129,7 @@ pub fn copy_cargo_workspace_file(
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -162,18 +154,22 @@ pub fn copy_vscode_settings(
 ) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, logger)?;
 
-    let core_templates_path = utils::get_core_templates_path();
-    let template_file_path = core_templates_path.join("rust/VSCode/settings.json");
-
-    let output_file_name = "settings.json";
-    let output_file_path = output_directory.join(".vscode").join(&output_file_name);
+    let template_file = TemplateFile::new(
+        "rust/VSCode/settings.json",
+        output_directory.join(".vscode").borrow(),
+        "settings.json"
+    );
 
     logger.write_operation_log(
-        "Copying 'settings.json' to '.vscode' directory...",
+        format!(
+            "Copying '{}' to '.vscode' directory...",
+            &template_file.output_file_name
+        )
+        .as_str(),
         OutputEmoji::Document
     )?;
 
-    if output_file_path.exists() {
+    if template_file.output_file_exists {
         if !force {
             let overwrite_response = logger.ask_for_overwrite()?;
 
@@ -182,13 +178,9 @@ pub fn copy_vscode_settings(
                 return Ok(());
             }
         }
-
-        fs::remove_file(&output_file_path)
-            .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
     }
 
-    let vscode_settings_json = fs::read_to_string(&template_file_path)?;
-    fs::write(&output_file_path, vscode_settings_json)?;
+    template_file.copy_file()?;
 
     logger.write_operation_success_log()?;
 
@@ -202,8 +194,7 @@ pub fn copy_vscode_settings(
 /// - `output_directory` - The output directory of the project.
 /// - `package_name` - The name of the package.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -231,18 +222,22 @@ pub fn copy_vscode_tasks(
 ) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, logger)?;
 
-    let core_templates_path = utils::get_core_templates_path();
-    let template_file_path = core_templates_path.join("rust/VSCode/tasks.json");
-
-    let output_file_name = "tasks.json";
-    let output_file_path = output_directory.join(".vscode").join(&output_file_name);
+    let template_file = TemplateFile::new(
+        "rust/VSCode/tasks.json",
+        output_directory.join(".vscode").borrow(),
+        "tasks.json"
+    );
 
     logger.write_operation_log(
-        "Copying 'tasks.json' to '.vscode' directory...",
+        format!(
+            "Copying '{}' to '.vscode' directory...",
+            &template_file.output_file_name
+        )
+        .as_str(),
         OutputEmoji::Document
     )?;
 
-    if output_file_path.exists() {
+    if template_file.output_file_exists {
         if !force {
             let overwrite_response = logger.ask_for_overwrite()?;
 
@@ -252,14 +247,13 @@ pub fn copy_vscode_tasks(
             }
         }
 
-        fs::remove_file(&output_file_path)
-            .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
+        fs::remove_file(&template_file.output_file_path)?;
     }
 
-    let vscode_tasks_json =
-        fs::read_to_string(&template_file_path)?.replace("{{basePackageName}}", package_name);
+    let vscode_tasks_json = fs::read_to_string(&template_file.template_file_path)?
+        .replace("{{basePackageName}}", package_name);
 
-    fs::write(&output_file_path, vscode_tasks_json)?;
+    fs::write(&template_file.output_file_path, vscode_tasks_json)?;
 
     logger.write_operation_success_log()?;
 
@@ -271,8 +265,7 @@ pub fn copy_vscode_tasks(
 /// # Arguments
 ///
 /// - `output_directory` - The output directory of the project.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -310,8 +303,7 @@ pub fn ensure_tools_dir_exists(
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -336,18 +328,22 @@ pub fn copy_build_pwsh_script(
 ) -> Result<(), Box<dyn std::error::Error>> {
     ensure_tools_dir_exists(output_directory, logger)?;
 
-    let core_templates_path = utils::get_core_templates_path();
-    let template_file_path = core_templates_path.join("rust/Tools/Build-Package.ps1");
-
-    let output_file_name = "Build-Package.ps1";
-    let output_file_path = output_directory.join("tools").join(&output_file_name);
+    let template_file = TemplateFile::new(
+        "rust/Tools/Build-Package.ps1",
+        output_directory.join("tools").borrow(),
+        "Build-Package.ps1"
+    );
 
     logger.write_operation_log(
-        "Copying 'Build-Package.ps1' to tools directory... ",
+        format!(
+            "Copying '{}' to 'tools' directory...",
+            &template_file.output_file_name
+        )
+        .as_str(),
         OutputEmoji::Document
     )?;
 
-    if output_file_path.exists() {
+    if template_file.output_file_exists {
         if !force {
             let overwrite_response = logger.ask_for_overwrite()?;
 
@@ -356,12 +352,9 @@ pub fn copy_build_pwsh_script(
                 return Ok(());
             }
         }
-
-        fs::remove_file(&output_file_path)
-            .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
     }
 
-    fs::copy(template_file_path, &output_file_path)?;
+    template_file.copy_file()?;
 
     logger.write_operation_success_log()?;
 
@@ -374,8 +367,7 @@ pub fn copy_build_pwsh_script(
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -400,18 +392,22 @@ pub fn copy_clean_pwsh_script(
 ) -> Result<(), Box<dyn std::error::Error>> {
     ensure_tools_dir_exists(output_directory, logger)?;
 
-    let core_templates_path = utils::get_core_templates_path();
-    let template_file_path = core_templates_path.join("rust/Tools/Clean-Package.ps1");
-
-    let output_file_name = "Clean-Package.ps1";
-    let output_file_path = output_directory.join("tools").join(&output_file_name);
+    let template_file = TemplateFile::new(
+        "rust/Tools/Clean-Package.ps1",
+        output_directory.join("tools").borrow(),
+        "Clean-Package.ps1"
+    );
 
     logger.write_operation_log(
-        "Copying 'Clean-Package.ps1' to tools directory... ",
+        format!(
+            "Copying '{}' to 'tools' directory...",
+            &template_file.output_file_name
+        )
+        .as_str(),
         OutputEmoji::Document
     )?;
 
-    if output_file_path.exists() {
+    if template_file.output_file_exists {
         if !force {
             let overwrite_response = logger.ask_for_overwrite()?;
 
@@ -420,12 +416,9 @@ pub fn copy_clean_pwsh_script(
                 return Ok(());
             }
         }
-
-        fs::remove_file(&output_file_path)
-            .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
     }
 
-    fs::copy(template_file_path, &output_file_path)?;
+    template_file.copy_file()?;
 
     logger.write_operation_success_log()?;
 

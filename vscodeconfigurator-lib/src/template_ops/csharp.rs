@@ -1,10 +1,7 @@
-use std::{fs, path::PathBuf};
+use std::{borrow::Borrow, fs, path::PathBuf};
 
-use super::vscode;
-use crate::{
-    logging::{ConsoleLogger, OutputEmoji},
-    utils
-};
+use super::{vscode, TemplateFile};
+use crate::logging::{ConsoleLogger, OutputEmoji};
 
 /// Copies the `GitVersion.yml` file to the project root.
 ///
@@ -12,8 +9,7 @@ use crate::{
 ///
 /// - `output_directory` - The output directory of the project.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -36,18 +32,22 @@ pub fn csharp_copy_gitversion(
     force: bool,
     logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let core_templates_path = utils::get_core_templates_path();
-    let template_file_path = core_templates_path.join("csharp/GitVersion/GitVersion.yml");
-
-    let output_file_name = "GitVersion.yml";
-    let output_file_path = output_directory.join(&output_file_name);
+    let template_file = TemplateFile::new(
+        "csharp/GitVersion/GitVersion.yml",
+        output_directory,
+        "GitVersion.yml"
+    );
 
     logger.write_operation_log(
-        "Copying 'GitVersion.yml' to project root...",
+        format!(
+            "Copying '{}' to project root...",
+            &template_file.output_file_name
+        )
+        .as_str(),
         OutputEmoji::Document
     )?;
 
-    if output_file_path.exists() {
+    if template_file.output_file_exists {
         if !force {
             let overwrite_response = logger.ask_for_overwrite()?;
 
@@ -56,12 +56,9 @@ pub fn csharp_copy_gitversion(
                 return Ok(());
             }
         }
-
-        fs::remove_file(&output_file_path)
-            .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
     }
 
-    fs::copy(template_file_path, &output_file_path)?;
+    template_file.copy_file()?;
 
     logger.write_operation_success_log()?;
 
@@ -75,8 +72,7 @@ pub fn csharp_copy_gitversion(
 /// - `output_directory` - The output directory of the project.
 /// - `solution_name` - The name of the solution.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -103,18 +99,22 @@ pub fn csharp_copy_vscode_settings(
 ) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, logger)?;
 
-    let core_templates_path = utils::get_core_templates_path();
-    let template_file_path = core_templates_path.join("csharp/VSCode/settings.json");
-
-    let output_file_name = "settings.json";
-    let output_file_path = output_directory.join(".vscode").join(&output_file_name);
+    let template_file = TemplateFile::new(
+        "csharp/VSCode/settings.json",
+        output_directory.join(".vscode").borrow(),
+        "settings.json"
+    );
 
     logger.write_operation_log(
-        "Copying 'settings.json' to '.vscode' directory...",
+        format!(
+            "Copying '{}' to '.vscode' directory...",
+            &template_file.output_file_name
+        )
+        .as_str(),
         OutputEmoji::Document
     )?;
 
-    if output_file_path.exists() {
+    if template_file.output_file_exists {
         if !force {
             let overwrite_response = logger.ask_for_overwrite()?;
 
@@ -124,15 +124,14 @@ pub fn csharp_copy_vscode_settings(
             }
         }
 
-        fs::remove_file(&output_file_path)
-            .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
+        fs::remove_file(&template_file.output_file_path)?;
     }
 
     let solution_name_full = format!("{:}.sln", solution_name);
-    let vscode_settings_json =
-        fs::read_to_string(&template_file_path)?.replace("{{solutionName}}", &solution_name_full);
+    let vscode_settings_json = fs::read_to_string(&template_file.template_file_path)?
+        .replace("{{solutionName}}", &solution_name_full);
 
-    fs::write(&output_file_path, vscode_settings_json)?;
+    fs::write(&template_file.output_file_path, vscode_settings_json)?;
 
     logger.write_operation_success_log()?;
 
@@ -146,8 +145,7 @@ pub fn csharp_copy_vscode_settings(
 /// - `output_directory` - The output directory of the project.
 /// - `solution_name` - The name of the solution.
 /// - `force` - Whether to forcefully overwrite.
-/// - `logger` - The
-///   [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
 ///   for logging.
 ///
 /// # Examples
@@ -174,18 +172,22 @@ pub fn csharp_copy_vscode_tasks(
 ) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, logger)?;
 
-    let core_templates_path = utils::get_core_templates_path();
-    let template_file_path = core_templates_path.join("csharp/VSCode/tasks.json");
-
-    let output_file_name = "tasks.json";
-    let output_file_path = output_directory.join(".vscode").join(&output_file_name);
+    let template_file = TemplateFile::new(
+        "csharp/VSCode/tasks.json",
+        output_directory.join(".vscode").borrow(),
+        "tasks.json"
+    );
 
     logger.write_operation_log(
-        "Copying 'tasks.json' to '.vscode' directory...",
+        format!(
+            "Copying '{}' to '.vscode' directory...",
+            &template_file.output_file_name
+        )
+        .as_str(),
         OutputEmoji::Document
     )?;
 
-    if output_file_path.exists() {
+    if template_file.output_file_exists {
         if !force {
             let overwrite_response = logger.ask_for_overwrite()?;
 
@@ -195,15 +197,14 @@ pub fn csharp_copy_vscode_tasks(
             }
         }
 
-        fs::remove_file(&output_file_path)
-            .expect(format!("Failed to remove existing '{:}' file.", &output_file_name).as_str());
+        fs::remove_file(&template_file.output_file_path)?;
     }
 
     let solution_name_full = format!("{:}.sln", solution_name);
-    let vscode_tasks_json =
-        fs::read_to_string(&template_file_path)?.replace("{{solutionName}}", &solution_name_full);
+    let vscode_tasks_json = fs::read_to_string(&template_file.template_file_path)?
+        .replace("{{solutionName}}", &solution_name_full);
 
-    fs::write(&output_file_path, vscode_tasks_json)?;
+    fs::write(&template_file.output_file_path, vscode_tasks_json)?;
 
     logger.write_operation_success_log()?;
 
