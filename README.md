@@ -13,8 +13,9 @@ Will this replace the original project? Don't know yet! We'll see how this goes 
 
 ## 📄 Docs
 
-> [!WARNING]
-> Will be added later.
+You can view the docs for installing and using the CLI here:
+
+- [Docs](./docs/README.md)
 
 ## 🏗️ Building from source
 
