@@ -15,7 +15,7 @@ use crate::subcommands::{ConfiguratorSubcommand, RootSubcommands};
 #[derive(Parser, Debug, PartialEq)]
 #[command(
     name = "VSCode Configurator",
-    bin_name = "vscodeconfigurator",
+    bin_name = "vscode-configurator",
     version = crate_version!(),
     about = "Quickly bootstrap and manage projects for VSCode.",
     long_about = None,
@@ -37,7 +37,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             generate(
                 command.shell,
                 &mut Cli::command(),
-                "vscodeconfigurator",
+                "vscode-configurator",
                 &mut std::io::stdout()
             );
             Ok(())

@@ -8,7 +8,7 @@ param(
     [string]$Configuration = "Release"
 )
 
-$artifactPath = Join-Path -Path $PSScriptRoot -ChildPath "target/$($Configuration.ToLower())/vscodeconfigurator"
+$artifactPath = Join-Path -Path $PSScriptRoot -ChildPath "target/$($Configuration.ToLower())/vscode-configurator"
 $templatesArtifactPath = Join-Path -Path $PSScriptRoot -ChildPath "target/$($Configuration.ToLower())/templates"
 $installPath = Join-Path -Path ([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::UserProfile)) -ChildPath ".vscodeconfigurator/bin/"
 

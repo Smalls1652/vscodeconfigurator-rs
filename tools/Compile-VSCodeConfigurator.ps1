@@ -88,12 +88,12 @@ $compiledOutputPath = Join-Path -Path $resolvedRootDirectory -ChildPath "target/
 $compiledTemplatesDirectoryPath = Join-Path -Path $compiledOutputPath -ChildPath "templates"
 $compiledBinaryPath = switch ($selectedCompilationTarget.Platform) {
     "Windows" {
-        Join-Path -Path $compiledOutputPath -ChildPath "vscodeconfigurator.exe"
+        Join-Path -Path $compiledOutputPath -ChildPath "vscode-configurator.exe"
         break
     }
 
     Default {
-        Join-Path -Path $compiledOutputPath -ChildPath "vscodeconfigurator"
+        Join-Path -Path $compiledOutputPath -ChildPath "vscode-configurator"
         break
     }
 }
