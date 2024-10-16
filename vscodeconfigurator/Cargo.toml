@@ -16,6 +16,10 @@ include = [
 
 build = "build.rs"
 
+[[bin]]
+name = "vscode-configurator"
+path = "src/main.rs"
+
 [dependencies]
 clap = { version = "4.5.20", features = ["derive", "string", "cargo"] }
 clap_complete = "4.5.33"
