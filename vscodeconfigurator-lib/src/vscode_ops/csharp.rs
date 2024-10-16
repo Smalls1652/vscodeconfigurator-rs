@@ -54,7 +54,7 @@ pub fn update_csharp_lsp(
     logger: &mut ConsoleLogger
 ) -> Result<(), Box<dyn std::error::Error>> {
     logger.write_operation_log(
-        "Updating C# LSP option in tasks.json...",
+        "Updating C# LSP option in settings.json...",
         OutputEmoji::Document
     )?;
 
