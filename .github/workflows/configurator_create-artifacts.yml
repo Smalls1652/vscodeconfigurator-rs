@@ -69,13 +69,14 @@ jobs:
             shell: pwsh
             run: |
               ./tools/Compile-VSCodeConfigurator.ps1 -Platform "macOS" -Architecture "x64";
-              ./tools/Compile-VSCodeConfigurator.ps1 -Platform "macOS" -Architecture "arm64"
+              ./tools/Compile-VSCodeConfigurator.ps1 -Platform "macOS" -Architecture "arm64";
 
           - name: Compile package (Linux)
             if: ${{ runner.os == 'Linux' }}
             shell: pwsh
             run: |
               ./tools/Compile-VSCodeConfigurator.ps1 -Platform "Linux" -Architecture "x64";
+              ./tools/Compile-VSCodeConfigurator.ps1 -Platform "Linux" -Architecture "arm64";
 
           # Upload artifacts
           - name: Create artifact (Windows)
@@ -92,6 +93,14 @@ jobs:
             with:
               name: "Configurator_linux-x64_${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
               path: ${{ github.workspace }}/artifacts/linux-x64/**/*
+              if-no-files-found: error
+
+          - name: Create artifact (Linux - arm64)
+            uses: actions/upload-artifact@v4
+            if: ${{ runner.os == 'Linux' }}
+            with:
+              name: "Configurator_linux-arm64_${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
+              path: ${{ github.workspace }}/artifacts/linux-arm64/**/*
               if-no-files-found: error
 
           - name: Create artifact (macOS - x64)
