@@ -21,11 +21,13 @@ class RustCompilationTarget {
     [string]$Platform
     [string]$Architecture
     [string]$TargetName
+    [bool]$UseCross
 
-    RustCompilationTarget([string]$platform, [string]$architecture, [string]$targetName) {
+    RustCompilationTarget([string]$platform, [string]$architecture, [string]$targetName, [bool]$useCross) {
         $this.Platform = $platform
         $this.Architecture = $architecture
         $this.TargetName = $targetName
+        $this.UseCross = $useCross
     }
 }
 
@@ -43,10 +45,12 @@ if ([System.IO.FileAttributes]::Directory -notin (Get-Item -Path $resolvedRootDi
 }
 
 $supportedCompilationTargets = @(
-    [RustCompilationTarget]::new("Linux", "x64", "x86_64-unknown-linux-gnu"),
-    [RustCompilationTarget]::new("macOS", "x64", "x86_64-apple-darwin"),
-    [RustCompilationTarget]::new("macOS", "arm64", "aarch64-apple-darwin"),
-    [RustCompilationTarget]::new("Windows", "x64", "x86_64-pc-windows-gnu")
+    [RustCompilationTarget]::new("Linux", "x64", "x86_64-unknown-linux-gnu", $false),
+    [RustCompilationTarget]::new("Linux", "arm64", "aarch64-unknown-linux-gnu", $true),
+    [RustCompilationTarget]::new("macOS", "x64", "x86_64-apple-darwin", $false),
+    [RustCompilationTarget]::new("macOS", "arm64", "aarch64-apple-darwin", $false),
+    [RustCompilationTarget]::new("Windows", "x64", "x86_64-pc-windows-gnu", $false),
+    [RustCompilationTarget]::new("Windows", "arm64", "aarch64-pc-windows-msvc", $false)
 )
 
 $selectedCompilationTarget = $supportedCompilationTargets | Where-Object { $PSItem.Platform -eq $Platform -and $PSItem.Architecture -eq $Architecture }
@@ -76,7 +80,17 @@ if (Test-Path -Path $targetArtifactsPath) {
 
 $null = New-Item -Path $targetArtifactsPath -ItemType "Directory"
 
-cargo build --release --package "vscodeconfigurator" --target "$($selectedCompilationTarget.TargetName)"
+switch ($selectedCompilationTarget.UseCross) {
+    $true {
+        cross build --target "$($selectedCompilationTarget.TargetName)" --release 
+        break
+    }
+
+    Default {
+        cargo build --release --package "vscodeconfigurator" --target "$($selectedCompilationTarget.TargetName)"
+        break
+    }
+}
 
 if (Test-Path -Path $targetArtifactsPath) {
     Remove-Item -Path $targetArtifactsPath -Recurse -Force
