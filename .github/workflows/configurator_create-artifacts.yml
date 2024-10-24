@@ -36,7 +36,8 @@ jobs:
             if: ${{ runner.os == 'Windows' }}
             shell: pwsh
             run: |
-              rustup target add x86_64-pc-windows-gnu
+              rustup target add x86_64-pc-windows-gnu;
+              rustup target add aarch64-pc-windows-gnullvm;
 
           - name: Install targets (macOS)
             if: ${{ runner.os == 'macOS' }}
@@ -75,6 +76,7 @@ jobs:
             shell: pwsh
             run: |
               ./tools/Compile-VSCodeConfigurator.ps1 -Platform "Windows" -Architecture "x64";
+              ./tools/Compile-VSCodeConfigurator.ps1 -Platform "Windows" -Architecture "arm64";
 
           - name: Compile package (macOS)
             if: ${{ runner.os == 'macOS' }}
@@ -91,12 +93,20 @@ jobs:
               ./tools/Compile-VSCodeConfigurator.ps1 -Platform "Linux" -Architecture "arm64";
 
           # Upload artifacts
-          - name: Create artifact (Windows)
+          - name: Create artifact (Windows - x64)
             uses: actions/upload-artifact@v4
             if: ${{ runner.os == 'Windows' }}
             with:
               name: "Configurator_win-x64_${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
               path: ${{ github.workspace }}/artifacts/windows-x64/**/*
+              if-no-files-found: error
+
+          - name: Create artifact (Windows - arm64)
+            uses: actions/upload-artifact@v4
+            if: ${{ runner.os == 'Windows' }}
+            with:
+              name: "Configurator_win-arm64_${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
+              path: ${{ github.workspace }}/artifacts/windows-arm64/**/*
               if-no-files-found: error
 
           - name: Create artifact (Linux - x64)
