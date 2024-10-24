@@ -9,8 +9,6 @@ This is a CLI tool to quickly bootstrap a new project for VSCode. More specifica
 
 That's because this is actually a _"rewrite"_ of the original [VSCode Configurator](https://github.com/Smalls1652/SmallsOnline.VSCode.Configurator) project that I wrote in `C#`, but this time in `Rust`. I've been wanting to learn how to write Rust for a while and I needed a bit of a starting point to get me acclimated with the language. So why not translate a CLI tool I've written before into Rust?
 
-Will this replace the original project? Don't know yet! We'll see how this goes and if it makes sense once I finish porting over all of the current features.
-
 ## 📄 Docs
 
 You can view the docs for installing and using the CLI here:
