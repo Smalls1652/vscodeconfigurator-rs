@@ -50,7 +50,7 @@ $supportedCompilationTargets = @(
     [RustCompilationTarget]::new("macOS", "x64", "x86_64-apple-darwin", $false),
     [RustCompilationTarget]::new("macOS", "arm64", "aarch64-apple-darwin", $false),
     [RustCompilationTarget]::new("Windows", "x64", "x86_64-pc-windows-gnu", $false),
-    [RustCompilationTarget]::new("Windows", "arm64", "aarch64-pc-windows-gnullvm", $false)
+    [RustCompilationTarget]::new("Windows", "arm64", "aarch64-pc-windows-msvc", $false)
 )
 
 $selectedCompilationTarget = $supportedCompilationTargets | Where-Object { $PSItem.Platform -eq $Platform -and $PSItem.Architecture -eq $Architecture }
