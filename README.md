@@ -21,19 +21,50 @@ You can view the docs for installing and using the CLI here:
 
 ### 🧰 Pre-requisites
 
-> [!WARNING]
-> Will be added later.
+- [Rust](https://www.rust-lang.org/tools/install)
+  - The `nightly` toolchain is preferred, but `stable` should work as well.
+  - Make sure to have the toolchains for the [target platforms](https://doc.rust-lang.org/nightly/rustc/platform-support.html) you want to build for.
 
 ### 🧱 Building
 
-> [!WARNING]
-> Will be added later.
+#### Command-line
+
+1. Navigate to the project directory in your terminal.
+2. Run the following command to build the project:
+
+```bash
+cargo build --package vscodeconfigurator --release --target <TARGET>
+```
+
+Replace `<TARGET>` with the desired [target platform](https://doc.rust-lang.org/nightly/rustc/platform-support.html).
+
+#### Command-line (PowerShell)
+
+If you have PowerShell 7 (or higher) installed on Linux, macOS, or Windows, you can do the following:
+
+1. Navigate to the project directory in your terminal.
+2. Run the following command to build the project:
+
+```powershell
+./tools/Compile-VSCodeConfigurator.ps1 -Platform <PLATFORM> -Architechture <ARCHITECTURE>
+```
+
+Make sure to replace the following:
+
+- `<PLATFORM>` with the desired platform (e.g. `Windows`, `Linux`, or `macOS`).
+- `<ARCHITECTURE>` with the desired architecture (e.g. `x64` or `arm64`).
 
 ## 🗂️ Dependencies used
 
 - [`clap`](https://crates.io/crates/clap)
+- [`clap_complete`](https://crates.io/crates/clap_complete)
 - [`crossterm`](https://crates.io/crates/crossterm)
 - [`serde_json`](https://crates.io/crates/serde_json)
+
+### Build dependencies
+
+- [`git-version`](https://crates.io/crates/git-version)
+- [`toml_edit`](https://crates.io/crates/toml_edit)
 
 ## 🤝 License
 
