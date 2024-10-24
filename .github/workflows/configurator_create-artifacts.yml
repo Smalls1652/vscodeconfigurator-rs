@@ -51,6 +51,12 @@ jobs:
             run: |
               rustup target add x86_64-unknown-linux-gnu
 
+          - name: Install cargo cross (Linux)
+            if: ${{ runner.os == 'Linux' }}
+            shell: pwsh
+            run: |
+              cargo install cross --git https://github.com/cross-rs/cross
+
           # Compile
           - name: Compile package (Windows)
             if: ${{ runner.os == 'Windows' }}
