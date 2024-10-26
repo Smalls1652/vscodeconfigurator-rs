@@ -15,6 +15,12 @@ You can view the docs for installing and using the CLI here:
 
 - [Docs](./docs/README.md)
 
+## 📦 Installation
+
+You can read the following documentation for installing the CLI tool:
+
+- [Installing vscode-configurator](./docs/cli/Installing%20vscode-configurator.md)
+
 ## 🏗️ Building from source
 
 ### 🧰 Pre-requisites
