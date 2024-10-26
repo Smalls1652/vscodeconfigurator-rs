@@ -2,10 +2,10 @@
 
 ## Manual install
 
-1. [Download the `.zip` archive of the latest release for your OS and architecture.](https://github.com/Smalls1652/SmallsOnline.VSCode.Configurator/releases).
+1. [Download the `.zip` archive of the latest release for your OS and architecture.](https://github.com/Smalls1652/vscodeconfigurator-rs/releases).
 2. Create a directory where you want to store it and extract the contents of the `.zip` archive to it.
     * For example, you can create a directory in your user profile/home directory named `.vscode-configurator`.
-    * **Ensure that the `Templates/` directory and the `vscode-configurator` binary are at the root of the directory you created.**
+    * **Ensure that the `templates/` directory and the `vscode-configurator` binary are at the root of the directory you created.**
 3. Add the directory you created to your operating system or shell's `PATH` environment variable.
 
 ### Additional steps
