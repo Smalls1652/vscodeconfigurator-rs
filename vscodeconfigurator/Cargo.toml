@@ -21,7 +21,7 @@ name = "vscode-configurator"
 path = "src/main.rs"
 
 [dependencies]
-clap = { version = "4.5.20", features = ["derive", "string", "cargo"] }
+clap = { version = "4.5.22", features = ["derive", "string", "cargo"] }
 clap_complete = "4.5.36"
 crossterm = { version = "0.28.1", features = ["events"] }
 serde_json = { version = "1.0.132", features = ["preserve_order"] }
