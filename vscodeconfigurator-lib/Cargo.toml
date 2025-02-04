@@ -10,6 +10,6 @@ homepage.workspace = true
 repository.workspace = true
 
 [dependencies]
-clap = { version = "4.5.27", features = ["derive", "string", "cargo"] }
+clap = { version = "4.5.28", features = ["derive", "string", "cargo"] }
 crossterm = { version = "0.28.1", features = ["events"] }
 serde_json = { version = "1.0.138", features = ["preserve_order"] }
