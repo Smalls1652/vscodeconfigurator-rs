@@ -29,4 +29,4 @@ vscodeconfigurator-lib = { path = "../vscodeconfigurator-lib" }
 
 [build-dependencies]
 git-version = "0.3.9"
-toml_edit = "0.22.23"
+toml_edit = "0.22.24"
