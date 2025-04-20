@@ -521,9 +521,7 @@ version = "2.0.0"
 dependencies = [
  "clap",
  "clap_complete",
- "crossterm",
  "git-version",
- "serde_json",
  "toml_edit",
  "vscodeconfigurator-lib",
 ]
