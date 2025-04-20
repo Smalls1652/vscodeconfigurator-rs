@@ -79,8 +79,6 @@ pub fn initalize_package(
     let cargo_proc_args = vec![
         "init",
         package_template_arg_str,
-        "--edition",
-        "2021",
         &package_output_directory_string.as_str(),
     ];
 
