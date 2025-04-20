@@ -5,6 +5,7 @@ resolver = "2"
 package.authors = [
     "Tim Small"
 ]
+package.edition = "2024"
 package.license-file = "LICENSE"
 package.homepage = "https://github.com/Smalls1652/vscodeconfigurator-rs"
 package.repository = "https://github.com/Smalls1652/vscodeconfigurator-rs"
