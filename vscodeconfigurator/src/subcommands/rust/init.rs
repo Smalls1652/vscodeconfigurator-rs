@@ -57,6 +57,14 @@ impl ConfiguratorSubcommandArgs for RustInitCommandArgs {
 
         let output_directory_absolute = output_directory.to_absolute();
 
+        logger.write_operation_category("Basic")?;
+        template_ops::rust::copy_editorconfig(
+            &output_directory_absolute,
+            self.force,
+            logger
+        )?;
+        logger.write_newline()?;
+
         logger.write_operation_category("Git")?;
         git::initialize_git_repo(&output_directory_absolute, logger)?;
         template_ops::rust::copy_gitignore(&output_directory_absolute, self.force, logger)?;
