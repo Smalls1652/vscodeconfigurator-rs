@@ -30,7 +30,7 @@ use crate::logging::{ConsoleLogger, OutputEmoji};
 pub fn copy_gitignore(
     output_directory: &PathBuf,
     force: bool,
-    logger: &mut ConsoleLogger
+    logger: &mut ConsoleLogger,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let template_file = TemplateFile::new("rust/Git/gitignore", output_directory, ".gitignore");
 
@@ -40,7 +40,7 @@ pub fn copy_gitignore(
             &template_file.output_file_name
         )
         .as_str(),
-        OutputEmoji::Document
+        OutputEmoji::Document,
     )?;
 
     if template_file.output_file_exists {
@@ -88,12 +88,12 @@ pub fn copy_gitignore(
 pub fn copy_cargo_workspace_file(
     output_directory: &PathBuf,
     force: bool,
-    logger: &mut ConsoleLogger
+    logger: &mut ConsoleLogger,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let template_file = TemplateFile::new(
         "rust/Cargo/Cargo.workspace.toml",
         output_directory,
-        "Cargo.toml"
+        "Cargo.toml",
     );
 
     logger.write_operation_log(
@@ -102,7 +102,7 @@ pub fn copy_cargo_workspace_file(
             &template_file.output_file_name
         )
         .as_str(),
-        OutputEmoji::Document
+        OutputEmoji::Document,
     )?;
 
     if template_file.output_file_exists {
@@ -117,6 +117,81 @@ pub fn copy_cargo_workspace_file(
     }
 
     template_file.copy_file()?;
+
+    logger.write_operation_success_log()?;
+
+    Ok(())
+}
+
+/// Copies the `Makefile.toml` file to the project root.
+///
+/// # Arguments
+///
+/// - `output_directory` - The output directory of the project.
+/// - `package_name` - The name of the package.
+/// - `force` - Whether to forcefully overwrite.
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+///
+/// # Examples
+///
+/// ## Example 01
+///
+/// Copies the `Makefile.toml` file to the project root with the package name
+/// `my_package`.
+///
+/// ```rust
+/// use vscodeconfigurator_lib::logging::ConsoleLogger;
+/// use vscodeconfigurator_lib::template_ops::rust::copy_cargo_makefile;
+///
+/// let output_directory = std::env::temp_dir().join("my-project");
+/// let package_name = "my_package";
+/// let force = false;
+/// let logger = &mut ConsoleLogger::new(None, None);
+/// 
+/// std::fs::create_dir(&output_directory).expect("Failed to create temp dir");
+///
+/// copy_cargo_makefile(&output_directory, &package_name, force, logger);
+///
+/// std::fs::remove_dir_all(&output_directory).expect("Failed to remove temp dir");
+/// ```
+pub fn copy_cargo_makefile(
+    output_directory: &PathBuf,
+    package_name: &str,
+    force: bool,
+    logger: &mut ConsoleLogger,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let template_file = TemplateFile::new(
+        "rust/Cargo/Makefile.toml",
+        output_directory,
+        "Makefile.toml",
+    );
+
+    logger.write_operation_log(
+        format!(
+            "Copying '{}' to project root...",
+            &template_file.output_file_name
+        )
+        .as_str(),
+        OutputEmoji::Document,
+    )?;
+
+    if template_file.output_file_exists {
+        if !force {
+            let overwrite_response = logger.ask_for_overwrite()?;
+
+            if !overwrite_response {
+                logger.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
+        }
+
+        fs::remove_file(&template_file.output_file_path)?;
+    }
+
+    let makefile_template = fs::read_to_string(&template_file.template_file_path)?
+        .replace("{{basePackageName}}", package_name);
+
+    fs::write(&template_file.output_file_path, makefile_template)?;
 
     logger.write_operation_success_log()?;
 
@@ -150,14 +225,14 @@ pub fn copy_cargo_workspace_file(
 pub fn copy_vscode_settings(
     output_directory: &PathBuf,
     force: bool,
-    logger: &mut ConsoleLogger
+    logger: &mut ConsoleLogger,
 ) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, logger)?;
 
     let template_file = TemplateFile::new(
         "rust/VSCode/settings.json",
         output_directory.join(".vscode").borrow(),
-        "settings.json"
+        "settings.json",
     );
 
     logger.write_operation_log(
@@ -166,7 +241,7 @@ pub fn copy_vscode_settings(
             &template_file.output_file_name
         )
         .as_str(),
-        OutputEmoji::Document
+        OutputEmoji::Document,
     )?;
 
     if template_file.output_file_exists {
@@ -218,14 +293,14 @@ pub fn copy_vscode_tasks(
     output_directory: &PathBuf,
     package_name: &str,
     force: bool,
-    logger: &mut ConsoleLogger
+    logger: &mut ConsoleLogger,
 ) -> Result<(), Box<dyn std::error::Error>> {
     vscode::ensure_vscode_dir_exists(output_directory, logger)?;
 
     let template_file = TemplateFile::new(
         "rust/VSCode/tasks.json",
         output_directory.join(".vscode").borrow(),
-        "tasks.json"
+        "tasks.json",
     );
 
     logger.write_operation_log(
@@ -234,7 +309,7 @@ pub fn copy_vscode_tasks(
             &template_file.output_file_name
         )
         .as_str(),
-        OutputEmoji::Document
+        OutputEmoji::Document,
     )?;
 
     if template_file.output_file_exists {
@@ -256,43 +331,6 @@ pub fn copy_vscode_tasks(
     fs::write(&template_file.output_file_path, vscode_tasks_json)?;
 
     logger.write_operation_success_log()?;
-
-    Ok(())
-}
-
-/// Creates the `tools` directory in the project root.
-///
-/// # Arguments
-///
-/// - `output_directory` - The output directory of the project.
-/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
-///   for logging.
-///
-/// # Examples
-///
-/// ## Example 01
-///
-/// Creates the `tools` directory in the project root.
-///
-/// ```rust
-/// use vscodeconfigurator::logger::ConsoleLogger;
-///
-/// let output_directory = std::env::temp_dir().join("my-project");
-/// let mut logger = ConsoleLogger::new();
-///
-/// ensure_tools_dir_exists(&output_directory, logger);
-/// ```
-pub fn ensure_tools_dir_exists(
-    output_directory: &PathBuf,
-    logger: &mut ConsoleLogger
-) -> Result<(), Box<dyn std::error::Error>> {
-    let vscode_dir_path = output_directory.join("tools");
-
-    if !vscode_dir_path.exists() {
-        logger.write_operation_log("Creating 'tools' directory...", OutputEmoji::Folder)?;
-        std::fs::create_dir(&vscode_dir_path)?;
-        logger.write_operation_success_log()?;
-    }
 
     Ok(())
 }
