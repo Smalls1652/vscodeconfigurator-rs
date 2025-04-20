@@ -78,6 +78,12 @@ impl ConfiguratorSubcommandArgs for RustInitCommandArgs {
             self.force,
             logger
         )?;
+        template_ops::rust::copy_cargo_makefile(
+            &output_directory_absolute,
+            &self.base_package_name,
+            self.force,
+            logger
+        )?;
         cargo::initalize_package(
             &output_directory_absolute,
             &self.base_package_name,
