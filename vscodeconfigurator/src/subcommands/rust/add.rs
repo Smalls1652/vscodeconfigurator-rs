@@ -62,7 +62,7 @@ impl ConfiguratorSubcommandArgs for RustAddCommandArgs {
         let output_directory_absolute = output_directory.to_absolute();
 
         let package_friendly_name = match &self.package_friendly_name {
-            Some(ref name) => &name.as_str(),
+            Some(name) => &name.as_str(),
             None => self.package_name.as_str()
         };
 
