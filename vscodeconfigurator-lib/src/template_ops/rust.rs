@@ -61,6 +61,75 @@ pub fn copy_gitignore(
     Ok(())
 }
 
+/// Copies the `.editorconfig` file to the project root.
+///
+/// # Arguments
+///
+/// - `output_directory` - The output directory of the project.
+/// - `force` - Whether to forcefully overwrite.
+/// - `logger` - The [`ConsoleLogger`](crate::logging::ConsoleLogger) instance
+///
+/// # Examples
+///
+/// ## Example 01
+///
+/// Copies the `.editorconfig` to the project root.
+///
+/// ```rust
+/// use vscodeconfigurator_lib::logging::ConsoleLogger;
+/// use vscodeconfigurator_lib::template_ops::rust::copy_editorconfig;
+///
+/// let output_directory = std::env::temp_dir().join("my-project");
+/// let package_name = "my_package";
+/// let force = false;
+/// let logger = &mut ConsoleLogger::new(None, None);
+/// 
+/// std::fs::create_dir(&output_directory).expect("Failed to create temp dir");
+///
+/// copy_editorconfig(&output_directory, force, logger);
+///
+/// std::fs::remove_dir_all(&output_directory).expect("Failed to remove temp dir");
+/// ```
+pub fn copy_editorconfig(
+    output_directory: &PathBuf,
+    force: bool,
+    logger: &mut ConsoleLogger,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let template_file = TemplateFile::new(
+        "rust/.editorconfig.template",
+        output_directory,
+        ".editorconfig",
+    );
+
+    logger.write_operation_log(
+        format!(
+            "Copying '{}' to project root...",
+            &template_file.output_file_name
+        )
+        .as_str(),
+        OutputEmoji::Document,
+    )?;
+
+    if template_file.output_file_exists {
+        if !force {
+            let overwrite_response = logger.ask_for_overwrite()?;
+
+            if !overwrite_response {
+                logger.write_warning(format!("Already exists 🟠\n"))?;
+                return Ok(());
+            }
+        }
+
+        fs::remove_file(&template_file.output_file_path)?;
+    }
+
+    template_file.copy_file()?;
+
+    logger.write_operation_success_log()?;
+
+    Ok(())
+}
+
 /// Copies the `Cargo.toml` workspace file to the project root.
 ///
 /// # Arguments
