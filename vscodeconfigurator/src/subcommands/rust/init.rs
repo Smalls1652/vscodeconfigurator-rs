@@ -70,8 +70,6 @@ impl ConfiguratorSubcommandArgs for RustInitCommandArgs {
             self.force,
             logger
         )?;
-        template_ops::rust::copy_build_pwsh_script(&output_directory_absolute, self.force, logger)?;
-        template_ops::rust::copy_clean_pwsh_script(&output_directory_absolute, self.force, logger)?;
         logger.write_newline()?;
 
         logger.write_operation_category("Rust")?;
