@@ -12,6 +12,6 @@ package.repository = "https://github.com/Smalls1652/vscodeconfigurator-rs"
 
 [workspace.dependencies]
 clap = { version = "4.5.37", features = ["derive", "string", "cargo"] }
-clap_complete = { version = "4.5.47" }
+clap_complete = { version = "4.5.66" }
 crossterm = { version = "0.29.0", features = ["events"] }
 serde_json = { version = "1.0.140", features = ["preserve_order"] }
